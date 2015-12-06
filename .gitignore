@@ -4,8 +4,10 @@
 ###############
 #    global   #
 ###############
-/source/
+/publish/
 ###############
 #    project  #
 ###############
-
+/source/MobileTopUp/packages/
+/source/MobileTopUp/*/bin/
+/source/MobileTopUp/*/obj/

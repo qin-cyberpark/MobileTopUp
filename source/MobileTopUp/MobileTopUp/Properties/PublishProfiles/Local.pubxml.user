@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit http://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>D:\works\Greenspot\MobileTopUp\publish</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="bin/App_global.asax.compiled">
+      <publishTime>12/06/2015 18:06:46</publishTime>
+    </File>
+    <File Include="bin/App_global.asax.dll">
+      <publishTime>12/06/2015 18:06:46</publishTime>
+    </File>
+    <File Include="bin/EntityFramework.dll">
+      <publishTime>12/05/2015 00:07:44</publishTime>
+    </File>
+    <File Include="bin/EntityFramework.SqlServer.dll">
+      <publishTime>12/05/2015 00:07:44</publishTime>
+    </File>
+    <File Include="bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Web.Infrastructure.dll">
+      <publishTime>12/05/2015 00:06:45</publishTime>
+    </File>
+    <File Include="bin/MobileTopUp.dll">
+      <publishTime>12/06/2015 17:55:45</publishTime>
+    </File>
+    <File Include="bin/MySql.Data.dll">
+      <publishTime>10/02/2015 17:05:26</publishTime>
+    </File>
+    <File Include="bin/MySql.Data.Entity.EF6.dll">
+      <publishTime>10/02/2015 17:05:30</publishTime>
+    </File>
+    <File Include="bin/Newtonsoft.Json.dll">
+      <publishTime>12/05/2015 00:06:46</publishTime>
+    </File>
+    <File Include="bin/roslyn/csc.exe">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.Build.Tasks.CodeAnalysis.dll">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.CSharp.dll">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.dll">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.VisualBasic.dll">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CSharp.Core.targets">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.VisualBasic.Core.targets">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Collections.Immutable.dll">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Reflection.Metadata.dll">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/vbc.exe">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/VBCSCompiler.exe">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/VBCSCompiler.exe.config">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/System.Net.Http.Formatting.dll">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/System.Web.Helpers.dll">
+      <publishTime>12/05/2015 00:06:45</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.dll">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.WebHost.dll">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/System.Web.Mvc.dll">
+      <publishTime>12/05/2015 00:06:45</publishTime>
+    </File>
+    <File Include="bin/System.Web.Razor.dll">
+      <publishTime>12/05/2015 00:06:45</publishTime>
+    </File>
+    <File Include="bin/System.Web.Webpages.Deployment.dll">
+      <publishTime>12/05/2015 00:06:45</publishTime>
+    </File>
+    <File Include="bin/System.Web.Webpages.dll">
+      <publishTime>12/05/2015 00:06:45</publishTime>
+    </File>
+    <File Include="bin/System.Web.Webpages.Razor.dll">
+      <publishTime>12/05/2015 00:06:45</publishTime>
+    </File>
+    <File Include="css/main.css">
+      <publishTime>12/06/2015 18:02:18</publishTime>
+    </File>
+    <File Include="img/2degree.png">
+      <publishTime>12/06/2015 03:16:19</publishTime>
+    </File>
+    <File Include="img/pe-a2a.png">
+      <publishTime>12/06/2015 03:16:19</publishTime>
+    </File>
+    <File Include="img/pe-cc.png">
+      <publishTime>12/06/2015 03:16:19</publishTime>
+    </File>
+    <File Include="img/skinny.png">
+      <publishTime>12/06/2015 03:16:19</publishTime>
+    </File>
+    <File Include="img/spark.png">
+      <publishTime>12/06/2015 03:16:19</publishTime>
+    </File>
+    <File Include="img/vodafone.png">
+      <publishTime>12/06/2015 03:16:19</publishTime>
+    </File>
+    <File Include="img/wx-pay.png">
+      <publishTime>12/06/2015 17:41:03</publishTime>
+    </File>
+    <File Include="Models/TopUpEntities.edmx.diagram">
+      <publishTime>12/05/2015 00:17:13</publishTime>
+    </File>
+    <File Include="packages.config">
+      <publishTime>12/05/2015 00:07:44</publishTime>
+    </File>
+    <File Include="PrecompiledApp.config">
+      <publishTime>12/06/2015 18:06:41</publishTime>
+    </File>
+    <File Include="Views/Home/Index.cshtml">
+      <publishTime>12/06/2015 03:13:51</publishTime>
+    </File>
+    <File Include="Views/Shared/_Layout.cshtml">
+      <publishTime>12/06/2015 03:34:18</publishTime>
+    </File>
+    <File Include="Views/TopUp/default.cshtml">
+      <publishTime>12/05/2015 04:15:57</publishTime>
+    </File>
+    <File Include="Views/web.config">
+      <publishTime>12/05/2015 00:06:44</publishTime>
+    </File>
+    <File Include="Views/Wx/topup.cshtml">
+      <publishTime>12/06/2015 18:05:56</publishTime>
+    </File>
+    <File Include="Views/_ViewStart.cshtml">
+      <publishTime>12/05/2015 00:24:23</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>12/05/2015 04:17:01</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

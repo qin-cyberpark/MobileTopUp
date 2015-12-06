@@ -1,0 +1,51 @@
+﻿@media (min-width: 960px) {
+	.container {
+	width: 780px;
+	}
+}
+.btn-brand{
+	background-color: white;
+	border-radius:0;
+	height:100px;
+	border: 1px solid #babcbe;
+	border-bottom: 0px;
+	background-size: auto 60%;
+	background-position: center;
+	background-repeat: no-repeat;
+	opacity: 0.2;
+	filter: alpha(opacity=20); /* For IE8 and earlier */
+}
+.brand-selected{
+	opacity: 1;
+	filter: alpha(opacity=100); /* For IE8 and earlier */
+}
+.btn-amount{
+	border-radius:0;
+	height:60px;
+	background-color:white;
+	border: 1px solid #babcbe;
+    font-size:18px;
+}
+.no-left-border{
+	border-left:0px;
+}
+
+.amount-selected{
+	background-color:#698905;
+}
+.btn-wechatPay{
+	height:55px;
+	background-color:white;
+}
+.btn-paymentExpress{
+	border-radius:0;
+	height:50px;
+	background-color:#e3e3e3;
+	background-size: 95% auto;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+.lbl-amount{
+    font-size:18px;
+    color:red;
+}
