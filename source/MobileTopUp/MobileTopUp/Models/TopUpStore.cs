@@ -65,7 +65,7 @@ namespace MobileTopUp.Models
             {
                 return false;
             }
-            switch (brand)
+            switch (brand.ToUpper())
             {
                 case "SPARK":
                 case "VODAFONE":
@@ -77,7 +77,6 @@ namespace MobileTopUp.Models
 
         public string GetVerifiedBrandOrDefault(string brand)
         {
-            brand = brand.ToUpper();
             if (!IsValidBrand(brand))
             {
                 return "SPARK";
@@ -106,7 +105,7 @@ namespace MobileTopUp.Models
                 return false;
             }
 
-            switch(type)
+            switch(type.ToUpper())
             {
                 case "WECHAT":
                 case "PECC":

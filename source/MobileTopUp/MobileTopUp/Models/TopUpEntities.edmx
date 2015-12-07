@@ -25,9 +25,10 @@
           <Property Name="Currency" Type="char" MaxLength="3" Nullable="false" />
           <Property Name="ExchangeRate" Type="decimal" Precision="10" Scale="0" Nullable="false" />
           <Property Name="Brand" Type="varchar" MaxLength="20" Nullable="false" />
-          <Property Name="TotalDenomination" Type="decimal" Precision="10" Scale="0" Nullable="false" />
-          <Property Name="SellingPrice" Type="decimal" Precision="10" Scale="0" Nullable="false" />
-          <Property Name="PaidDate" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="TotalDenomination" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="SellingPrice" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="OrderDate" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="PaidDate" Type="datetime" Precision="0" />
         </EntityType>
         <EntityType Name="voucher">
           <Key>
@@ -35,7 +36,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Brand" Type="varchar" MaxLength="20" />
-          <Property Name="Denomination" Type="decimal" Precision="10" Scale="0" Nullable="false" />
+          <Property Name="Denomination" Type="decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="Number" Type="varchar" MaxLength="30" />
           <Property Name="Image" Type="blob" />
           <Property Name="CreatedBy" Type="varchar" MaxLength="255" Nullable="false" />
@@ -75,7 +76,8 @@
           <Property Name="Brand" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="TotalDenomination" Type="Decimal" Nullable="false" />
           <Property Name="SellingPrice" Type="Decimal" Nullable="false" />
-          <Property Name="PaidDate" Type="DateTime" Nullable="false" />
+          <Property Name="OrderDate" Type="DateTime" Nullable="false" />
+          <Property Name="PaidDate" Type="DateTime" Nullable="true" />
         </EntityType>
         <EntityType Name="Voucher">
           <Key>
@@ -116,6 +118,7 @@
           <EntitySetMapping Name="Transactions">
             <EntityTypeMapping TypeName="Model.Transaction">
               <MappingFragment StoreEntitySet="transaction">
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
                 <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />

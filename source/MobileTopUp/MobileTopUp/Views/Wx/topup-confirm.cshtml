@@ -1,20 +1,25 @@
 ﻿@using MobileTopUp.Utilities
 @{
-    var logoFile = ViewBag.Transaction.Brand + ".png";
+    string logoFile = ViewBag.Transaction.Brand + ".png";
+    int voucherNum = TopUpStoreHelper.CalcNeededVoucherNumber(ViewBag.Transaction.TotalDenomination);
+    string payTypeStr = "";
+    switch ((string)ViewBag.Transaction.PaymentType)
+    {
+        case "WECHAT": payTypeStr = "WECHAT"; break;
+        case "PECC": payTypeStr = "CREDIT CARD"; break;
+        case "PEA2A": payTypeStr = "ACCOUNT 2 ACCOUNT"; break;
+        default: payTypeStr = "UNKNOWN"; break;
+    }
 }
 <div class="container">
-    <div class="jumbotron">
-        <img src="~/img/@logoFile" style="height:40px" />
-        <h4>$20 Voucher x @ViewBag.Transaction.NeededVoucherNumber total <span class="lbl-amount">@ViewBag.Transaction.SellingPrice @ViewBag.Transaction.Currency</span></h4>
-        <h4>pay by @TopUpStoreHelper.PaymentCodeToName(ViewBag.Transaction.PaymentType)</h4>
-        <p>
-            <button type="button" class="btn btn-confirm">Confirm to Pay</button>
+    <div class="jumbotron" style="text-align:center">
+        <img src="~/img/@logoFile" style="height:80px" />
+        <h4>$20 Voucher x @voucherNum</h4>
+        <h4>total <span class="lbl-amount">@ViewBag.Transaction.SellingPrice @ViewBag.Transaction.Currency</span></h4>
+        <h4>pay by <span class="lbl-amount">@payTypeStr</span></h4>
+        <p style="margin-top:30px">
+            <a href="/wx/topup/pay"><button type="submit" class="btn btn-confirm">Confirm and Pay</button></a>
             <a href="/wx/topup/@ViewBag.Transaction.Brand/@ViewBag.Transaction.TotalDenomination"><button type="button" class="btn">Back</button></a>
-         </p>
+        </p>
     </div>
-    <form id="form_topup" method="post" action="/wx/topup/confirm">
-        <input type="hidden" id="topup_brand" name="@ViewBag.Transaction.Brand" />
-        <input type="hidden" id="topup_amount" name="topup_amount" />
-        <input type="hidden" id="topup_pay_type" name="topup_pay_type" />
-    </form>
 </div>

@@ -23,10 +23,7 @@ namespace MobileTopUp.Models
         public string Brand { get; set; }
         public decimal TotalDenomination { get; set; }
         public decimal SellingPrice { get; set; }
-        public System.DateTime PaidDate { get; set; }
-
-        //add by Qin
-        public int NeededVoucherNumber { get; set; }
-        public Customer Customer { get; set; }
+        public System.DateTime OrderDate { get; set; }
+        public Nullable<System.DateTime> PaidDate { get; set; }
     }
 }

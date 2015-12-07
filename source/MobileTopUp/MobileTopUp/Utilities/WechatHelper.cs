@@ -7,13 +7,15 @@ using System.Web;
 using System.Web.Configuration;
 using Senparc.Weixin.MP.AdvancedAPIs;
 using Senparc.Weixin.MP.AdvancedAPIs.OAuth;
+using Senparc.Weixin.MP.AdvancedAPIs.Media;
+using Senparc.Weixin.Entities;
 
 namespace MobileTopUp.Utilities
 {
     public class WechatHelper
     {
-        private static string _appId = WebConfigurationManager.AppSettings["WeixinAppId"];
-
+        private static readonly string _appId = WebConfigurationManager.AppSettings["WeixinAppId"];
+        private static readonly string _tempFolder = WebConfigurationManager.AppSettings["TempFolder"];
 
         public static bool CheckSignature(string signature, string timestamp, string nonce)
         {
@@ -64,6 +66,20 @@ namespace MobileTopUp.Utilities
         public static OAuthUserInfo GetUserInfo(string token, string openID)
         {
             return OAuthApi.GetUserInfo(token, openID, Senparc.Weixin.Language.en);
+        }
+
+        public static bool SendImage(string openid, byte[] fileByte)
+        {
+            string tempFile = _tempFolder + openid + ".png";
+            System.IO.File.WriteAllBytes(tempFile, fileByte);
+            UploadTemporaryMediaResult updateRst = MediaApi.UploadTemporaryMedia(_appId, Senparc.Weixin.MP.UploadMediaFileType.image, tempFile);
+            if (updateRst.errcode != 0)
+            {
+                return false;
+            }
+
+            WxJsonResult sendRst = CustomApi.SendImage(_appId, openid, updateRst.media_id);
+            return sendRst.errcode == 0;
         }
     }
 }

@@ -13,29 +13,47 @@ namespace MobileTopUp
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.MapRoute(
-                name: "MobileTopUpPay",
-                url: "Wx/topup/confirm/{brand}/{amount}/{paytype}",
-                defaults: new
+                 "MobileTopUpConfirm",
+                 @"Wx/topup/confirm/{brand}/{amount}/{paytype}",
+                new
                 {
                     controller = "Wx",
                     action = "TopUpConfirm",
                 }
             );
             routes.MapRoute(
-                name: "MobileTopUpHome",
-                url: "Wx/topup/{brand}/{amount}",
+                 "MobileTopUpPay",
+                 "Wx/topup/pay",
                 defaults: new
                 {
                     controller = "Wx",
-                    action = "TopUp",
+                    action = "TopUpPay",
+                }
+            );
+            routes.MapRoute(
+                "MobileTopUpResult",
+                 "Wx/topup/paid/{transID}",
+                defaults: new
+                {
+                    controller = "Wx",
+                    action = "TopUpPaid",
+                }
+            );
+            routes.MapRoute(
+               "MobileTopUpHome",
+                "Wx/topup/{brand}/{amount}",
+                new
+                {
+                    controller = "Wx",
+                    action = "TopUpIndex",
                     brand = UrlParameter.Optional,
                     amount = UrlParameter.Optional
                 }
             );
             routes.MapRoute(
-                name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                 "Default",
+                 "{controller}/{action}/{id}",
+                 new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

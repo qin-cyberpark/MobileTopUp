@@ -32,11 +32,12 @@ namespace MobileTopUp.Controllers
         }
 
         // GET: TopUp
-        public ActionResult TopUp(string brand, int? amount)
+        public ActionResult TopUpIndex(string brand, int? amount)
         {
             //get customer
             Customer customer = (Customer)Session["LoginCustomer"];
-            if(customer == null) {
+            if (customer == null)
+            {
                 customer = _store.GetCustomerByWechatCode(Request["code"]);
                 if (customer == null)
                 {
@@ -49,15 +50,19 @@ namespace MobileTopUp.Controllers
             ViewBag.Amount = _store.GetVerifiedAmountOrDefault(amount);
             ViewBag.Discount = _store.Discount;
             ViewBag.ExRateCNY = _store.GetExchangeRate(CurrencyTypes.CNY);
+            ViewBag.ExRateNZD = _store.GetExchangeRate(CurrencyTypes.NZD);
 
             return View("topup-home");
+
         }
 
+        [OutputCacheAttribute(VaryByParam = "*", Duration = 0, NoStore = true)]
         public ActionResult TopUpConfirm(string brand, int amount, string payType)
         {
             //verify customer
             Customer customer = (Customer)Session["LoginCustomer"];
-            if (customer == null) {
+            if (customer == null)
+            {
                 return Redirect("/wx/topup");
             }
 
@@ -81,12 +86,12 @@ namespace MobileTopUp.Controllers
             //transaction info
             trans.Brand = brand;
             trans.TotalDenomination = _store.GetVerifiedAmountOrDefault(amount);
-            trans.NeededVoucherNumber = TopUpStoreHelper.CalcNeededVoucherNumber(trans.TotalDenomination);
             trans.PaymentType = payType;
-           
+
             if (TopUpStoreHelper.PaymentCodeToType(trans.PaymentType) != PaymentTypes.WechatPay)
             {
                 trans.Currency = TopUpStoreHelper.CurrencyTypeToString(CurrencyTypes.NZD);
+                trans.ExchangeRate = _store.GetExchangeRate(CurrencyTypes.NZD);
                 trans.SellingPrice = trans.TotalDenomination * _store.Discount;
             }
             else
@@ -96,10 +101,121 @@ namespace MobileTopUp.Controllers
                 trans.SellingPrice = trans.TotalDenomination * _store.Discount * trans.ExchangeRate;
             }
             trans.SellingPrice = Math.Round(trans.SellingPrice, 2);
+            Session["CurrentTransaction"] = trans; 
 
             ViewBag.Transaction = trans;
 
             return View("topup-confirm");
+        }
+
+        // GET: TopUp
+        [OutputCacheAttribute(VaryByParam = "*", Duration = 0, NoStore = true)]
+        public ActionResult TopUpPay()
+        {
+            //verify customer
+            Customer customer = (Customer)Session["LoginCustomer"];
+            if (customer == null)
+            {
+                return Redirect("/wx/topup");
+            }
+
+            //verify transaction
+            Transaction trans = (Transaction)Session["CurrentTransaction"];
+            Session.Remove("CurrentTransaction");
+            if (trans == null)
+            {
+                return Redirect("/wx/topup");
+            }
+
+            //verify voucher
+            //link vouchour
+            int voucherNumber = TopUpStoreHelper.CalcNeededVoucherNumber(trans.TotalDenomination);
+            IEnumerable<Voucher> vouchers = _store.Vouchers.Where(x => x.Brand.Equals(trans.Brand) && x.TransactionID == null).Take(voucherNumber);
+            if (vouchers.Count() != voucherNumber)
+            {
+                ViewBag.ImageUrl = "/img/soldout.png";
+                return View("topup-msg");
+            }
+            using (var dbTrans = _store.Database.BeginTransaction())
+            {
+                try
+                {
+                    //save transaction
+                    trans.CustomerID = customer.ID;
+                    trans.OrderDate = DateTime.Now;
+                    _store.Transactions.Add(trans);
+                    _store.SaveChanges();
+
+                    //hold voucher
+                    foreach (Voucher v in vouchers)
+                    {
+                        v.CustomerID = customer.ID;
+                        v.TransactionID = trans.ID;
+                    }
+                    _store.SaveChanges();
+                
+                    dbTrans.Commit();
+                }
+                catch (Exception)
+                {
+                    dbTrans.Rollback();
+                    ViewBag.Message = "Sorry, something went wrong.";
+                    return View("topup-msg");
+                }
+            }
+           
+            //redirect to pay
+            switch (TopUpStoreHelper.PaymentCodeToType(trans.PaymentType))
+            {
+                case PaymentTypes.WechatPay: break;
+                case PaymentTypes.PaymentExpressA2A: break;
+                case PaymentTypes.PaymentExpressCC: break;
+                default: break;
+            }
+
+            //test
+            return Redirect("/wx/topup/paid/" + trans.ID);
+        }
+
+        // GET: TopUp
+        [OutputCacheAttribute(VaryByParam = "*", Duration = 0, NoStore = true)]
+        public ActionResult TopUpPaid(int transID)
+        {
+            //verify customer
+            Customer customer = (Customer)Session["LoginCustomer"];
+            if (customer == null)
+            {
+                return Redirect("/wx/topup");
+            }
+
+            //verify transaction
+            Transaction trans = _store.Transactions.Find(transID);
+            if(trans == null || trans.CustomerID != customer.ID)
+            {
+                return Redirect("/wx/topup");
+            }
+
+            //get holded voucher
+            IEnumerable<Voucher> vouchers = _store.Vouchers.Where(x => x.TransactionID == trans.ID);
+            if (trans.PaidDate == null)
+            {
+                //update transaction
+                trans.PaymentRef = "TESTREFNUM";
+                trans.PaidDate = DateTime.Now;
+
+                //flag vouchour to sold and send image to customer
+                foreach (Voucher v in vouchers)
+                {
+                    v.IsSold = true;
+                    WechatHelper.SendImage(customer.ReferenceID, v.Image);
+                }
+                _store.SaveChanges();
+            }
+        
+            //send voucher
+            ViewBag.Vouchers = vouchers;
+
+            return View("topup-voucher");
         }
     }
 }
