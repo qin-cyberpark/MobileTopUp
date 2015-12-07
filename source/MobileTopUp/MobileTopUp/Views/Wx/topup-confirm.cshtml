@@ -1,0 +1,20 @@
+﻿@using MobileTopUp.Utilities
+@{
+    var logoFile = ViewBag.Transaction.Brand + ".png";
+}
+<div class="container">
+    <div class="jumbotron">
+        <img src="~/img/@logoFile" style="height:40px" />
+        <h4>$20 Voucher x @ViewBag.Transaction.NeededVoucherNumber total <span class="lbl-amount">@ViewBag.Transaction.SellingPrice @ViewBag.Transaction.Currency</span></h4>
+        <h4>pay by @TopUpStoreHelper.PaymentCodeToName(ViewBag.Transaction.PaymentType)</h4>
+        <p>
+            <button type="button" class="btn btn-confirm">Confirm to Pay</button>
+            <a href="/wx/topup/@ViewBag.Transaction.Brand/@ViewBag.Transaction.TotalDenomination"><button type="button" class="btn">Back</button></a>
+         </p>
+    </div>
+    <form id="form_topup" method="post" action="/wx/topup/confirm">
+        <input type="hidden" id="topup_brand" name="@ViewBag.Transaction.Brand" />
+        <input type="hidden" id="topup_amount" name="topup_amount" />
+        <input type="hidden" id="topup_pay_type" name="topup_pay_type" />
+    </form>
+</div>

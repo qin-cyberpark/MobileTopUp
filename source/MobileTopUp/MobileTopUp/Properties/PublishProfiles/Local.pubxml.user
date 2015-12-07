@@ -10,10 +10,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/App_global.asax.compiled">
-      <publishTime>12/06/2015 18:06:46</publishTime>
+      <publishTime>12/06/2015 20:30:12</publishTime>
     </File>
     <File Include="bin/App_global.asax.dll">
-      <publishTime>12/06/2015 18:06:46</publishTime>
+      <publishTime>12/06/2015 20:30:11</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>12/05/2015 00:07:44</publishTime>
@@ -28,7 +28,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/05/2015 00:06:45</publishTime>
     </File>
     <File Include="bin/MobileTopUp.dll">
-      <publishTime>12/06/2015 17:55:45</publishTime>
+      <publishTime>12/06/2015 20:30:07</publishTime>
     </File>
     <File Include="bin/MySql.Data.dll">
       <publishTime>10/02/2015 17:05:26</publishTime>
@@ -102,8 +102,11 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="bin/System.Web.Webpages.Razor.dll">
       <publishTime>12/05/2015 00:06:45</publishTime>
     </File>
+    <File Include="css/bootstrap.min.css">
+      <publishTime>12/06/2015 18:36:13</publishTime>
+    </File>
     <File Include="css/main.css">
-      <publishTime>12/06/2015 18:02:18</publishTime>
+      <publishTime>12/06/2015 20:24:22</publishTime>
     </File>
     <File Include="img/2degree.png">
       <publishTime>12/06/2015 03:16:19</publishTime>
@@ -124,7 +127,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/06/2015 03:16:19</publishTime>
     </File>
     <File Include="img/wx-pay.png">
-      <publishTime>12/06/2015 17:41:03</publishTime>
+      <publishTime>12/06/2015 18:11:46</publishTime>
+    </File>
+    <File Include="js/bootstrap.min.js">
+      <publishTime>12/06/2015 18:36:17</publishTime>
+    </File>
+    <File Include="js/jquery-1.11.3.min.js">
+      <publishTime>12/06/2015 18:35:55</publishTime>
+    </File>
+    <File Include="js/main.js">
+      <publishTime>12/06/2015 18:30:08</publishTime>
     </File>
     <File Include="Models/TopUpEntities.edmx.diagram">
       <publishTime>12/05/2015 00:17:13</publishTime>
@@ -133,13 +145,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/05/2015 00:07:44</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>12/06/2015 18:06:41</publishTime>
+      <publishTime>12/06/2015 20:30:08</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
       <publishTime>12/06/2015 03:13:51</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>12/06/2015 03:34:18</publishTime>
+      <publishTime>12/06/2015 20:18:53</publishTime>
     </File>
     <File Include="Views/TopUp/default.cshtml">
       <publishTime>12/05/2015 04:15:57</publishTime>
@@ -148,7 +160,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/05/2015 00:06:44</publishTime>
     </File>
     <File Include="Views/Wx/topup.cshtml">
-      <publishTime>12/06/2015 18:05:56</publishTime>
+      <publishTime>12/06/2015 20:27:28</publishTime>
     </File>
     <File Include="Views/_ViewStart.cshtml">
       <publishTime>12/05/2015 00:24:23</publishTime>

@@ -1,0 +1,39 @@
+{
+  "button": [
+    {
+      "type": "click",
+      "name": "测试按钮A",
+      "key": "TEST_BUTTON_A"
+    },
+    {
+      "name": "话费充值",
+      "sub_button": [
+        {
+          "type": "view",
+          "name": "Spark",
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8f0f03f3f09da028&redirect_uri=http://www.q-life.me/wx/topup/spark&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
+        },
+        {
+          "type": "view",
+          "name": "Vodafone",
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8f0f03f3f09da028&redirect_uri=http://192.168.2.146/wx/topup/vodafone&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect"
+        },
+        {
+          "type": "view",
+          "name": "2 Degree",
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8f0f03f3f09da028&redirect_uri=http://www.q-life.me/wx/topup/2degree&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
+        },
+        {
+          "type": "view",
+          "name": "Skinny",
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8f0f03f3f09da028&redirect_uri=http://192.168.2.146/wx/topup/skinny&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
+        }
+      ]
+    },
+    {
+      "type": "click",
+      "name": "测试按钮B",
+      "key": "TEST_BUTTON_B"
+    }
+  ]
+}
