@@ -13,10 +13,10 @@ namespace MobileTopUp.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class MyEntities : DbContext
+    public partial class TopUpStore : DbContext
     {
-        public MyEntities()
-            : base("name=MyEntities")
+        public TopUpStore()
+            : base("name=TopUpStore")
         {
         }
     

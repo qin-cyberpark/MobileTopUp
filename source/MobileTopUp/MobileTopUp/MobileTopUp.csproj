@@ -58,6 +58,14 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="MySql.Data, Version=6.9.8.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
     <Reference Include="MySql.Data.Entity.EF6, Version=6.9.8.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
+    <Reference Include="Senparc.Weixin, Version=4.5.1.19290, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Senparc.Weixin.4.5.1\lib\net45\Senparc.Weixin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Senparc.Weixin.MP, Version=13.4.4.19291, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Senparc.Weixin.MP.13.4.4\lib\net45\Senparc.Weixin.MP.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -114,6 +122,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="css\bootstrap.min.css" />
     <Content Include="css\main.css" />
     <Content Include="Global.asax" />
     <Content Include="img\2degree.png" />
@@ -123,6 +132,9 @@
     <Content Include="img\spark.png" />
     <Content Include="img\vodafone.png" />
     <Content Include="img\wx-pay.png" />
+    <Content Include="js\bootstrap.min.js" />
+    <Content Include="js\jquery-1.11.3.min.js" />
+    <Content Include="js\main.js" />
     <Content Include="Models\TopUpEntities.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>TopUpEntities.edmx</DependentUpon>
@@ -140,9 +152,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\WxController.cs" />
-    <Compile Include="Global.asax.cs">
-      <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
+    <Compile Include="Models\TopUpStore.cs" />
     <Compile Include="Models\Customer.cs">
       <DependentUpon>TopUpEntities.tt</DependentUpon>
     </Compile>
@@ -167,11 +177,19 @@
     <Compile Include="Models\Voucher.cs">
       <DependentUpon>TopUpEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\TopUpStoreHelper.cs" />
+    <Compile Include="Utilities\WechatHelper.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
     <Content Include="packages.config" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
     <EntityDeploy Include="Models\TopUpEntities.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>TopUpEntities.Designer.cs</LastGenOutput>
@@ -179,11 +197,9 @@
     <Content Include="Models\TopUpEntities.edmx.diagram">
       <DependentUpon>TopUpEntities.edmx</DependentUpon>
     </Content>
-    <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\_ViewStart.cshtml" />
     <None Include="Properties\PublishProfiles\Local.pubxml" />
-    <Content Include="Views\Wx\topup.cshtml" />
+    <Content Include="Views\Wx\topup-home.cshtml" />
+    <Content Include="Views\Wx\topup-confirm.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -212,7 +228,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>54299</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:54299/</IISUrl>
+          <IISUrl>http://localhost:80</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

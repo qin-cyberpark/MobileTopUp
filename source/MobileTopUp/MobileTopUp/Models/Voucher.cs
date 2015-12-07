@@ -15,7 +15,8 @@ namespace MobileTopUp.Models
     public partial class Voucher
     {
         public int ID { get; set; }
-        public decimal Amount { get; set; }
+        public string Brand { get; set; }
+        public decimal Denomination { get; set; }
         public string Number { get; set; }
         public byte[] Image { get; set; }
         public string CreatedBy { get; set; }

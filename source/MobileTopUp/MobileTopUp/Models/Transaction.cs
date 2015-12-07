@@ -18,8 +18,15 @@ namespace MobileTopUp.Models
         public int CustomerID { get; set; }
         public string PaymentType { get; set; }
         public string PaymentRef { get; set; }
-        public decimal TotalAmount { get; set; }
-        public decimal PaidAmount { get; set; }
+        public string Currency { get; set; }
+        public decimal ExchangeRate { get; set; }
+        public string Brand { get; set; }
+        public decimal TotalDenomination { get; set; }
+        public decimal SellingPrice { get; set; }
         public System.DateTime PaidDate { get; set; }
+
+        //add by Qin
+        public int NeededVoucherNumber { get; set; }
+        public Customer Customer { get; set; }
     }
 }

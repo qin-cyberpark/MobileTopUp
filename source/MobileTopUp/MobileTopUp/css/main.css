@@ -12,8 +12,8 @@
 	background-size: auto 60%;
 	background-position: center;
 	background-repeat: no-repeat;
-	opacity: 0.2;
-	filter: alpha(opacity=20); /* For IE8 and earlier */
+	opacity: 0.15;
+	filter: alpha(opacity=15); /* For IE8 and earlier */
 }
 .brand-selected{
 	opacity: 1;
@@ -33,19 +33,24 @@
 .amount-selected{
 	background-color:#698905;
 }
-.btn-wechatPay{
+.btn-pay{
 	height:55px;
+}
+.btn-pay-wechat{
 	background-color:white;
 }
-.btn-paymentExpress{
-	border-radius:0;
-	height:50px;
+.btn-pay-pe{
+    max-width:200px;
 	background-color:#e3e3e3;
-	background-size: 95% auto;
+	background-size: 100% 100%;
 	background-position: center;
 	background-repeat: no-repeat;
 }
 .lbl-amount{
     font-size:18px;
     color:red;
+}
+.btn-confirm{
+    color:white;
+    background-color:#698905;
 }
