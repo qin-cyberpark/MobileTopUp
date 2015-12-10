@@ -6,19 +6,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <_PublishTargetUrl>D:\works\Greenspot\MobileTopUp\publish</_PublishTargetUrl>
+    <_PublishTargetUrl>D:\works\Greenspot\MobileTopUp\release\1.0\production</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/App_global.asax.compiled">
-      <publishTime>12/06/2015 20:30:12</publishTime>
+      <publishTime>12/10/2015 12:59:20</publishTime>
     </File>
     <File Include="bin/App_global.asax.dll">
-      <publishTime>12/06/2015 20:30:11</publishTime>
+      <publishTime>12/10/2015 12:59:20</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
-      <publishTime>12/05/2015 00:07:44</publishTime>
-    </File>
-    <File Include="bin/EntityFramework.SqlServer.dll">
       <publishTime>12/05/2015 00:07:44</publishTime>
     </File>
     <File Include="bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll">
@@ -28,7 +25,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/05/2015 00:06:45</publishTime>
     </File>
     <File Include="bin/MobileTopUp.dll">
-      <publishTime>12/06/2015 20:30:07</publishTime>
+      <publishTime>12/10/2015 12:59:12</publishTime>
+    </File>
+    <File Include="bin/MobileTopUp.pdb">
+      <publishTime>12/10/2015 12:59:12</publishTime>
     </File>
     <File Include="bin/MySql.Data.dll">
       <publishTime>10/02/2015 17:05:26</publishTime>
@@ -75,6 +75,12 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="bin/roslyn/VBCSCompiler.exe.config">
       <publishTime>12/05/2015 00:06:48</publishTime>
     </File>
+    <File Include="bin/Senparc.Weixin.dll">
+      <publishTime>12/06/2015 22:22:04</publishTime>
+    </File>
+    <File Include="bin/Senparc.Weixin.MP.dll">
+      <publishTime>12/06/2015 22:22:07</publishTime>
+    </File>
     <File Include="bin/System.Net.Http.Formatting.dll">
       <publishTime>12/05/2015 00:06:48</publishTime>
     </File>
@@ -102,11 +108,14 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="bin/System.Web.Webpages.Razor.dll">
       <publishTime>12/05/2015 00:06:45</publishTime>
     </File>
+    <File Include="bin/Tesseract.dll">
+      <publishTime>12/09/2015 11:50:47</publishTime>
+    </File>
     <File Include="css/bootstrap.min.css">
       <publishTime>12/06/2015 18:36:13</publishTime>
     </File>
     <File Include="css/main.css">
-      <publishTime>12/06/2015 20:24:22</publishTime>
+      <publishTime>12/08/2015 14:59:36</publishTime>
     </File>
     <File Include="img/2degree.png">
       <publishTime>12/06/2015 03:16:19</publishTime>
@@ -117,14 +126,26 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="img/pe-cc.png">
       <publishTime>12/06/2015 03:16:19</publishTime>
     </File>
+    <File Include="img/pe.png">
+      <publishTime>12/08/2015 14:38:10</publishTime>
+    </File>
     <File Include="img/skinny.png">
       <publishTime>12/06/2015 03:16:19</publishTime>
+    </File>
+    <File Include="img/soldout.png">
+      <publishTime>12/08/2015 11:27:04</publishTime>
     </File>
     <File Include="img/spark.png">
       <publishTime>12/06/2015 03:16:19</publishTime>
     </File>
     <File Include="img/vodafone.png">
       <publishTime>12/06/2015 03:16:19</publishTime>
+    </File>
+    <File Include="img/wechat.png">
+      <publishTime>12/08/2015 14:38:10</publishTime>
+    </File>
+    <File Include="img/wip.png">
+      <publishTime>12/08/2015 17:13:06</publishTime>
     </File>
     <File Include="img/wx-pay.png">
       <publishTime>12/06/2015 18:11:46</publishTime>
@@ -135,38 +156,56 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="js/jquery-1.11.3.min.js">
       <publishTime>12/06/2015 18:35:55</publishTime>
     </File>
+    <File Include="js/jquery-ui.min.js">
+      <publishTime>12/09/2015 14:04:23</publishTime>
+    </File>
+    <File Include="js/jquery.fileupload.js">
+      <publishTime>12/09/2015 14:11:32</publishTime>
+    </File>
+    <File Include="js/jquery.iframe-transport.js">
+      <publishTime>12/09/2015 14:11:32</publishTime>
+    </File>
     <File Include="js/main.js">
       <publishTime>12/06/2015 18:30:08</publishTime>
     </File>
     <File Include="Models/TopUpEntities.edmx.diagram">
-      <publishTime>12/05/2015 00:17:13</publishTime>
+      <publishTime>12/07/2015 16:54:42</publishTime>
     </File>
     <File Include="packages.config">
-      <publishTime>12/05/2015 00:07:44</publishTime>
+      <publishTime>12/09/2015 11:50:48</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>12/06/2015 20:30:08</publishTime>
+      <publishTime>12/10/2015 12:59:13</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
       <publishTime>12/06/2015 03:13:51</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>12/06/2015 20:18:53</publishTime>
+      <publishTime>12/07/2015 14:06:57</publishTime>
     </File>
-    <File Include="Views/TopUp/default.cshtml">
-      <publishTime>12/05/2015 04:15:57</publishTime>
+    <File Include="Views/Voucher/scan.cshtml">
+      <publishTime>12/09/2015 15:03:47</publishTime>
     </File>
     <File Include="Views/web.config">
       <publishTime>12/05/2015 00:06:44</publishTime>
     </File>
-    <File Include="Views/Wx/topup.cshtml">
-      <publishTime>12/06/2015 20:27:28</publishTime>
+    <File Include="Views/Wx/topup-confirm.cshtml">
+      <publishTime>12/08/2015 14:24:55</publishTime>
+    </File>
+    <File Include="Views/Wx/topup-home.cshtml">
+      <publishTime>12/08/2015 14:58:25</publishTime>
+    </File>
+    <File Include="Views/Wx/topup-msg.cshtml">
+      <publishTime>12/08/2015 11:30:07</publishTime>
+    </File>
+    <File Include="Views/Wx/topup-voucher.cshtml">
+      <publishTime>12/08/2015 02:22:20</publishTime>
     </File>
     <File Include="Views/_ViewStart.cshtml">
       <publishTime>12/05/2015 00:24:23</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>12/05/2015 04:17:01</publishTime>
+      <publishTime>12/10/2015 12:59:12</publishTime>
     </File>
   </ItemGroup>
 </Project>

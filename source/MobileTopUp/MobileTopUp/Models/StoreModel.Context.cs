@@ -13,10 +13,10 @@ namespace MobileTopUp.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class TopUpStore : DbContext
+    public partial class StoreEntities : DbContext
     {
-        public TopUpStore()
-            : base("name=TopUpStore")
+        public StoreEntities()
+            : base("name=StoreEntities")
         {
         }
     
@@ -25,8 +25,8 @@ namespace MobileTopUp.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Transaction> Transactions { get; set; }
         public virtual DbSet<Voucher> Vouchers { get; set; }
+        public virtual DbSet<Account> Accounts { get; set; }
     }
 }

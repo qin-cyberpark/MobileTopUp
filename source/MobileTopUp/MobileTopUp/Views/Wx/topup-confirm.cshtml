@@ -6,14 +6,14 @@
     switch ((string)ViewBag.Transaction.PaymentType)
     {
         case "WECHAT": payTypeStr = "WECHAT"; break;
-        case "PECC": payTypeStr = "CREDIT CARD"; break;
-        case "PEA2A": payTypeStr = "ACCOUNT 2 ACCOUNT"; break;
+        case "PECC": payTypeStr = "PAYMENT EXPRESS"; break;
+        case "PEA2A": payTypeStr = "SKIP PAYMENT"; break;
         default: payTypeStr = "UNKNOWN"; break;
     }
 }
 <div class="container">
     <div class="jumbotron" style="text-align:center">
-        <img src="~/img/@logoFile" style="height:80px" />
+        <img src="~/img/@logoFile" style="height:80px"/>
         <h4>$20 Voucher x @voucherNum</h4>
         <h4>total <span class="lbl-amount">@ViewBag.Transaction.SellingPrice @ViewBag.Transaction.Currency</span></h4>
         <h4>pay by <span class="lbl-amount">@payTypeStr</span></h4>

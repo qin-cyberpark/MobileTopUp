@@ -12,7 +12,7 @@ namespace MobileTopUp.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Customer
+    public partial class Account
     {
         public int ID { get; set; }
         public string Type { get; set; }

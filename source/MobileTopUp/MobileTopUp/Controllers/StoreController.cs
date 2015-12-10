@@ -9,28 +9,9 @@ using MobileTopUp.Utilities;
 
 namespace MobileTopUp.Controllers
 {
-    public class WxController : Controller
+    public class StoreController : Controller
     {
-        // GET: Wx
-        TopUpStore _store = new TopUpStore();
-        public ActionResult Test()
-        {
-            bool correct = WechatHelper.CheckSignature(Request["signature"], Request["timestamp"], Request["nonce"]);
-            if (correct && Request.HttpMethod == "GET")
-            {
-                //for wexin verify using
-                return Content(Request["echostr"]);
-            }
-            else if (correct && Request.HttpMethod == "POST")
-            {
-                return Content(Request["echostr"]);
-            }
-            else
-            {
-                return Content("NG");
-            }
-        }
-
+        /*
         // GET: TopUp
         public ActionResult TopUpIndex(string brand, int? amount)
         {
@@ -38,7 +19,7 @@ namespace MobileTopUp.Controllers
             Customer customer = (Customer)Session["LoginCustomer"];
             if (customer == null)
             {
-                customer = _store.GetCustomerByWechatCode(Request["code"]);
+                customer = Store.GetAccountByWechatCode(Request["code"]);
                 if (customer == null)
                 {
                     return Content("NG");
@@ -46,11 +27,9 @@ namespace MobileTopUp.Controllers
                 Session["LoginCustomer"] = customer;
             }
 
-            ViewBag.Brand = _store.GetVerifiedBrandOrDefault(brand);
-            ViewBag.Amount = _store.GetVerifiedAmountOrDefault(amount);
-            ViewBag.Discount = _store.Discount;
-            ViewBag.ExRateCNY = _store.GetExchangeRate(CurrencyTypes.CNY);
-            ViewBag.ExRateNZD = _store.GetExchangeRate(CurrencyTypes.NZD);
+            ViewBag.Brand = Store.VerifiedBrandOrDefault(brand);
+            ViewBag.Discount = Store.Configuration.Payment.Discount;
+            ViewBag.ExRateCNY = Store.Configuration.Payment.ExchangeRateCNY;
 
             return View("topup-home");
 
@@ -163,18 +142,34 @@ namespace MobileTopUp.Controllers
                     return View("topup-msg");
                 }
             }
-           
+
             //redirect to pay
+            string payUrl = null;
+            string urlFail = "http://192.168.2.164/wx/topup/paidfail/" + trans.ID;
+            string urlSucces = "http://192.168.2.164/wx/topup/paid/" + trans.ID;
+
             switch (TopUpStoreHelper.PaymentCodeToType(trans.PaymentType))
             {
-                case PaymentTypes.WechatPay: break;
+                case PaymentTypes.WechatPay: 
+                    ViewBag.ImageUrl = "/img/wip.png";
+                    return View("topup-msg");
                 case PaymentTypes.PaymentExpressA2A: break;
-                case PaymentTypes.PaymentExpressCC: break;
+                case PaymentTypes.PaymentExpressCC:
+                    payUrl = PxPayHelper.GeneratePaymentRequestURL(trans.SellingPrice, "TOPUP" + trans.ID, trans.ID.ToString(), urlFail, urlSucces);
+                    break;
                 default: break;
             }
 
-            //test
-            return Redirect("/wx/topup/paid/" + trans.ID);
+            if (string.IsNullOrEmpty(payUrl))
+            {  
+                //test
+                return Redirect("/wx/topup/paid/" + trans.ID);
+            }
+            else
+            {
+                return Redirect(payUrl);
+            }
+
         }
 
         // GET: TopUp
@@ -217,5 +212,6 @@ namespace MobileTopUp.Controllers
 
             return View("topup-voucher");
         }
+        */
     }
 }

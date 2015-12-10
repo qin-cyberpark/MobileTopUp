@@ -5,17 +5,22 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using System.Web.Configuration;
+using Senparc.Weixin.MP.TenPayLibV3;
 using Senparc.Weixin.MP.AdvancedAPIs;
 using Senparc.Weixin.MP.AdvancedAPIs.OAuth;
 using Senparc.Weixin.MP.AdvancedAPIs.Media;
 using Senparc.Weixin.Entities;
+using MobileTopUp.Configuration;
 
 namespace MobileTopUp.Utilities
 {
     public class WechatHelper
     {
-        private static readonly string _appId = WebConfigurationManager.AppSettings["WeixinAppId"];
-        private static readonly string _tempFolder = WebConfigurationManager.AppSettings["TempFolder"];
+        private static readonly log4net.ILog _sysLogger = log4net.LogManager.GetLogger("SysLogger");
+
+        private static readonly string _appId = StoreConfiguration.Instance.Wechat.Id;
+        private static readonly string _appSecret = StoreConfiguration.Instance.Wechat.Key;
+        private static readonly string _tempFolder = StoreConfiguration.Instance.TemporaryDirectory;
 
         public static bool CheckSignature(string signature, string timestamp, string nonce)
         {
@@ -44,30 +49,59 @@ namespace MobileTopUp.Utilities
             return signature == sb.ToString();
         }
 
-
-        public void GetUserInfo()
-        {
-            UserApi.Info(_appId, "", Senparc.Weixin.Language.en);
-        }
-
+        /// <summary>
+        /// get open id
+        /// </summary>
+        /// <param name="code">code from wexin</param>
+        /// <param name="userInfoAccessToken">token using to get userInfo</param>
+        /// <returns></returns>
         public static string GetOpenID(string code, out string userInfoAccessToken)
         {
-
-            OAuthAccessTokenResult result = OAuthApi.GetAccessToken(WebConfigurationManager.AppSettings["WeixinAppId"], WebConfigurationManager.AppSettings["WeixinAppSecret"], code);
-            if (string.IsNullOrEmpty(result.access_token)) {
+            _sysLogger.Info(string.Format("[WX]start to get open ID by code {0}", code));
+            try {
+                OAuthAccessTokenResult result = OAuthApi.GetAccessToken(_appId, _appSecret, code);
+                if (string.IsNullOrEmpty(result.access_token)) {
+                    userInfoAccessToken = null;
+                    return null;
+                }
+                userInfoAccessToken = result.access_token;
+                _sysLogger.Info(string.Format("[WX]succeed to get open ID {0}, token {1}", result.openid, result.access_token));
+                return result.openid;
+            }
+            catch (Exception ex)
+            {
+                _sysLogger.Error(string.Format("[WX]failed to get open ID by code {0}", code), ex);
                 userInfoAccessToken = null;
                 return null;
             }
 
-            userInfoAccessToken = result.access_token;
-            return result.openid;
         }
 
+        /// <summary>
+        /// get userInfo
+        /// </summary>
+        /// <param name="token"></param>
+        /// <param name="openID"></param>
+        /// <returns></returns>
         public static OAuthUserInfo GetUserInfo(string token, string openID)
         {
-            return OAuthApi.GetUserInfo(token, openID, Senparc.Weixin.Language.en);
+            _sysLogger.Info(string.Format("[WX]start to get user info by open id {0}", openID));
+            try {
+                return OAuthApi.GetUserInfo(token, openID, Senparc.Weixin.Language.en);
+            }
+            catch(Exception ex)
+            {
+                _sysLogger.Error(string.Format("[WX]failed to get user info by open id {0}", openID), ex);
+                return null;
+            }
         }
 
+        /// <summary>
+        /// send image to openid
+        /// </summary>
+        /// <param name="openid"></param>
+        /// <param name="fileByte"></param>
+        /// <returns></returns>
         public static bool SendImage(string openid, byte[] fileByte)
         {
             string tempFile = _tempFolder + openid + ".png";

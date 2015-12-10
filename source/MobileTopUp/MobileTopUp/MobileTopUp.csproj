@@ -25,26 +25,13 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.14.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.4\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -81,6 +68,10 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Tesseract, Version=2.4.1.0, Culture=neutral, PublicKeyToken=ebeb3d86bef60cbe, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Tesseract.2.4.1.0\lib\net45\Tesseract.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Web.Razor">
@@ -124,23 +115,29 @@
     <Content Include="img\2degree.png" />
     <Content Include="img\pe-a2a.png" />
     <Content Include="img\pe-cc.png" />
+    <Content Include="img\pe.png" />
     <Content Include="img\skinny.png" />
     <Content Include="img\soldout.png" />
     <Content Include="img\spark.png" />
     <Content Include="img\vodafone.png" />
+    <Content Include="img\wechat.png" />
+    <Content Include="img\wip.png" />
     <Content Include="img\wx-pay.png" />
     <Content Include="js\bootstrap.min.js" />
     <Content Include="js\jquery-1.11.3.min.js" />
+    <Content Include="js\jquery-ui.min.js" />
+    <Content Include="js\jquery.fileupload.js" />
+    <Content Include="js\jquery.iframe-transport.js" />
     <Content Include="js\main.js" />
-    <Content Include="Models\TopUpEntities.Context.tt">
+    <Content Include="Models\StoreModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>TopUpEntities.edmx</DependentUpon>
-      <LastGenOutput>TopUpEntities.Context.cs</LastGenOutput>
+      <DependentUpon>StoreModel.edmx</DependentUpon>
+      <LastGenOutput>StoreModel.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\TopUpEntities.tt">
+    <Content Include="Models\StoreModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>TopUpEntities.edmx</DependentUpon>
-      <LastGenOutput>TopUpEntities.cs</LastGenOutput>
+      <DependentUpon>StoreModel.edmx</DependentUpon>
+      <LastGenOutput>StoreModel.cs</LastGenOutput>
     </Content>
     <Content Include="Web.config" />
   </ItemGroup>
@@ -148,33 +145,42 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\WxController.cs" />
-    <Compile Include="Models\TopUpStore.cs" />
-    <Compile Include="Models\Customer.cs">
-      <DependentUpon>TopUpEntities.tt</DependentUpon>
+    <Compile Include="Controllers\VoucherController.cs" />
+    <Compile Include="Controllers\StoreController.cs" />
+    <Compile Include="Controllers\WechatController.cs" />
+    <Compile Include="Configuration\StoreConfig.cs" />
+    <Compile Include="Domain\AccountManager.cs" />
+    <Compile Include="Models\Account.cs">
+      <DependentUpon>StoreModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\TopUpEntities.Context.cs">
+    <Compile Include="Models\StoreModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>TopUpEntities.Context.tt</DependentUpon>
+      <DependentUpon>StoreModel.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\TopUpEntities.cs">
+    <Compile Include="Models\StoreModel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>TopUpEntities.tt</DependentUpon>
+      <DependentUpon>StoreModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\TopUpEntities.Designer.cs">
+    <Compile Include="Models\StoreModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>TopUpEntities.edmx</DependentUpon>
+      <DependentUpon>StoreModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Transaction.cs">
-      <DependentUpon>TopUpEntities.tt</DependentUpon>
+      <DependentUpon>StoreModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Voucher.cs">
-      <DependentUpon>TopUpEntities.tt</DependentUpon>
+      <DependentUpon>StoreModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Utilities\TopUpStoreHelper.cs" />
+    <Compile Include="Domain\Accountant.cs" />
+    <Compile Include="Domain\Exceptions.cs" />
+    <Compile Include="Domain\Store.cs" />
+    <Compile Include="Domain\Store_definition.cs" />
+    <Compile Include="Domain\Store_log.cs" />
+    <Compile Include="Domain\VoucherManager.cs" />
+    <Compile Include="PxPay\PxPay.cs" />
     <Compile Include="Utilities\WechatHelper.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -187,28 +193,31 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <EntityDeploy Include="Models\TopUpEntities.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>TopUpEntities.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\TopUpEntities.edmx.diagram">
-      <DependentUpon>TopUpEntities.edmx</DependentUpon>
-    </Content>
-    <None Include="Properties\PublishProfiles\Local.pubxml" />
     <Content Include="Views\Wx\topup-home.cshtml" />
     <Content Include="Views\Wx\topup-confirm.cshtml" />
     <Content Include="Views\Wx\topup-voucher.cshtml" />
     <Content Include="Views\Wx\topup-msg.cshtml" />
-    <None Include="Web.Debug.config">
+    <Content Include="Views\Voucher\scan.cshtml" />
+    <EntityDeploy Include="Models\StoreModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>StoreModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\StoreModel.edmx.diagram">
+      <DependentUpon>StoreModel.edmx</DependentUpon>
+    </Content>
+    <None Include="Properties\PublishProfiles\Production 1.0.pubxml" />
+    <None Include="Properties\PublishProfiles\Test 1.0.pubxml" />
+    <None Include="Web.Pro.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-    <None Include="Web.Release.config">
+    <None Include="Web.Test.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Voucher\" />
+    <Folder Include="js\vendor\" />
+    <Folder Include="Views\Wechat\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -216,6 +225,34 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Test|AnyCPU' ">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <WarningLevel>0</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Pro|AnyCPU' ">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Dev|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

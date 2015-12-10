@@ -35,29 +35,25 @@
             <button type="button" class="btn btn-amount btn-lg no-left-border" amount-type="100">$100</button>
         </div>
     </div>
-    <p></p>
+    <p style="height:30px"></p>
+    <div class="btn-group btn-group-justified" role="group" aria-label="..." style="text-align:center">
+        <div class="btn-group" role="group">
+            <span id="payAmountCNY" class="lbl-amount">
+                0 CNY
+            </span>
+            <button type="button" class="btn btn-pay" pay-type="WECHAT"><img src="/img/wechat.png"/></button>
+        </div>
+        <div class="btn-group" role="group">
+            <span id="payAmountNZD" class="lbl-amount">
+                0 NZD
+            </span>
+            <button type="button" class="btn btn-pay" pay-type="PECC"><img src="/img/pe.png"/></button>
+        </div>
+    </div>
     <div>
-        <span id="payAmountCNY" class="lbl-amount">
-            0 CNY
-        </span>
     </div>
-    <div class="btn-group btn-group-justified" role="group" aria-label="...">
-        <div class="btn-group" role="group">
-            <button type="button" class="btn btn-pay btn-pay-wechat" pay-type="WECHAT"><img src="~/img/wx-pay.png" style="height:30px" />Wechat Pay</button>
-        </div>
-    </div>
-    <div>OR 
-        <span id="payAmountNZD" class="lbl-amount">
-            0 NZD
-        </span>
-    </div>
-    <div class="btn-group btn-group-justified" role="group" aria-label="...">
-        <div class="btn-group" role="group">
-            <button type="button" class="btn btn-pay btn-pay-pe"  pay-type="PECC" style="background-image:url(/img/pe-cc.png)"></button>
-        </div>
-        <div class="btn-group" role="group">
-            <button type="button" class="btn btn-pay btn-pay-pe" pay-type="PEA2A" style="background-image:url(/img/pe-a2a.png)"></button>
-        </div>
+    <div style="text-align:center">
+        <button type="button" class="btn btn-pay" pay-type="PEA2A">skip payment</button>
     </div>
 </div>
 <script>

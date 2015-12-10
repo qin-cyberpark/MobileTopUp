@@ -7,20 +7,33 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileTopUp", "MobileTopUp\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileTopUp.Tests", "MobileTopUp.Tests\MobileTopUp.Tests.csproj", "{8B54F42A-F38B-4159-AB73-082E3E74D5C4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileTopUp.Tests.Console", "MobileTopUp.Tests.Console\MobileTopUp.Tests.Console.csproj", "{EB915076-F2B9-43CF-AC90-63956FC4E117}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
+		Dev|Any CPU = Dev|Any CPU
+		Pro|Any CPU = Pro|Any CPU
+		Test|Any CPU = Test|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{398290AE-C5D9-4808-AE27-2C087AD9BCCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{398290AE-C5D9-4808-AE27-2C087AD9BCCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{398290AE-C5D9-4808-AE27-2C087AD9BCCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{398290AE-C5D9-4808-AE27-2C087AD9BCCF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8B54F42A-F38B-4159-AB73-082E3E74D5C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8B54F42A-F38B-4159-AB73-082E3E74D5C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8B54F42A-F38B-4159-AB73-082E3E74D5C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8B54F42A-F38B-4159-AB73-082E3E74D5C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{398290AE-C5D9-4808-AE27-2C087AD9BCCF}.Dev|Any CPU.ActiveCfg = Dev|Any CPU
+		{398290AE-C5D9-4808-AE27-2C087AD9BCCF}.Dev|Any CPU.Build.0 = Dev|Any CPU
+		{398290AE-C5D9-4808-AE27-2C087AD9BCCF}.Pro|Any CPU.ActiveCfg = Pro|Any CPU
+		{398290AE-C5D9-4808-AE27-2C087AD9BCCF}.Pro|Any CPU.Build.0 = Pro|Any CPU
+		{398290AE-C5D9-4808-AE27-2C087AD9BCCF}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{398290AE-C5D9-4808-AE27-2C087AD9BCCF}.Test|Any CPU.Build.0 = Test|Any CPU
+		{8B54F42A-F38B-4159-AB73-082E3E74D5C4}.Dev|Any CPU.ActiveCfg = Dev|Any CPU
+		{8B54F42A-F38B-4159-AB73-082E3E74D5C4}.Dev|Any CPU.Build.0 = Dev|Any CPU
+		{8B54F42A-F38B-4159-AB73-082E3E74D5C4}.Pro|Any CPU.ActiveCfg = Dev|Any CPU
+		{8B54F42A-F38B-4159-AB73-082E3E74D5C4}.Pro|Any CPU.Build.0 = Dev|Any CPU
+		{8B54F42A-F38B-4159-AB73-082E3E74D5C4}.Test|Any CPU.ActiveCfg = Dev|Any CPU
+		{8B54F42A-F38B-4159-AB73-082E3E74D5C4}.Test|Any CPU.Build.0 = Dev|Any CPU
+		{EB915076-F2B9-43CF-AC90-63956FC4E117}.Dev|Any CPU.ActiveCfg = Dev|Any CPU
+		{EB915076-F2B9-43CF-AC90-63956FC4E117}.Dev|Any CPU.Build.0 = Dev|Any CPU
+		{EB915076-F2B9-43CF-AC90-63956FC4E117}.Pro|Any CPU.ActiveCfg = Dev|Any CPU
+		{EB915076-F2B9-43CF-AC90-63956FC4E117}.Pro|Any CPU.Build.0 = Dev|Any CPU
+		{EB915076-F2B9-43CF-AC90-63956FC4E117}.Test|Any CPU.ActiveCfg = Dev|Any CPU
+		{EB915076-F2B9-43CF-AC90-63956FC4E117}.Test|Any CPU.Build.0 = Dev|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
