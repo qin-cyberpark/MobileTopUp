@@ -13,47 +13,44 @@ namespace MobileTopUp
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.MapRoute(
-                 "MobileTopUpConfirm",
-                 @"Wx/topup/confirm/{brand}/{amount}/{paytype}",
+                 "TopUpConfirm",
+                 "confirm/{brand}/{quantiy}/{paytype}",
                 new
                 {
-                    controller = "Wx",
-                    action = "TopUpConfirm",
+                    controller = "TopUp",
+                    action = "Confirm",
                 }
+                ,new { quantiy = @"[1-5]?" }
             );
             routes.MapRoute(
-                 "MobileTopUpPay",
-                 "Wx/topup/pay",
-                defaults: new
-                {
-                    controller = "Wx",
-                    action = "TopUpPay",
-                }
+               "Paid",
+               "Paid/{transactionId}",
+              new
+              {
+                  controller = "TopUp",
+                  action = "Paid"
+              }
             );
             routes.MapRoute(
-                "MobileTopUpResult",
-                 "Wx/topup/paid/{transID}",
-                defaults: new
-                {
-                    controller = "Wx",
-                    action = "TopUpPaid",
-                }
+               "Pay",
+               "pay",
+              new
+              {
+                  controller = "TopUp",
+                  action = "Pay"
+              }
             );
             routes.MapRoute(
-               "MobileTopUpHome",
-                "Wx/topup/{brand}/{amount}",
-                new
-                {
-                    controller = "Wx",
-                    action = "TopUpIndex",
-                    brand = UrlParameter.Optional,
-                    amount = UrlParameter.Optional
-                }
-            );
-            routes.MapRoute(
-                 "Default",
-                 "{controller}/{action}/{id}",
-                 new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                 "TopUpHome",
+                 "{brand}/{quantiy}",
+                 new
+                 {
+                     controller = "TopUp",
+                     action = "Index",
+                     brand = UrlParameter.Optional,
+                     quantiy = UrlParameter.Optional
+                 },
+                 new {quantiy=@"[1-5]?"}
             );
         }
     }

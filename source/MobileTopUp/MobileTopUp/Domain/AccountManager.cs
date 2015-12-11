@@ -16,7 +16,7 @@ namespace MobileTopUp
                 Account account;
                 using (StoreEntities db = new StoreEntities())
                 {
-                    account = db.Accounts.First(x => x.Type.Equals(accountSrc) && x.ReferenceID.Equals(id));
+                    account = db.Accounts.FirstOrDefault(x => x.Type.Equals(accountSrc) && x.ReferenceID.Equals(id));
                 }
 
                 Store.SysInfo("ACCOUNT",string.Format("succeed to got account info id {0}", account == null?"NULL":account.ID.ToString()));
@@ -27,6 +27,7 @@ namespace MobileTopUp
                 return null;
             }
         }
+
 
         public static Account CreateAccount(Store.AccountSources source, string oriId, string name)
         {
@@ -48,6 +49,11 @@ namespace MobileTopUp
                 Store.SysError("[ACCOUNT]","failed to create account", ex);
                 return null;
             }
+        }
+
+        public static bool IsAdministrator(Account account)
+        {
+            return Store.Configuration.Administrators[account.ReferenceID] != null;
         }
     }
 }

@@ -8,7 +8,6 @@
 	border-radius:0;
 	height:100px;
 	border: 1px solid #babcbe;
-	border-bottom: 0px;
 	background-size: auto 60%;
 	background-position: center;
 	background-repeat: no-repeat;
@@ -19,7 +18,20 @@
 	opacity: 1;
 	filter: alpha(opacity=100); /* For IE8 and earlier */
 }
-.btn-amount{
+.btn-spark{
+    background-image:url(../img/spark.png);
+}
+.btn-vodafone{
+    background-image:url(../img/vodafone.png);
+}
+.btn-2degree{
+    background-image:url(../img/2degree.png);
+}
+.btn-skinny{
+    background-image:url(../img/skinny.png);
+}
+
+.btn-quanity{
 	border-radius:0;
 	height:60px;
 	background-color:white;
@@ -30,15 +42,14 @@
 	border-left:0px;
 }
 
-.amount-selected{
+.quanity-selected{
 	background-color:#698905;
 }
 .btn-pay{
-	height:50px;
+    cursor:pointer;
 }
 
 .lbl-amount{
-    font-size:18px;
     color:red;
 }
 .btn-confirm{

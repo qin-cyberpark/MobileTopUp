@@ -19,12 +19,13 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CustomerID" Type="int" Nullable="false" />
+          <Property Name="AccountID" Type="int" Nullable="false" />
           <Property Name="PaymentType" Type="varchar" MaxLength="20" />
           <Property Name="PaymentRef" Type="varchar" MaxLength="30" />
           <Property Name="Currency" Type="char" MaxLength="3" Nullable="false" />
           <Property Name="ExchangeRate" Type="decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="Brand" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
           <Property Name="TotalDenomination" Type="decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="SellingPrice" Type="decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="OrderDate" Type="datetime" Precision="0" Nullable="false" />
@@ -42,7 +43,7 @@
           <Property Name="CreatedBy" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="CreatedDate" Type="datetime" Precision="0" Nullable="false" />
           <Property Name="IsSold" Type="bit" />
-          <Property Name="CustomerID" Type="int" />
+          <Property Name="AccountID" Type="int" />
           <Property Name="TransactionID" Type="int" />
         </EntityType>
         <EntityContainer Name="ModelStoreContainer">
@@ -59,12 +60,13 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CustomerID" Type="Int32" Nullable="false" />
+          <Property Name="AccountID" Type="Int32" Nullable="false" />
           <Property Name="PaymentType" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="PaymentRef" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Currency" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="ExchangeRate" Type="Decimal" Nullable="false" />
           <Property Name="Brand" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
           <Property Name="TotalDenomination" Type="Decimal" Nullable="false" />
           <Property Name="SellingPrice" Type="Decimal" Nullable="false" />
           <Property Name="OrderDate" Type="DateTime" Nullable="false" />
@@ -82,7 +84,7 @@
           <Property Name="CreatedBy" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="CreatedDate" Type="DateTime" Nullable="false" />
           <Property Name="IsSold" Type="Boolean" />
-          <Property Name="CustomerID" Type="Int32" />
+          <Property Name="AccountID" Type="Int32" />
           <Property Name="TransactionID" Type="Int32" />
         </EntityType>
         <EntityContainer Name="StoreEntities" annotation:LazyLoadingEnabled="true">
@@ -108,8 +110,9 @@
           <EntitySetMapping Name="Transactions">
             <EntityTypeMapping TypeName="Model.Transaction">
               <MappingFragment StoreEntitySet="t_transaction">
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
                 <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
                 <ScalarProperty Name="PaymentRef" ColumnName="PaymentRef" />
                 <ScalarProperty Name="Currency" ColumnName="Currency" />
@@ -125,6 +128,7 @@
           <EntitySetMapping Name="Vouchers">
             <EntityTypeMapping TypeName="Model.Voucher">
               <MappingFragment StoreEntitySet="t_voucher">
+                <ScalarProperty Name="AccountID" ColumnName="AccountID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Brand" ColumnName="Brand" />
                 <ScalarProperty Name="Denomination" ColumnName="Denomination" />
@@ -133,7 +137,6 @@
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
                 <ScalarProperty Name="IsSold" ColumnName="IsSold" />
-                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
                 <ScalarProperty Name="TransactionID" ColumnName="TransactionID" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -102,10 +102,10 @@ namespace MobileTopUp.Utilities
         /// <param name="openid"></param>
         /// <param name="fileByte"></param>
         /// <returns></returns>
-        public static bool SendImage(string openid, byte[] fileByte)
+        public static bool SendImage(string openid, byte[] imageBytes)
         {
             string tempFile = _tempFolder + openid + ".png";
-            System.IO.File.WriteAllBytes(tempFile, fileByte);
+            System.IO.File.WriteAllBytes(tempFile, imageBytes);
             UploadTemporaryMediaResult updateRst = MediaApi.UploadTemporaryMedia(_appId, Senparc.Weixin.MP.UploadMediaFileType.image, tempFile);
             if (updateRst.errcode != 0)
             {
@@ -114,6 +114,11 @@ namespace MobileTopUp.Utilities
 
             WxJsonResult sendRst = CustomApi.SendImage(_appId, openid, updateRst.media_id);
             return sendRst.errcode == 0;
+        }
+
+        public static bool SendImages(string openid, byte[][] imageBytes)
+        {
+            return false;
         }
     }
 }

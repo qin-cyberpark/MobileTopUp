@@ -25,14 +25,14 @@ using System.IO;
 using System.Reflection;
 using System.Web.Configuration;
 
-namespace MobileTopUp.PaPay
+namespace MobileTopUp.Utilities
 {
     /// <summary>
     /// Main class for submitting transactions via PxPay using static methods
     /// </summary>
     public class PxPay
     {
-        private string _WebServiceUrl = WebConfigurationManager.AppSettings["PaymentExpress.PxPay"];
+        private string _WebServiceUrl = Store.Configuration.StoreSettings["PaymentExpress.PxPay"];
         private string _PxPayUserId;
         private string _PxPayKey;
 

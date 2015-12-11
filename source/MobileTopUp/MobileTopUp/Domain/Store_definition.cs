@@ -7,6 +7,8 @@ namespace MobileTopUp
 {
     public partial class Store
     {
+        //voucher
+        public const int VOUCHER_DEFAULT_DENOMINATION = 20;
         //brand
         public enum Brands {Spark, Vodafone, TwoDegree, Skinny }
         public const string BRAND_SPARK = "SPARK";
@@ -93,7 +95,7 @@ namespace MobileTopUp
         public const string PAYMENT_CODE_PX_CC = "PXCC";
         public const string PAYMENT_CODE_PX_A2A = "PXA2A";
         public const string PAYMENT_NAME_WECHAT = "WECHAT PAY";
-        public const string PAYMENT_NAME_PX_CC = "CREDIT CARD";
+        public const string PAYMENT_NAME_PX_CC = "PAYMENT EXPRESS";
         public const string PAYMENT_NAME_PX_A2A = "ACCOUNT 2 ACCOUNT";
         public static PaymentTypes PaymentCodeToType(string code)
         {

@@ -7,7 +7,7 @@ using MobileTopUp.Utilities;
 
 namespace MobileTopUp.Controllers
 {
-    public class VoucherController : Controller
+    public class AdminController : Controller
     {
         // GET: Voucher
         public ActionResult Scan()

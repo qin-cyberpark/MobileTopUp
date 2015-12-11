@@ -15,12 +15,13 @@ namespace MobileTopUp.Models
     public partial class Transaction
     {
         public int ID { get; set; }
-        public int CustomerID { get; set; }
+        public int AccountID { get; set; }
         public string PaymentType { get; set; }
         public string PaymentRef { get; set; }
         public string Currency { get; set; }
         public decimal ExchangeRate { get; set; }
         public string Brand { get; set; }
+        public int Quantity { get; set; }
         public decimal TotalDenomination { get; set; }
         public decimal SellingPrice { get; set; }
         public System.DateTime OrderDate { get; set; }

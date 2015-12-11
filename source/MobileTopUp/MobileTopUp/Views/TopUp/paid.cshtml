@@ -1,0 +1,14 @@
+﻿@using MobileTopUp.Models;
+@{ 
+    ViewBag.Title = "Your Voucher";
+}
+<div class="container">
+    <div class="jumbotron" style="text-align:center;margin-top:15px;">
+        @foreach (Voucher v in ViewBag.Vouchers)
+        {
+            <h4>#999999999</h4>
+            <div><img src="data:image;base64,@System.Convert.ToBase64String(v.Image)" style="width:100%"/></div>
+        }
+        <a href="/"><button type="button" class="btn">Back</button></a>
+    </div>
+</div>

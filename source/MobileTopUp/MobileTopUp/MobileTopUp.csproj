@@ -115,6 +115,7 @@
     <Content Include="img\2degree.png" />
     <Content Include="img\pe-a2a.png" />
     <Content Include="img\pe-cc.png" />
+    <Content Include="img\pe-wide.png" />
     <Content Include="img\pe.png" />
     <Content Include="img\skinny.png" />
     <Content Include="img\soldout.png" />
@@ -144,9 +145,9 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\VoucherController.cs" />
-    <Compile Include="Controllers\StoreController.cs" />
+    <Compile Include="Controllers\ErrorPageController.cs" />
+    <Compile Include="Controllers\TopUpController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\WechatController.cs" />
     <Compile Include="Configuration\StoreConfig.cs" />
     <Compile Include="Domain\AccountManager.cs" />
@@ -180,7 +181,7 @@
     <Compile Include="Domain\Store_definition.cs" />
     <Compile Include="Domain\Store_log.cs" />
     <Compile Include="Domain\VoucherManager.cs" />
-    <Compile Include="PxPay\PxPay.cs" />
+    <Compile Include="Utilities\PxPay.cs" />
     <Compile Include="Utilities\WechatHelper.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -191,12 +192,11 @@
     <Content Include="Views\web.config" />
     <Content Include="packages.config" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Wx\topup-home.cshtml" />
-    <Content Include="Views\Wx\topup-confirm.cshtml" />
-    <Content Include="Views\Wx\topup-voucher.cshtml" />
-    <Content Include="Views\Wx\topup-msg.cshtml" />
+    <Content Include="Views\TopUp\Index.cshtml" />
+    <Content Include="Views\TopUp\confirm.cshtml" />
+    <Content Include="Views\TopUp\paid.cshtml" />
+    <Content Include="Views\Shared\message.cshtml" />
     <Content Include="Views\Voucher\scan.cshtml" />
     <EntityDeploy Include="Models\StoreModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -205,8 +205,10 @@
     <Content Include="Models\StoreModel.edmx.diagram">
       <DependentUpon>StoreModel.edmx</DependentUpon>
     </Content>
-    <None Include="Properties\PublishProfiles\Production 1.0.pubxml" />
-    <None Include="Properties\PublishProfiles\Test 1.0.pubxml" />
+    <Content Include="Views\Shared\error.cshtml" />
+    <Content Include="Views\ErrorPage\FileNotFound.cshtml" />
+    <Content Include="Views\ErrorPage\UnauthorizedAccess.cshtml" />
+    <None Include="Properties\PublishProfiles\Production.pubxml" />
     <None Include="Web.Pro.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -217,7 +219,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="js\vendor\" />
-    <Folder Include="Views\Wechat\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -229,7 +230,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Test|AnyCPU' ">
     <OutputPath>bin\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>

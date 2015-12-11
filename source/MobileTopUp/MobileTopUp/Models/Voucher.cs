@@ -22,7 +22,7 @@ namespace MobileTopUp.Models
         public string CreatedBy { get; set; }
         public System.DateTime CreatedDate { get; set; }
         public Nullable<bool> IsSold { get; set; }
-        public Nullable<int> CustomerID { get; set; }
+        public Nullable<int> AccountID { get; set; }
         public Nullable<int> TransactionID { get; set; }
     }
 }

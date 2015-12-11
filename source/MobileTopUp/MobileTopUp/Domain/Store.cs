@@ -5,6 +5,7 @@ using System.Web;
 using MobileTopUp.Models;
 using MobileTopUp.Configuration;
 using MobileTopUp.Utilities;
+using Senparc.Weixin.MP.AdvancedAPIs.OAuth;
 
 namespace MobileTopUp
 {
@@ -35,11 +36,16 @@ namespace MobileTopUp
             //get openid
             string userInfoAccessToken = null;
 
-#if DEBUG
-            string openid = "opDxls3kxQNdVPqkKW4c8DAfDGX8";
-#else
-            string openid = WechatHelper.GetOpenID(code, out userInfoAccessToken);
-#endif
+            string openid = null;
+            if (Store.Configuration.FakeLogin && Store.Configuration.Administrators.Count > 0) {
+                openid = Store.Configuration.Administrators[0].WechatId;
+                Store.BizInfo("AUTH", string.Format("fake login set open id {0}", openid));
+            }
+            else
+            {
+                openid = WechatHelper.GetOpenID(code, out userInfoAccessToken);
+            }
+
             if (string.IsNullOrEmpty(openid))
             {
                 //failed to get open id
@@ -49,22 +55,25 @@ namespace MobileTopUp
 
             //got open id
             Store.BizInfo("AUTH", string.Format("got open id {0}", openid));
-
             //get customer
             Account account = AccountManager.GetAccountById(AccountSources.Wechat, openid);
             if (account == null)
             {
-                //new account
-                Store.BizInfo("AUTH", string.Format("new account, open id {0}", openid));
-
                 //get name
-                string name = WechatHelper.GetUserInfo(userInfoAccessToken, openid).nickname;
-                if (string.IsNullOrEmpty(name))
+                OAuthUserInfo userInfo = WechatHelper.GetUserInfo(userInfoAccessToken, openid);
+                if(userInfo == null)
                 {
-                    Store.BizInfo("AUTH", string.Format("can not get user name by open id {0}", openid));
+                    Store.BizInfo("AUTH", string.Format("can not get user info by open id {0}", openid));
                     return null;
                 }
 
+                if (string.IsNullOrEmpty(userInfo.nickname))
+                {
+                    Store.BizInfo("AUTH", string.Format("can not get user name in userinfo open id {0}", openid));
+                    return null;
+                }
+
+                string name = userInfo.nickname;
                 Store.BizInfo("AUTH", string.Format("got user name {0}", name));
 
                 //create account
@@ -75,7 +84,7 @@ namespace MobileTopUp
                     return null;
                 }
 
-                Store.BizInfo("AUTH", string.Format("account created {0}:{1}:{2}", openid, name));
+                Store.BizInfo("AUTH", string.Format("new account created {0}:{1}", openid, name));
             }
 
             return account;

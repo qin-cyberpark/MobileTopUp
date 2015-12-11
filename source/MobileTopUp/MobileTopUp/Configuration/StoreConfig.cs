@@ -78,6 +78,18 @@ namespace MobileTopUp.Configuration
             }
         }
 
+        [ConfigurationProperty("storeSetttings", IsDefaultCollection = false)]
+        [ConfigurationCollection(typeof(StoreSettingElementCollection),
+        AddItemName = "add",
+        ClearItemsName = "clear",
+        RemoveItemName = "remove")]
+        public StoreSettingElementCollection StoreSettings
+        {
+            get
+            {
+                return (StoreSettingElementCollection)base["storeSetttings"];
+            }
+        }
         //
         public string TemporaryDirectory
         {
@@ -100,6 +112,21 @@ namespace MobileTopUp.Configuration
                 return Directories["voucherImage"];
             }
         }
+        public bool FakeLogin
+        {
+            get
+            {
+                return bool.Parse(StoreSettings["fakeLogin"]);
+            }
+        }
+        public string RootUrl
+        {
+            get
+            {
+                return StoreSettings["RootURL"];
+            }
+        }
+
     }
 
     /// <summary>
@@ -122,6 +149,14 @@ namespace MobileTopUp.Configuration
             get
             {
                 return (decimal)this["exchangeRateCNY"];
+            }
+        }
+
+        public decimal ExchangeRateNZD
+        {
+            get
+            {
+                return 1.0M;
             }
         }
 
@@ -207,7 +242,7 @@ namespace MobileTopUp.Configuration
     /// </summary>
     public class AdministratorElement : ConfigurationElement
     {
-        [ConfigurationProperty("name", IsRequired = true, IsKey = true)]
+        [ConfigurationProperty("name", IsRequired = true)]
         public string Name
         {
             get
@@ -215,7 +250,7 @@ namespace MobileTopUp.Configuration
                 return this["name"] as string;
             }
         }
-        [ConfigurationProperty("wechatId", IsRequired = true)]
+        [ConfigurationProperty("wechatId", IsRequired = true, IsKey = true)]
         public string WechatId
         {
             get
@@ -227,9 +262,9 @@ namespace MobileTopUp.Configuration
 
     public class AdministratorElementCollection : ConfigurationElementCollection
     {
-        new public string this[string name]
+        new public string this[string id]
         {
-            get { return ((AdministratorElement)BaseGet(name)).WechatId; }
+            get { return ((AdministratorElement)BaseGet(id)).Name; }
         }
         public AdministratorElement this[int i]
         {
@@ -242,7 +277,48 @@ namespace MobileTopUp.Configuration
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((AdministratorElement)element).Name;
+            return ((AdministratorElement)element).WechatId;
+        }
+    }
+
+    public class StoreSettingElement : ConfigurationElement
+    {
+        [ConfigurationProperty("key", IsRequired = true, IsKey = true)]
+        public string Key
+        {
+            get
+            {
+                return this["key"] as string;
+            }
+        }
+        [ConfigurationProperty("value", IsRequired = true)]
+        public string Value
+        {
+            get
+            {
+                return this["value"] as string;
+            }
+        }
+    }
+
+    public class StoreSettingElementCollection : ConfigurationElementCollection
+    {
+        new public string this[string key]
+        {
+            get { return ((StoreSettingElement)BaseGet(key)).Value; }
+        }
+        public StoreSettingElement this[int i]
+        {
+            get { return (StoreSettingElement)BaseGet(i); }
+        }
+        protected override ConfigurationElement CreateNewElement()
+        {
+            return new StoreSettingElement();
+        }
+
+        protected override object GetElementKey(ConfigurationElement element)
+        {
+            return ((StoreSettingElement)element).Key;
         }
     }
 }
