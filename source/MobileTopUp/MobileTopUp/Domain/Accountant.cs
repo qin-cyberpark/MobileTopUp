@@ -53,5 +53,10 @@ namespace MobileTopUp
 
             return payUrl;
         }
+
+        public static bool VerifyPayment(decimal amount, Store.PaymentTypes type, string refId)
+        {
+            return false;
+        }
     }
 }

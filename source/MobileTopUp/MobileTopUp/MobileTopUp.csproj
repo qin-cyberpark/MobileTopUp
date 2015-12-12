@@ -110,6 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="css\bootstrap.min.css" />
+    <Content Include="css\main-test.css" />
     <Content Include="css\main.css" />
     <Content Include="Global.asax" />
     <Content Include="img\2degree.png" />
@@ -195,7 +196,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\TopUp\Index.cshtml" />
     <Content Include="Views\TopUp\confirm.cshtml" />
-    <Content Include="Views\TopUp\paid.cshtml" />
+    <Content Include="Views\TopUp\view.cshtml" />
     <Content Include="Views\Shared\message.cshtml" />
     <Content Include="Views\Voucher\scan.cshtml" />
     <EntityDeploy Include="Models\StoreModel.edmx">

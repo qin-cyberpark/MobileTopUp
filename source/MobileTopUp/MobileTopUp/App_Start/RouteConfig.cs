@@ -20,8 +20,17 @@ namespace MobileTopUp
                     controller = "TopUp",
                     action = "Confirm",
                 }
-                ,new { quantiy = @"[1-5]?" }
+                , new { quantiy = @"[1-5]?" }
             );
+            routes.MapRoute(
+             "View",
+             "View/{transactionId}",
+            new
+            {
+                controller = "TopUp",
+                action = "View"
+            }
+          );
             routes.MapRoute(
                "Paid",
                "Paid/{transactionId}",
@@ -50,7 +59,7 @@ namespace MobileTopUp
                      brand = UrlParameter.Optional,
                      quantiy = UrlParameter.Optional
                  },
-                 new {quantiy=@"[1-5]?"}
+                 new { quantiy = @"[1-5]?" }
             );
         }
     }

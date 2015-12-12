@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@ViewBag.Title</title>
     <link rel="stylesheet" href="~/css/bootstrap.min.css">
-    <link rel="stylesheet" href="~/css/main.css"/>
+    <link rel="stylesheet" href="~/css/@Store.Configuration.StoreSettings["cssFile"]"/>
     <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <script src="~/js/jquery-1.11.3.min.js"></script>
     <script src="~/js/main.js"></script>
 </head>
-<body style="background-color:@Store.Configuration.StoreSettings["bgColor"]">
+<body>
     @RenderBody()
 </body>
 </html>

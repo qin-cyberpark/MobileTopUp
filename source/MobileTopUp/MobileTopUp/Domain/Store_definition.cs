@@ -90,10 +90,12 @@ namespace MobileTopUp
         }
 
         //payment
-        public enum PaymentTypes { Unknown, WechatPay, PxPayCreditCard, PxPayAccount2Account}
+        public enum PaymentTypes {Skip, WechatPay, PxPayCreditCard, PxPayAccount2Account}
+        public const string PAYMENT_CODE_SKIP = "SKIP";
         public const string PAYMENT_CODE_WECHAT = "WECHAT";
         public const string PAYMENT_CODE_PX_CC = "PXCC";
         public const string PAYMENT_CODE_PX_A2A = "PXA2A";
+        public const string PAYMENT_NAME_SKIP = "SKIP PAYMENT FOR TEST";
         public const string PAYMENT_NAME_WECHAT = "WECHAT PAY";
         public const string PAYMENT_NAME_PX_CC = "PAYMENT EXPRESS";
         public const string PAYMENT_NAME_PX_A2A = "ACCOUNT 2 ACCOUNT";
@@ -104,6 +106,7 @@ namespace MobileTopUp
                 case PAYMENT_CODE_WECHAT: return PaymentTypes.WechatPay;
                 case PAYMENT_CODE_PX_CC: return PaymentTypes.PxPayCreditCard;
                 case PAYMENT_CODE_PX_A2A: return PaymentTypes.PxPayAccount2Account;
+                case PAYMENT_CODE_SKIP: return PaymentTypes.Skip;
                 default: throw new UnknownDataException("PaymentCodeToType", code);
             }
         }
@@ -114,6 +117,7 @@ namespace MobileTopUp
                 case PaymentTypes.WechatPay: return PAYMENT_NAME_WECHAT;
                 case PaymentTypes.PxPayCreditCard: return PAYMENT_NAME_PX_CC;
                 case PaymentTypes.PxPayAccount2Account: return PAYMENT_NAME_PX_A2A;
+                case PaymentTypes.Skip: return PAYMENT_CODE_SKIP;
                 default: throw new UnknownDataException("PaymentTypeToName", type.ToString());
             }
         }
@@ -124,6 +128,7 @@ namespace MobileTopUp
                 case PAYMENT_CODE_WECHAT: return PAYMENT_NAME_WECHAT;
                 case PAYMENT_CODE_PX_CC: return PAYMENT_NAME_PX_CC;
                 case PAYMENT_CODE_PX_A2A: return PAYMENT_NAME_PX_A2A;
+                case PAYMENT_CODE_SKIP: return PAYMENT_NAME_SKIP;
                 default: throw new UnknownDataException("PaymentCodeToName", code);
             }
         }

@@ -11,6 +11,7 @@ using Senparc.Weixin.MP.AdvancedAPIs.OAuth;
 using Senparc.Weixin.MP.AdvancedAPIs.Media;
 using Senparc.Weixin.Entities;
 using MobileTopUp.Configuration;
+using System.Threading;
 
 namespace MobileTopUp.Utilities
 {
@@ -102,23 +103,82 @@ namespace MobileTopUp.Utilities
         /// <param name="openid"></param>
         /// <param name="fileByte"></param>
         /// <returns></returns>
-        public static bool SendImage(string openid, byte[] imageBytes)
+        public static bool SendImage(string openid, byte[] imageBytes, int maxAttamptTime = 3)
         {
+            _sysLogger.Info(string.Format("[WX]start to sent image to {0}", openid));
             string tempFile = _tempFolder + openid + ".png";
             System.IO.File.WriteAllBytes(tempFile, imageBytes);
-            UploadTemporaryMediaResult updateRst = MediaApi.UploadTemporaryMedia(_appId, Senparc.Weixin.MP.UploadMediaFileType.image, tempFile);
-            if (updateRst.errcode != 0)
+            UploadTemporaryMediaResult updateRst = null;
+            WxJsonResult sendRst = null;
+            for (int i = 0; i < maxAttamptTime; i++)
             {
+                _sysLogger.Info(string.Format("[WX]start to upload temporary image try {0}", i));
+                updateRst = MediaApi.UploadTemporaryMedia(_appId, Senparc.Weixin.MP.UploadMediaFileType.image, tempFile);
+                if (updateRst!=null && updateRst.errcode == 0)
+                {
+                    break;
+                }
+            }
+            if (updateRst == null || updateRst.errcode != 0)
+            {
+                _sysLogger.Info("[WX]faild to upload temporary image");
                 return false;
             }
 
-            WxJsonResult sendRst = CustomApi.SendImage(_appId, openid, updateRst.media_id);
-            return sendRst.errcode == 0;
+            for (int i = 0; i < maxAttamptTime; i++)
+            {
+                _sysLogger.Info(string.Format("[WX]start to send image to {0} try {1}", openid, i));
+                sendRst = CustomApi.SendImage(_appId, openid, updateRst.media_id);
+                if (sendRst != null && sendRst.errcode == 0)
+                {
+                    break;
+                }
+            }
+            if (updateRst == null || updateRst.errcode != 0)
+            {
+                _sysLogger.Info("[WX]faild to send image");
+                return false;
+            }
+
+            return true;
+        }
+        public static void SendImages(string openid, byte[][] imageBytes)
+        {
+            if (imageBytes == null)
+            {
+                return;
+            }
+
+            _sysLogger.Info(string.Format("[WX]start to sent images{0} to {1}", imageBytes.Length, openid));
+            foreach (byte[] bytes in imageBytes)
+            {
+                SendImage(openid, bytes);
+            }
+            _sysLogger.Info(string.Format("[WX]finish to sent images{0} to {1}", imageBytes.Length, openid));
         }
 
-        public static bool SendImages(string openid, byte[][] imageBytes)
+        public static void SendImageAsync(string openid, byte[] imageBytes)
         {
-            return false;
+            if (imageBytes == null)
+            {
+                return;
+            }
+            _sysLogger.Info(string.Format("[WX]start thread to sent image to {0}", openid));
+            ThreadStart starter = () => SendImage(openid, imageBytes);
+            Thread thread = new Thread(starter);
+            thread.Start();
+        }
+
+        public static void SendImagesAsync(string openid, byte[][] imageBytes)
+        {
+            if (imageBytes == null)
+            {
+                return;
+            }
+            _sysLogger.Info(string.Format("[WX]start thread to sent images{0} to {1}", imageBytes.Length, openid));
+            ThreadStart starter = () => SendImages(openid, imageBytes);
+            Thread thread = new Thread(starter);
+            thread.Start();
         }
     }
 }

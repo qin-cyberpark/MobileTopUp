@@ -98,13 +98,16 @@ namespace MobileTopUp
             }
             return result;
         }
-        public static IList<Voucher> Sold(int transactionId)
+        public static IList<Voucher> Sold(Transaction trans)
         {
+            //update transaction
             List<Voucher> result = new List<Voucher>();
-            //get holded voucher
             using (StoreEntities db = new StoreEntities())
             {
-                IEnumerable<Voucher> vouchers = db.Vouchers.Where(x => x.TransactionID == transactionId);
+                trans.PaidDate = DateTime.Now;
+                db.Entry(trans).State = System.Data.Entity.EntityState.Modified;
+                //get holded voucher
+                IEnumerable<Voucher> vouchers = db.Vouchers.Where(x => x.TransactionID == trans.ID);
                 //flag vouchour to sold and send image to customer
                 foreach (Voucher v in vouchers)
                 {

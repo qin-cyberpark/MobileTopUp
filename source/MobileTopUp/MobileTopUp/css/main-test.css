@@ -3,9 +3,11 @@
 	width: 780px;
 	}
 }
+h4, h5{margin-bottom:2px;}
+
 body{
-    color:#7C786A;
-    background-color:#8DCDC1;
+    color:#677077;
+    background-color:#70C1B3;
 }
 .btn-brand{
 	background-color: white;
@@ -38,6 +40,7 @@ body{
 .btn-quanity{
 	border-radius:0;
 	height:60px;
+    color:black;
 	background-color:white;
 	border: 1px solid #babcbe;
     font-size:18px;
@@ -47,16 +50,16 @@ body{
 }
 
 .quanity-selected{
-	background-color:  #EB6E44;
+	background-color:#247BA0;
 }
 .btn-pay{
     cursor:pointer;
 }
 
 .lbl-amount{
-    color:#EB6E44;
+    color:#FF1654;
 }
 .btn-confirm{
     color:white;
-    background-color:#698905;
+    background-color:#247BA0;
 }

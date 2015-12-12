@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using MobileTopUp.Models;
+using System.Threading;
 
 namespace MobileTopUp.Controllers
 {
@@ -52,6 +53,7 @@ namespace MobileTopUp.Controllers
             Account account = (Account)Session["LoginAccount"];
             if (account == null)
             {
+                Store.BizInfo("COMFIRM", string.Format("not login"));
                 return Redirect("/");
             }
 
@@ -60,6 +62,7 @@ namespace MobileTopUp.Controllers
             if (!Store.VerfiyBrand(brand))
             {
                 //unvalid brand
+                Store.BizInfo("COMFIRM", string.Format("brand not valid"));
                 return Redirect("/");
             }
 
@@ -67,7 +70,8 @@ namespace MobileTopUp.Controllers
             payType = payType.ToUpper();
             if (!Store.VerifyPayType(payType))
             {
-                //unvalid brand
+                //unvalid pay type
+                Store.BizInfo("COMFIRM", string.Format("payment type not valid"));
                 return Redirect("/");
             }
 
@@ -115,6 +119,7 @@ namespace MobileTopUp.Controllers
             Account account = (Account)Session["LoginAccount"];
             if (account == null)
             {
+                Store.BizInfo("PAY", string.Format("not login"));
                 return Redirect("/");
             }
 
@@ -123,19 +128,27 @@ namespace MobileTopUp.Controllers
             Session.Remove("CurrentTransaction");
             if (trans == null)
             {
+                Store.BizInfo("PAY", string.Format("no transaction in progress"));
                 return Redirect("/");
             }
 
             //verify skip
-            if (isSkip && !AccountManager.IsAdministrator(account))
+            if (isSkip)
             {
-                return Redirect("/");
+                if (!AccountManager.IsAdministrator(account))
+                {
+                    Store.BizInfo("PAY", string.Format("skip payment but not administrator id={0}", account.ID));
+                    return Redirect("/");
+                }
+
+                trans.PaymentType = Store.PAYMENT_CODE_SKIP;
             }
 
             //verify voucher stock
             int stock = VoucherManager.GetStock(trans.Brand);
             if (stock < trans.Quantity)
             {
+                Store.BizInfo("PAY", string.Format("not enough voucher {0}/{1}", stock,trans.Quantity));
                 ViewBag.ImageUrl = "/img/soldout.png";
                 return View("topup-msg");
             }
@@ -143,32 +156,37 @@ namespace MobileTopUp.Controllers
             //hold voucher
             if (!VoucherManager.Hold(trans))
             {
+                Store.BizInfo("PAY", string.Format("can not create transcation and hold voucher"));
                 ViewBag.Message = "Sorry, wrong";
                 return View("topup-msg");
             }
 
             //redirect to pay
             string payUrl = null;
-            string urlFail = string.Format("{0}/payFail/{1}", Store.Configuration.RootUrl, trans.ID);
-            string urlSucces = string.Format("{0}/paid/{1}", Store.Configuration.RootUrl, trans.ID);
+            string urlFail = string.Format("{0}/payFail/{1}?payType={2}", Store.Configuration.RootUrl, trans.ID,trans.PaymentType);
+            string urlSucces = string.Format("{0}/paid/{1}?payType={2}", Store.Configuration.RootUrl, trans.ID,trans.PaymentType);
 
             if (isSkip && skipToSuccess)
             {
                 //test
+                Store.BizInfo("PAY", string.Format("skip to pay success id={0}", account.ID));
                 return Redirect(urlSucces);
             }
             else if (isSkip && skipToSuccess)
             {
                 //test
+                Store.BizInfo("PAY", string.Format("skip to pay fail id={0}", account.ID));
                 return Redirect(urlFail);
             }
             else if (isSkip)
             {
+                Store.BizInfo("PAY", string.Format("skip payment but go to neither Success nor fail", account.ID));
                 return Redirect("/");
             }
             else
             {
                 payUrl = Accountant.GeneratePayURL(trans, urlSucces, urlFail);
+                Store.BizInfo("PAY", string.Format("payment url generated id={0}", account.ID));
                 return Redirect(payUrl);
             }
         }
@@ -184,45 +202,116 @@ namespace MobileTopUp.Controllers
             Account account = (Account)Session["LoginAccount"];
             if (account == null)
             {
+                Store.BizInfo("PAID", string.Format("not login"));
+                return Redirect("/");
+            }
+
+            //verify transaction
+            Transaction trans = null;
+            using (StoreEntities db = new StoreEntities())
+            {
+                trans = db.Transactions.Find(transactionId);
+                if (trans == null)
+                {
+                    Store.BizInfo("PAID", string.Format("not exist transactionid={0}", trans.ID));
+                    return Redirect("/");
+                }
+                
+                if(trans.AccountID != account.ID)
+                {
+                    Store.BizInfo("PAID", string.Format("transaction owner not match trans.id={1}, id={0}", trans.ID, account.ID));
+                    return Redirect("/");
+                }
+            }
+
+            bool hasPaid = trans.PaidDate != null;
+            if (hasPaid)
+            {
+                //has paid
+                Store.BizInfo("PAID", string.Format("has paid transcation id={0}, go to show page", trans.ID));
+                return Redirect(string.Format("Show/{0}", trans.ID));
+            }
+
+            //just paid
+            //verify payment
+            string payResultId = null;
+            bool isSkipPayment = false;
+            Store.PaymentTypes payType = Store.PaymentCodeToType(trans.PaymentType);
+            switch (payType)
+            {
+                case Store.PaymentTypes.PxPayCreditCard:
+                case Store.PaymentTypes.PxPayAccount2Account:
+                    payResultId = Request["result"];
+                    break;
+                case Store.PaymentTypes.Skip:
+                    isSkipPayment = true;
+                    break;
+                default:
+                    break;
+            }
+
+            if(!isSkipPayment && !Accountant.VerifyPayment(trans.SellingPrice, payType, payResultId))
+            {
+                //not skip payment or payment not verified
+                Store.BizInfo("PAID", string.Format("not skip payment or payment not verified id={0}", trans.ID));
+                return Redirect("/");
+            }
+
+            //update transaction and voucher
+            trans.PaymentRef = payResultId;
+            Store.BizInfo("PAID", string.Format("update transaction and vouchers id={0}", trans.ID));
+            IList<Voucher> vouchers = VoucherManager.Sold(trans);
+
+            //send voucher
+            int voucherLen = vouchers.Count;
+            byte[][] imageBytes = new byte[voucherLen][];
+            for(int i=0;i< voucherLen; i++)
+            {
+                imageBytes[i] = vouchers[i].Image;
+            }
+            WechatHelper.SendImagesAsync(account.ReferenceID, imageBytes);
+
+            ViewBag.Vouchers = vouchers;
+            return View("view");
+        }
+
+        public ActionResult View(int transactionId)
+        {
+            //verify customer
+            Account account = (Account)Session["LoginAccount"];
+            if (account == null)
+            {
+                Store.BizInfo("VIEW", string.Format("not login"));
                 return Redirect("/");
             }
 
             //verify transaction
             Transaction trans;
-            bool isJustPaid = false;
             using (StoreEntities db = new StoreEntities())
             {
                 trans = db.Transactions.Find(transactionId);
-                if (trans == null || trans.AccountID != account.ID)
+                if (trans == null)
                 {
+                    Store.BizInfo("VIEW", string.Format("not exist transactionid={0}", trans.ID));
                     return Redirect("/");
                 }
 
-                //update transaction
-                if (trans.PaidDate == null)
+                if (trans.AccountID != account.ID)
                 {
-                    isJustPaid = true;
-                    trans.PaymentRef = "TESTREFNUM";
-                    trans.PaidDate = DateTime.Now;
-                    db.SaveChanges();
+                    Store.BizInfo("VIEW", string.Format("transaction owner not match trans.id={1}, id={0}", trans.ID, account.ID));
+                    return Redirect("/");
                 }
             }
 
-            IList<Voucher> vouchers;
-            if (isJustPaid)
+            bool hasPaid = trans.PaidDate != null;
+            if (!hasPaid)
             {
-                vouchers = VoucherManager.Sold(trans.ID);
-                foreach (Voucher v in vouchers)
-                {
-                    WechatHelper.SendImage(account.ReferenceID, v.Image);
-                }
-            }
-            else
-            {
-                vouchers = VoucherManager.FindByTranscationId(trans.ID);
+                //not paid
+                Store.BizInfo("VIEW", string.Format("unpaid transaction id={0}", trans.ID));
+                return Redirect("/");
             }
 
-            //send voucher
+            IList<Voucher> vouchers = VoucherManager.FindByTranscationId(trans.ID);
             ViewBag.Vouchers = vouchers;
             return View();
         }
