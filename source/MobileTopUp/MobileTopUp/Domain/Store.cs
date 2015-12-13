@@ -56,7 +56,7 @@ namespace MobileTopUp
             //got open id
             Store.BizInfo("AUTH", string.Format("got open id {0}", openid));
             //get customer
-            Account account = AccountManager.GetAccountById(AccountSources.Wechat, openid);
+            Account account = AccountManager.GetAccountById(AccountType.Wechat, openid);
             if (account == null)
             {
                 //get name
@@ -77,7 +77,7 @@ namespace MobileTopUp
                 Store.BizInfo("AUTH", string.Format("got user name {0}", name));
 
                 //create account
-                account = AccountManager.CreateAccount(AccountSources.Wechat, openid, name);
+                account = AccountManager.CreateAccount(AccountType.Wechat, openid, name);
                 if (account.ID == 0)
                 {
                     Store.BizInfo("AUTH", string.Format("can not create account open {0}:{1}", openid, name));

@@ -8,15 +8,14 @@ namespace MobileTopUp
 {
     public class AccountManager
     {
-        public static Account GetAccountById(Store.AccountSources source, string id)
+        public static Account GetAccountById(AccountType accountType, string id)
         {
-            Store.SysInfo("ACCOUNT",string.Format("start to get account info by id {0}@{1}", id, source));
+            Store.SysInfo("ACCOUNT",string.Format("start to get account info by id {0}@{1}", id, accountType));
             try {
-                string accountSrc = Store.AccountSourceTypeToCode(source);
                 Account account;
                 using (StoreEntities db = new StoreEntities())
                 {
-                    account = db.Accounts.FirstOrDefault(x => x.Type.Equals(accountSrc) && x.ReferenceID.Equals(id));
+                    account = db.Accounts.FirstOrDefault(x => x.Type.Value == accountType.Value && x.ReferenceID.Equals(id));
                 }
 
                 Store.SysInfo("ACCOUNT",string.Format("succeed to got account info id {0}", account == null?"NULL":account.ID.ToString()));
@@ -29,14 +28,16 @@ namespace MobileTopUp
         }
 
 
-        public static Account CreateAccount(Store.AccountSources source, string oriId, string name)
+        public static Account CreateAccount(AccountType accountType, string oriId, string name)
         {
-            Store.SysInfo("[ACCOUNT]", string.Format("start to create account {0}:{1}@{2}", oriId, name, source));
+            Store.SysInfo("[ACCOUNT]", string.Format("start to create account {0}:{1}@{2}", oriId, name, accountType));
             try {
-                Account account = new Account();
-                account.Type = Store.AccountSourceTypeToCode(source);
-                account.ReferenceID = oriId;
-                account.Name = name;
+                Account account = new Account
+                {
+                    Type = accountType,
+                    ReferenceID = oriId,
+                    Name = name
+                };
                 using (StoreEntities db = new StoreEntities())
                 {
                     account = db.Accounts.Add(account);

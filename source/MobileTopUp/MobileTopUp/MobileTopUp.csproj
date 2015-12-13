@@ -131,57 +131,27 @@
     <Content Include="js\jquery.fileupload.js" />
     <Content Include="js\jquery.iframe-transport.js" />
     <Content Include="js\main.js" />
-    <Content Include="Models\StoreModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>StoreModel.edmx</DependentUpon>
-      <LastGenOutput>StoreModel.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\StoreModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>StoreModel.edmx</DependentUpon>
-      <LastGenOutput>StoreModel.cs</LastGenOutput>
-    </Content>
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Configuration\StoreConfig.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ErrorPageController.cs" />
     <Compile Include="Controllers\TopUpController.cs" />
-    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\WechatController.cs" />
-    <Compile Include="Configuration\StoreConfig.cs" />
-    <Compile Include="Domain\AccountManager.cs" />
-    <Compile Include="Models\Account.cs">
-      <DependentUpon>StoreModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\StoreModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StoreModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\StoreModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StoreModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\StoreModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StoreModel.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Transaction.cs">
-      <DependentUpon>StoreModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Voucher.cs">
-      <DependentUpon>StoreModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Domain\Accountant.cs" />
+    <Compile Include="Domain\AccountManager.cs" />
+    <Compile Include="Domain\Definitions.cs" />
     <Compile Include="Domain\Exceptions.cs" />
     <Compile Include="Domain\Store.cs" />
-    <Compile Include="Domain\Store_definition.cs" />
     <Compile Include="Domain\Store_log.cs" />
     <Compile Include="Domain\VoucherManager.cs" />
+    <Compile Include="Models\StoreEntities.cs" />
+    <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\Transaction.cs" />
+    <Compile Include="Models\Voucher.cs" />
     <Compile Include="Utilities\PxPay.cs" />
     <Compile Include="Utilities\WechatHelper.cs" />
     <Compile Include="Global.asax.cs">
@@ -199,13 +169,6 @@
     <Content Include="Views\TopUp\view.cshtml" />
     <Content Include="Views\Shared\message.cshtml" />
     <Content Include="Views\Voucher\scan.cshtml" />
-    <EntityDeploy Include="Models\StoreModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>StoreModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\StoreModel.edmx.diagram">
-      <DependentUpon>StoreModel.edmx</DependentUpon>
-    </Content>
     <Content Include="Views\Shared\error.cshtml" />
     <Content Include="Views\ErrorPage\FileNotFound.cshtml" />
     <Content Include="Views\ErrorPage\UnauthorizedAccess.cshtml" />

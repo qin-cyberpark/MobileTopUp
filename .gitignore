@@ -11,3 +11,9 @@
 /source/MobileTopUp/packages/
 /source/MobileTopUp/*/bin/
 /source/MobileTopUp/*/obj/
+/design/voucher_sample
+/source/MobileTopUp
+/test/log
+/test/temp
+/test/tessdata/Configs
+/test/tessdata

@@ -15,7 +15,7 @@ namespace MobileTopUp
             RequestInput reqInput = new RequestInput();
 
             reqInput.AmountInput = amount.ToString("#.##");
-            reqInput.CurrencyInput = Store.CURRENCY_CODE_NZD;
+            reqInput.CurrencyInput = CurrencyType.NZD.Value;
             reqInput.MerchantReference = reference;
             reqInput.TxnId = transactionID;
             reqInput.TxnType = "Purchase";
@@ -42,19 +42,16 @@ namespace MobileTopUp
             {
                 ttlCharge = 0.01M;
             }
-            switch (Store.PaymentCodeToType(trans.PaymentType))
+            if(trans.PaymentType  == PaymentType.PxPay)
             {
-                case Store.PaymentTypes.PxPayCreditCard:
-                case Store.PaymentTypes.PxPayAccount2Account:
-                    payUrl = GeneratePxPayRequestURL(ttlCharge, "TOPUP " + trans.Brand, trans.ID.ToString(), urlFail, urlSuccess);
-                    break;
-                default: break;
+                payUrl = GeneratePxPayRequestURL(ttlCharge, "TOPUP " + trans.Brand, trans.ID.ToString(), urlFail, urlSuccess);
             }
 
             return payUrl;
         }
 
-        public static bool VerifyPayment(decimal amount, Store.PaymentTypes type, string refId)
+
+        public static bool VerifyPayment(decimal amount, PaymentType type, string refId)
         {
             return false;
         }

@@ -13,14 +13,13 @@ namespace MobileTopUp.Tests
         [ClassInitialize()]
         public static void Initialize(TestContext context)
         {
-            //_account = AccountManager.GetAccountById(Store.AccountSources.Wechat, Store.Configuration.Administrators[0].WechatId);
+            _account = AccountManager.GetAccountById(Store.AccountSources.Wechat, Store.Configuration.Administrators[0].WechatId);
         }
 
         [TestMethod]
         public void TestCreateVoucher()
         {
-            Account a = AccountManager.GetAccountById(Store.AccountSources.Wechat, Store.Configuration.Administrators[0].WechatId);
-            VoucherManager mnger = new VoucherManager(a);
+            VoucherManager mnger = new VoucherManager(_account);
             Voucher v = new Voucher();
             v.Brand = "SPARK";
             v.Denomination = 20;

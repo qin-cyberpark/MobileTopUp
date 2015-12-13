@@ -7,18 +7,18 @@
     <!-- brand -->
     <div class="btn-group btn-group-justified" role="group" aria-label="...">
         <div class="btn-group" role="group">
-            <button type="button" class="btn btn-brand btn-lg brand-selected btn-spark" brand-type="@Store.BRAND_SPARK"></button>
+            <button type="button" class="btn btn-brand btn-lg brand-selected btn-spark" brand-type="@BrandType.Spark"></button>
         </div>
         <div class="btn-group" role="group">
-            <button type="button" class="btn btn-brand btn-lg btn-vodafone" brand-type="@Store.BRAND_VODAFONE"></button>
+            <button type="button" class="btn btn-brand btn-lg btn-vodafone" brand-type="@BrandType.Vodafone"></button>
         </div>
     </div>
     <div class="btn-group btn-group-justified" role="group" aria-label="...">
         <div class="btn-group" role="group">
-            <button type="button" class="btn btn-brand btn-lg btn-2degree" brand-type="@Store.BRAND_TWO_DEGREE"></button>
+            <button type="button" class="btn btn-brand btn-lg btn-2degree" brand-type="@BrandType.TwoDegree"></button>
         </div>
         <div class="btn-group" role="group">
-            <button type="button" class="btn btn-brand btn-lg btn-skinny" brand-type="@Store.BRAND_SKINNY"></button>
+            <button type="button" class="btn btn-brand btn-lg btn-skinny" brand-type="@BrandType.Skinny"></button>
         </div>
     </div>
     <!-- amount -->
@@ -47,7 +47,7 @@
             <span id="payAmountCNY" class="lbl-amount">
                 0 CNY
             </span>
-            <button type="button" class="btn btn-pay" pay-type="@Store.PAYMENT_CODE_WECHAT"><img src="~/img/wechat.png"/></button>
+            <button type="button" class="btn btn-pay" pay-type="@PaymentType.WechatPay"><img src="~/img/wechat.png"/></button>
         </div>
         }
     </div>
@@ -55,14 +55,14 @@
         <h4 id="payAmountNZD" class="lbl-amount">0 NZD</h4>
         <h5>*accpet Credit Card and Bank Account</h5>
         <div >
-            <img src="~/img/pe-wide.png" class="btn-pay" pay-type="@Store.PAYMENT_CODE_PX_CC" style="width:95%;max-width:280px" />
+            <img src="~/img/pe-wide.png" class="btn-pay" pay-type="@PaymentType.PxPay" style="width:95%;max-width:280px" />
         </div>
 
     </div>
 
 </div>
 <script>
-    var _denomination = @Store.VOUCHER_DEFAULT_DENOMINATION;
+    var _denomination = @VoucherType.Twenty;
     var _exRateCNY = @Store.Configuration.Payment.ExchangeRateCNY;
     var _discount = @Store.Configuration.Payment.Discount;
     var _brand = "@ViewBag.Brand";
@@ -75,7 +75,7 @@
             $(this).addClass("brand-selected");
             _brand = $(this).attr("brand-type");
         });
-        $(".btn-brand[brand-type='@ViewBag.Brand.ToUpper()']").click();
+        $(".btn-brand[brand-type='@ViewBag.Brand']").click();
 
         //amount select
         $(".btn-quanity").click(function () {

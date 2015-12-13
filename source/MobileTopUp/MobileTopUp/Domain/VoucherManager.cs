@@ -24,7 +24,8 @@ namespace MobileTopUp
             {
                 using (StoreEntities db = new StoreEntities())
                 {
-                    voucher.CreatedBy = _manager.Name;
+                    db.Accounts.Attach(_manager);
+                    voucher.Creator = _manager;
                     voucher.CreatedDate = DateTime.Now;
                     db.Vouchers.Add(voucher);
                     db.SaveChanges();
@@ -44,7 +45,7 @@ namespace MobileTopUp
                 {
                     foreach (Voucher voucher in vouchers)
                     {
-                        voucher.CreatedBy = _manager.Name;
+                        voucher.Creator = _manager;
                         voucher.CreatedDate = DateTime.Now;
                         db.Vouchers.Add(voucher);
                     }
@@ -83,40 +84,31 @@ namespace MobileTopUp
                 return null;
             }
         }
-        public static IList<Voucher> FindByTranscationId(int transactionId)
-        {
-            List<Voucher> result = new List<Voucher>();
-            //get holded voucher
-            using (StoreEntities db = new StoreEntities())
-            {
-                IEnumerable<Voucher> vouchers = db.Vouchers.Where(x => x.TransactionID == transactionId);
-                //flag vouchour to sold and send image to customer
-                foreach (Voucher v in vouchers)
-                {
-                    result.Add(v);
-                }
-            }
-            return result;
-        }
-        public static IList<Voucher> Sold(Transaction trans)
+        //public static IList<Voucher> FindByTranscationId(int transactionId)
+        //{
+        //    List<Voucher> result = new List<Voucher>();
+        //    //get holded voucher
+        //    using (StoreEntities db = new StoreEntities())
+        //    {
+        //        IEnumerable<Voucher> vouchers = db.Vouchers.Where(x => x.TransactionID == transactionId);
+        //        //flag vouchour to sold and send image to customer
+        //        foreach (Voucher v in vouchers)
+        //        {
+        //            result.Add(v);
+        //        }
+        //    }
+        //    return result;
+        //}
+        public static void Sold(Transaction trans)
         {
             //update transaction
-            List<Voucher> result = new List<Voucher>();
             using (StoreEntities db = new StoreEntities())
-            {
-                trans.PaidDate = DateTime.Now;
-                db.Entry(trans).State = System.Data.Entity.EntityState.Modified;
-                //get holded voucher
-                IEnumerable<Voucher> vouchers = db.Vouchers.Where(x => x.TransactionID == trans.ID);
-                //flag vouchour to sold and send image to customer
-                foreach (Voucher v in vouchers)
-                {
-                    result.Add(v);
-                    v.IsSold = true;
-                }
+            { 
+                db.Accounts.Attach(trans.Consumer);
+                db.Transactions.Attach(trans);
+                trans.Sold();
                 db.SaveChanges();
             }
-            return result;
         }
 
         public static int GetStock(string brandCode)
@@ -125,7 +117,7 @@ namespace MobileTopUp
             {
                 try
                 {
-                    int stock = db.Vouchers.Count(x => x.Brand.Equals(brandCode) && x.TransactionID == null);
+                    int stock = db.Vouchers.Count(x => x.Brand.Value.Equals(brandCode) && x.TransactionID == null);
                     Store.BizInfo("VOUCHER", string.Format("{0} Voucher stock=", stock));
                     return stock;
                 }
@@ -146,8 +138,9 @@ namespace MobileTopUp
                 {
                     try
                     {
+                        db.Accounts.Attach(trans.Consumer);
                         //got voucher
-                        IEnumerable<Voucher> vouchers = db.Vouchers.Where(x => x.Brand.Equals(trans.Brand) && x.TransactionID == null).Take(trans.Quantity);
+                        IEnumerable<Voucher> vouchers = db.Vouchers.Where(x => x.Brand.Value == trans.Brand.Value && x.TransactionID == null).Take(trans.Quantity);
                         Store.BizInfo("VOUCHER", string.Format("got {0} of {1} voucher", vouchers.Count(), trans.Quantity));
 
                         if (vouchers.Count() != trans.Quantity)
@@ -164,8 +157,7 @@ namespace MobileTopUp
                         //hold voucher
                         foreach (Voucher v in vouchers)
                         {
-                            v.AccountID = trans.AccountID;
-                            v.TransactionID = trans.ID;
+                            trans.Vouchers.Add(v);
                         }
                         db.SaveChanges();
                         dbTrans.Commit();

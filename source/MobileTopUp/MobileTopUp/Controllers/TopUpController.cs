@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using MobileTopUp.Models;
 using System.Threading;
+using System.Data.Entity;
 
 namespace MobileTopUp.Controllers
 {
@@ -35,7 +36,7 @@ namespace MobileTopUp.Controllers
             }
 
             Store.BizInfo("HOME", string.Format("home page visited cdoe={0}, brand={1}, amount={2}", Request["code"], brand, quantiy));
-            ViewBag.Brand = Store.VerifiedBrandOrDefault(brand);
+            ViewBag.Brand = BrandType.VerifiedOrDefault(brand);
             ViewBag.Qty = quantiy == null ? 1 : quantiy;
             return View();
         }
@@ -59,7 +60,7 @@ namespace MobileTopUp.Controllers
 
             //verify brand, amount, pay type
             Transaction trans = new Transaction();
-            if (!Store.VerfiyBrand(brand))
+            if (!BrandType.Contains(brand))
             {
                 //unvalid brand
                 Store.BizInfo("COMFIRM", string.Format("brand not valid"));
@@ -68,7 +69,7 @@ namespace MobileTopUp.Controllers
 
             //verify pay type
             payType = payType.ToUpper();
-            if (!Store.VerifyPayType(payType))
+            if (!payType.Contains(payType))
             {
                 //unvalid pay type
                 Store.BizInfo("COMFIRM", string.Format("payment type not valid"));
@@ -78,22 +79,22 @@ namespace MobileTopUp.Controllers
             Store.BizInfo("COMFIRM", string.Format("comfirm page visited id={0}, brand={1}, amount={2}", account.ID, brand, quantiy));
 
             //transaction info
-            trans.AccountID = account.ID;
-            trans.Brand = brand;
+            trans.Consumer = account;
+            trans.Brand = (BrandType)brand;
             trans.Quantity = quantiy;
-            trans.TotalDenomination = Store.VOUCHER_DEFAULT_DENOMINATION * trans.Quantity;
+            trans.TotalDenomination = VoucherType.Twenty * trans.Quantity;
 
-            trans.PaymentType = payType;
+            trans.PaymentType = (PaymentType)payType;
 
-            if (Store.PaymentCodeToType(trans.PaymentType) != Store.PaymentTypes.WechatPay)
+            if (trans.PaymentType != PaymentType.WechatPay)
             {
-                trans.Currency = Store.CurrencyTypeToCode(Store.Currencies.NZD);
+                trans.Currency = CurrencyType.NZD;
                 trans.ExchangeRate = Store.Configuration.Payment.ExchangeRateNZD;
                 trans.SellingPrice = trans.TotalDenomination * Store.Configuration.Payment.Discount;
             }
             else
             {
-                trans.Currency = Store.CurrencyTypeToCode(Store.Currencies.CNY);
+                trans.Currency = CurrencyType.CNY;
                 trans.ExchangeRate = Store.Configuration.Payment.ExchangeRateCNY;
                 trans.SellingPrice = trans.TotalDenomination * Store.Configuration.Payment.Discount * trans.ExchangeRate;
             }
@@ -141,7 +142,7 @@ namespace MobileTopUp.Controllers
                     return Redirect("/");
                 }
 
-                trans.PaymentType = Store.PAYMENT_CODE_SKIP;
+                trans.PaymentType = PaymentType.Skip;
             }
 
             //verify voucher stock
@@ -210,7 +211,7 @@ namespace MobileTopUp.Controllers
             Transaction trans = null;
             using (StoreEntities db = new StoreEntities())
             {
-                trans = db.Transactions.Find(transactionId);
+                trans = db.Transactions.Include(t => t.Consumer).FirstOrDefault(t => t.ID == transactionId);
                 if (trans == null)
                 {
                     Store.BizInfo("PAID", string.Format("not exist transactionid={0}", trans.ID));
@@ -235,22 +236,12 @@ namespace MobileTopUp.Controllers
             //just paid
             //verify payment
             string payResultId = null;
-            bool isSkipPayment = false;
-            Store.PaymentTypes payType = Store.PaymentCodeToType(trans.PaymentType);
-            switch (payType)
+            if (trans.PaymentType == PaymentType.PxPay)
             {
-                case Store.PaymentTypes.PxPayCreditCard:
-                case Store.PaymentTypes.PxPayAccount2Account:
-                    payResultId = Request["result"];
-                    break;
-                case Store.PaymentTypes.Skip:
-                    isSkipPayment = true;
-                    break;
-                default:
-                    break;
+                payResultId = Request["result"];
             }
 
-            if(!isSkipPayment && !Accountant.VerifyPayment(trans.SellingPrice, payType, payResultId))
+            if(trans.PaymentType != PaymentType.Skip && !Accountant.VerifyPayment(trans.SellingPrice, trans.PaymentType, payResultId))
             {
                 //not skip payment or payment not verified
                 Store.BizInfo("PAID", string.Format("not skip payment or payment not verified id={0}", trans.ID));
@@ -260,18 +251,18 @@ namespace MobileTopUp.Controllers
             //update transaction and voucher
             trans.PaymentRef = payResultId;
             Store.BizInfo("PAID", string.Format("update transaction and vouchers id={0}", trans.ID));
-            IList<Voucher> vouchers = VoucherManager.Sold(trans);
+            VoucherManager.Sold(trans);
 
             //send voucher
-            int voucherLen = vouchers.Count;
-            byte[][] imageBytes = new byte[voucherLen][];
-            for(int i=0;i< voucherLen; i++)
+            byte[][] imageBytes = new byte[trans.Vouchers.Count][];
+            int idx = 0;
+            foreach(Voucher v in trans.Vouchers)
             {
-                imageBytes[i] = vouchers[i].Image;
+                imageBytes[idx++] = v.Image;
             }
             WechatHelper.SendImagesAsync(account.ReferenceID, imageBytes);
 
-            ViewBag.Vouchers = vouchers;
+            ViewBag.Vouchers = trans.Vouchers;
             return View("view");
         }
 
@@ -311,8 +302,7 @@ namespace MobileTopUp.Controllers
                 return Redirect("/");
             }
 
-            IList<Voucher> vouchers = VoucherManager.FindByTranscationId(trans.ID);
-            ViewBag.Vouchers = vouchers;
+            ViewBag.Vouchers = trans.Vouchers;
             return View();
         }
     }
