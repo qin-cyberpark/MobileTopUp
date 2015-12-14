@@ -44,13 +44,14 @@ namespace MobileTopUp.Models
         public DateTime OrderDate { get; set; }
 
         public DateTime? PaidDate { get; set; }
+        public DateTime? VoucherSendDate { get; set; }
 
-        public string AuthCode { get; set; }
+        public int PayFailedCount { get; set; }
 
 
         public virtual ICollection<Voucher> Vouchers { get; set; }
 
-        public void Sold()
+        public void Paid()
         {
             PaidDate = DateTime.Now;
             foreach(Voucher v in Vouchers)

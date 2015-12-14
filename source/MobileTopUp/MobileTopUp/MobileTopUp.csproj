@@ -114,8 +114,12 @@
     <Content Include="css\main.css" />
     <Content Include="Global.asax" />
     <Content Include="img\2degree.png" />
+    <Content Include="img\404.png" />
+    <Content Include="img\error.png" />
+    <Content Include="img\local.png" />
     <Content Include="img\pe-a2a.png" />
     <Content Include="img\pe-cc.png" />
+    <Content Include="img\pe-wide-red.PNG" />
     <Content Include="img\pe-wide.png" />
     <Content Include="img\pe.png" />
     <Content Include="img\skinny.png" />
@@ -142,7 +146,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ErrorPageController.cs" />
     <Compile Include="Controllers\TopUpController.cs" />
-    <Compile Include="Controllers\WechatController.cs" />
+    <Compile Include="Controllers\MessageController.cs" />
     <Compile Include="Domain\Accountant.cs" />
     <Compile Include="Domain\AccountManager.cs" />
     <Compile Include="Domain\Definitions.cs" />
@@ -171,12 +175,12 @@
     <Content Include="Views\TopUp\Home.cshtml" />
     <Content Include="Views\TopUp\confirm.cshtml" />
     <Content Include="Views\TopUp\view.cshtml" />
-    <Content Include="Views\Shared\message.cshtml" />
     <Content Include="Views\Voucher\scan.cshtml" />
-    <Content Include="Views\Shared\error.cshtml" />
     <None Include="Properties\PublishProfiles\Production.pubxml" />
     <Content Include="Views\TopUp\fakePay.cshtml" />
-    <Content Include="Views\ErrorPage\error.cshtml" />
+    <Content Include="Views\Shared\error.cshtml" />
+    <Content Include="Views\Admin\login.cshtml" />
+    <Content Include="Views\Admin\index.cshtml" />
     <None Include="Web.Pro.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

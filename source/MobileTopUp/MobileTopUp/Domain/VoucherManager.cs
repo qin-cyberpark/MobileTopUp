@@ -5,6 +5,8 @@ using System.Web;
 using Tesseract;
 using System.Text.RegularExpressions;
 using MobileTopUp.Models;
+using MobileTopUp.Utilities;
+
 namespace MobileTopUp
 {
     public class VoucherManager
@@ -75,7 +77,7 @@ namespace MobileTopUp
                 }
                 else
                 {
-                    Store.BizInfo("VOUCHER",null, string.Format("found voucher id={0}", id));
+                    Store.BizInfo("VOUCHER", null, string.Format("found voucher id={0}", id));
                 }
                 return v;
             }
@@ -103,20 +105,21 @@ namespace MobileTopUp
                 }
             }
         }
-
-        public static void Sold(Transaction trans)
+        public static bool CheckStock(string brand, int quantity)
         {
-            //update transaction
-            using (StoreEntities db = new StoreEntities())
-            { 
-                db.Accounts.Attach(trans.Consumer);
-                db.Transactions.Attach(trans);
-                trans.Sold();
-                db.SaveChanges();
+            int stock = VoucherManager.GetStock(brand);
+            if (stock < quantity)
+            {
+                Store.SysInfo("PAY", string.Format("not enough {0} voucher stock {1}/{2}", brand, stock, quantity));
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
 
-  
+
         public static bool Hold(Transaction trans)
         {
             //hold vouchour
@@ -159,6 +162,36 @@ namespace MobileTopUp
                         return false;
                     }
                 }
+            }
+        }
+   
+        public static bool SendVoucher(Transaction trans)
+        {
+            try
+            {
+                //send voucher
+                Store.BizInfo("VOUCHER", trans.Consumer.ID, string.Format("start to send voucher transId={0}", trans.ID));
+                byte[][] imageBytes = new byte[trans.Vouchers.Count][];
+                int idx = 0;
+                foreach (Voucher v in trans.Vouchers)
+                {
+                    imageBytes[idx++] = v.Image;
+                }
+                WechatHelper.SendImagesAsync(trans.Consumer.ReferenceID, imageBytes);
+                WechatHelper.SendMessageAsync(trans.Consumer.ReferenceID, string.Format("Your {0} voucher number:{1}", trans.Brand, trans.VoucherNumberString));
+                using (StoreEntities db = new StoreEntities())
+                {
+                    db.Transactions.Attach(trans);
+                    trans.VoucherSendDate = DateTime.Now;
+                    db.SaveChanges();
+                    Store.BizInfo("VOUCHER", trans.Consumer.ID, string.Format("voucher sent date updated transId={0}", trans.ID));
+                }
+                return true;
+            }
+            catch
+            {
+                Store.BizInfo("VOUCHER", trans.Consumer.ID, string.Format("fail to send voucher transId={0}", trans.ID));
+                return false;
             }
         }
 

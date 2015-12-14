@@ -13,6 +13,14 @@ namespace MobileTopUp
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             routes.MapRoute(
+              "Admin",
+              "admin/{Action}/",
+              new
+              {
+                  controller = "Admin",
+                  action = "Index",
+              });
+            routes.MapRoute(
                  "TopUpConfirm",
                  "confirm/{brand}/{quantiy}/{paytype}",
                 new

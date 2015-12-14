@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using MobileTopUp.Models;
 using MobileTopUp.Utilities;
+using System.Data.Entity;
 namespace MobileTopUp
 {
     public class Accountant
@@ -39,6 +40,7 @@ namespace MobileTopUp
         {
             return GeneratePxPayRequestURL(amount, reference, transactionID, null, urlFail, urlSuccess);
         }
+        /*
         private static decimal GetPxPaymentAmount(string resultId, out ResponseOutput output)
         {
             output = _pxPay.ProcessResponse(resultId);
@@ -64,7 +66,7 @@ namespace MobileTopUp
             }catch{
                 return 0.0M;
             }
-        }
+        }*/
         #endregion
         public static string GeneratePayURL(Transaction trans, string urlFail, string urlSuccess, int attemptTime = 0)
         {
@@ -79,7 +81,7 @@ namespace MobileTopUp
             return payUrl;
         }
 
-
+        /*
         public static bool VerifyPayment(decimal amount, PaymentType type, string refId, out string authCode, out string response)
         {
             decimal chargedAmount = 0.0M;
@@ -96,6 +98,79 @@ namespace MobileTopUp
 
             return chargedAmount == amount;
         }
-     
+        */
+        /// <summary>
+        /// verify px payment match transaction
+        /// if pay success set transaction as paid
+        /// </summary>
+        /// <param name="resultId"></param>
+        /// <param name="isSuccess"></param>
+        /// <returns></returns>
+        public static bool VerifyPxPayPayment(string resultId, bool isSuccess, out int outTransactionId)
+        {
+            try {
+                //check response
+                Store.SysInfo("ACCOUNT-PXPAY", "start to get pxpay payment result =" + resultId);
+                ResponseOutput output = _pxPay.ProcessResponse(resultId);
+                Store.SysInfo("ACCOUNT-PXPAY", "PXPAY PROCESS RESPONSE:" + output.ToString());
+                if (output == null)
+                {
+                    Store.SysError("ACCOUNT-PXPAY", "can not get pxpay payment result - resposne is null");
+                }
+                Store.SysInfo("ACCOUNT-PXPAY", output.ToString());
+                if (bool.Parse(output.Success) == isSuccess)
+                {
+                    Store.SysError("ACCOUNT-PXPAY", string.Format("payment result not match except {0} - actual {1}", output.Success, isSuccess));
+                }
+                
+                //set transaction
+                int transactionId = int.Parse(output.TxnId);
+                decimal amount = decimal.Parse(output.AmountSettlement);
+                using (StoreEntities db = new StoreEntities())
+                {
+                    Transaction trans = db.Transactions.Include(t => t.Vouchers).FirstOrDefault(t => t.ID == transactionId);
+                    if (trans == null)
+                    {
+                        outTransactionId = 0;
+                        Store.SysError("ACCOUNT-PXPAY", string.Format("payment {0} can not mactch transaction {1}", resultId, transactionId));
+                        return false;
+                    }
+
+                    
+                    trans.PaymentRef = (string.IsNullOrEmpty(trans.PaymentRef)? "" : trans.PaymentRef) + output.ToString();
+                    if (!isSuccess)
+                    {
+                        //pay fail
+                        outTransactionId = transactionId;
+                        trans.PayFailedCount++;
+                        Store.BizInfo("ACCOUNT-PAPAY", trans.AccountID, "pay failed count = " + trans.PayFailedCount);
+                        db.SaveChanges();
+                        return true;
+                    }
+                    else
+                    {
+                        //pay success
+                        if (trans.ChargeAmount != amount)
+                        {
+                            outTransactionId = 0;
+                            Store.BizInfo("ACCOUNT-PAPAY", trans.AccountID, string.Format("pxpay amount {0} <> transaction amount {1}", amount, trans.ChargeAmount));
+                            return false;
+                        }
+
+                        outTransactionId = transactionId;
+                        trans.Paid();
+                        db.SaveChanges();
+                        Store.BizInfo("ACCOUNT-PAPAY", trans.AccountID, string.Format("transaction set to paid, id={0}", trans.ID));
+                        return true;
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                outTransactionId = 0;
+                Store.SysError("ACCOUNT", "can not get pxpay payment result", ex);
+                return false;
+            }
+        }
     }
 }
