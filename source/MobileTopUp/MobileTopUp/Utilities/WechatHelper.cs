@@ -106,7 +106,7 @@ namespace MobileTopUp.Utilities
         public static bool SendImage(string openid, byte[] imageBytes, int maxAttamptTime = 3)
         {
             _sysLogger.Info(string.Format("[WX]start to sent image to {0}", openid));
-            string tempFile = _tempFolder + openid + ".png";
+            string tempFile = _tempFolder + openid + ".jpg";
             System.IO.File.WriteAllBytes(tempFile, imageBytes);
             UploadTemporaryMediaResult updateRst = null;
             WxJsonResult sendRst = null;
@@ -134,7 +134,7 @@ namespace MobileTopUp.Utilities
                     break;
                 }
             }
-            if (updateRst == null || updateRst.errcode != 0)
+            if (sendRst == null || sendRst.errcode != 0)
             {
                 _sysLogger.Info("[WX]faild to send image");
                 return false;
@@ -177,6 +177,45 @@ namespace MobileTopUp.Utilities
             }
             _sysLogger.Info(string.Format("[WX]start thread to sent images{0} to {1}", imageBytes.Length, openid));
             ThreadStart starter = () => SendImages(openid, imageBytes);
+            Thread thread = new Thread(starter);
+            thread.Start();
+        }
+
+        /// <summary>
+        /// send image to openid
+        /// </summary>
+        /// <param name="openid"></param>
+        /// <param name="fileByte"></param>
+        /// <returns></returns>
+        public static bool SendMessage(string openid, string message, int maxAttamptTime = 3)
+        {
+            _sysLogger.Info(string.Format("[WX]start to sent message to {0}", openid));
+            WxJsonResult sendRst = null;
+            for (int i = 0; i < maxAttamptTime; i++)
+            {
+                _sysLogger.Info(string.Format("[WX]start to send image to {0} try {1}", openid, i));
+                sendRst = CustomApi.SendText(_appId, openid, message);
+                if (sendRst != null && sendRst.errcode == 0)
+                {
+                    break;
+                }
+            }
+            if (sendRst == null || sendRst.errcode != 0)
+            {
+                _sysLogger.Info("[WX]faild to send message");
+                return false;
+            }
+
+            return true;
+        }
+        public static void SendMessageAsync(string openid, string message)
+        {
+            if (string.IsNullOrEmpty(message))
+            {
+                return;
+            }
+            _sysLogger.Info(string.Format("[WX]start thread to sent message to {0}", openid));
+            ThreadStart starter = () => SendMessage(openid, message);
             Thread thread = new Thread(starter);
             thread.Start();
         }

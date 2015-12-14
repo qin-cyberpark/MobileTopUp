@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using MobileTopUp.ViewModels;
 namespace MobileTopUp.Controllers
 {
     public class ErrorPageController : Controller
@@ -11,15 +11,33 @@ namespace MobileTopUp.Controllers
         // GET: ErrorPage
         public ActionResult Index()
         {
-            return View("error");
+            ErrorViewModel model = new ErrorViewModel
+            {
+                Message = "error"
+            };
+            return View("error", model);
         }
         public ActionResult FileNotFound()
         {
-            return View();
+            ErrorViewModel model = new ErrorViewModel
+            {
+                Message = "FileNotFound"
+            };
+            return View("error", model);
         }
         public ActionResult UnauthorizedAccess()
         {
-            return View();
+            ErrorViewModel model = new ErrorViewModel
+            {
+                Message = "UnauthorizedAccess"
+            };
+            return View("error", model);
+        }
+
+        public ActionResult Unavailable()
+        {
+            ErrorViewModel model = new ErrorViewModel(ErrorViewModel.ErrorType.OutOfStock);
+            return View("error", model);
         }
     }
 }

@@ -30,11 +30,11 @@ namespace MobileTopUp
                     db.Vouchers.Add(voucher);
                     db.SaveChanges();
                 }
-                Store.BizInfo("VOUCHER", string.Format("{0} succeed to add voucher {1}", _manager.ID, voucher.Number));
+                Store.BizInfo("VOUCHER", _manager.ID, string.Format("succeed to add voucher {0}", voucher.Number));
             }
             catch (Exception ex)
             {
-                Store.SysError("VOUCHER", string.Format("{0} failed to add voucher {1}", _manager.ID, voucher.Number), ex);
+                Store.SysError("VOUCHER", string.Format("failed to add voucher id={0}, voucher={1}", _manager.ID, voucher.Number), ex);
             }
         }
         public void Add(IList<Voucher> vouchers)
@@ -43,6 +43,7 @@ namespace MobileTopUp
             {
                 using (StoreEntities db = new StoreEntities())
                 {
+                    db.Accounts.Attach(_manager);
                     foreach (Voucher voucher in vouchers)
                     {
                         voucher.Creator = _manager;
@@ -51,11 +52,11 @@ namespace MobileTopUp
                     }
                     db.SaveChanges();
                 }
-                Store.BizInfo("VOUCHER", string.Format("{0} succeed to add batch of voucher", _manager.ID));
+                Store.BizInfo("VOUCHER", _manager.ID, string.Format("succeed to add batch of voucher"));
             }
             catch (Exception ex)
             {
-                Store.SysError("VOUCHER", string.Format("{0} failed to add batch of voucher", _manager.ID), ex);
+                Store.SysError("VOUCHER", string.Format("failed to add batch of voucher, id={0}", _manager.ID), ex);
             }
         }
 
@@ -70,11 +71,11 @@ namespace MobileTopUp
                 }
                 if (v == null)
                 {
-                    Store.BizInfo("VOUCHER", string.Format("not find voucher id {0}", id));
+                    Store.BizInfo("VOUCHER", null, string.Format("can not find voucher id={0}", id));
                 }
                 else
                 {
-                    Store.BizInfo("VOUCHER", string.Format("find voucher id {0}", id));
+                    Store.BizInfo("VOUCHER",null, string.Format("found voucher id={0}", id));
                 }
                 return v;
             }
@@ -84,21 +85,25 @@ namespace MobileTopUp
                 return null;
             }
         }
-        //public static IList<Voucher> FindByTranscationId(int transactionId)
-        //{
-        //    List<Voucher> result = new List<Voucher>();
-        //    //get holded voucher
-        //    using (StoreEntities db = new StoreEntities())
-        //    {
-        //        IEnumerable<Voucher> vouchers = db.Vouchers.Where(x => x.TransactionID == transactionId);
-        //        //flag vouchour to sold and send image to customer
-        //        foreach (Voucher v in vouchers)
-        //        {
-        //            result.Add(v);
-        //        }
-        //    }
-        //    return result;
-        //}
+
+        public static int GetStock(string brand)
+        {
+            using (StoreEntities db = new StoreEntities())
+            {
+                try
+                {
+                    int stock = db.Vouchers.Count(x => x.Brand.Value.Equals(brand) && x.TransactionID == null);
+                    Store.BizInfo("VOUCHER", null, string.Format("{0} Voucher stock={1}", brand, stock));
+                    return stock;
+                }
+                catch (Exception ex)
+                {
+                    Store.SysError("VOUCHER", string.Format("failed to get stock of {0} voucher", brand), ex);
+                    return -1;
+                }
+            }
+        }
+
         public static void Sold(Transaction trans)
         {
             //update transaction
@@ -111,24 +116,7 @@ namespace MobileTopUp
             }
         }
 
-        public static int GetStock(string brandCode)
-        {
-            using (StoreEntities db = new StoreEntities())
-            {
-                try
-                {
-                    int stock = db.Vouchers.Count(x => x.Brand.Value.Equals(brandCode) && x.TransactionID == null);
-                    Store.BizInfo("VOUCHER", string.Format("{0} Voucher stock=", stock));
-                    return stock;
-                }
-                catch (Exception ex)
-                {
-                    Store.SysError("VOUCHER", string.Format("failed to get stock {0} voucher", brandCode), ex);
-                    return -1;
-                }
-            }
-        }
-
+  
         public static bool Hold(Transaction trans)
         {
             //hold vouchour
@@ -141,11 +129,11 @@ namespace MobileTopUp
                         db.Accounts.Attach(trans.Consumer);
                         //got voucher
                         IEnumerable<Voucher> vouchers = db.Vouchers.Where(x => x.Brand.Value == trans.Brand.Value && x.TransactionID == null).Take(trans.Quantity);
-                        Store.BizInfo("VOUCHER", string.Format("got {0} of {1} voucher", vouchers.Count(), trans.Quantity));
+                        Store.BizInfo("VOUCHER", trans.Consumer.ID, string.Format("got {0} of {1} voucher", vouchers.Count(), trans.Quantity));
 
                         if (vouchers.Count() != trans.Quantity)
                         {
-                            Store.BizInfo("VOUCHER", string.Format("not enough voucher {0}/{1}", vouchers.Count(), trans.Quantity));
+                            Store.BizInfo("VOUCHER", trans.Consumer.ID, string.Format("not enough voucher {0}/{1} for {2}", vouchers.Count(), trans.Quantity, trans.Brand));
                             return false;
                         }
 
@@ -161,7 +149,7 @@ namespace MobileTopUp
                         }
                         db.SaveChanges();
                         dbTrans.Commit();
-                        Store.BizInfo("VOUCHER", string.Format("hold {0} of {1} voucher for {2}, transaction={3}", trans.Brand, trans.Quantity, trans.AccountID, trans.ID));
+                        Store.BizInfo("VOUCHER", trans.Consumer.ID, string.Format("hold {0} of {1} voucher for transaction={2}", trans.Quantity, trans.Brand, trans.ID));
                         return true;
                     }
                     catch (Exception ex)

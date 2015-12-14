@@ -22,7 +22,8 @@ namespace MobileTopUp.Models
         [Required]
         public PaymentType PaymentType { get; set; }
 
-        [StringLength(30)]
+        [Column(TypeName = "text")]
+        [MaxLength]
         public string PaymentRef { get; set; }
 
         [Required]
@@ -38,10 +39,13 @@ namespace MobileTopUp.Models
         public decimal TotalDenomination { get; set; }
 
         public decimal SellingPrice { get; set; }
+        public decimal ChargeAmount { get; set; }
 
         public DateTime OrderDate { get; set; }
 
         public DateTime? PaidDate { get; set; }
+
+        public string AuthCode { get; set; }
 
 
         public virtual ICollection<Voucher> Vouchers { get; set; }
@@ -53,6 +57,27 @@ namespace MobileTopUp.Models
             {
                 v.AccountID = this.AccountID;
                 v.IsSold = true;
+            }
+        }
+
+        public string VoucherNumberString
+        {
+            get
+            {
+                string voucherStr = null;
+                foreach (Voucher v in Vouchers)
+                {
+                    if (!string.IsNullOrEmpty(voucherStr))
+                    {
+                        voucherStr += ",";
+                    }
+
+                    if (!string.IsNullOrEmpty(v.Number))
+                    {
+                        voucherStr += v.Number;
+                    }
+                }
+                return voucherStr;
             }
         }
     }

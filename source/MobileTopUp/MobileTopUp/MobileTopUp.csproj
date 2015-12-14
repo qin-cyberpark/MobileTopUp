@@ -131,7 +131,9 @@
     <Content Include="js\jquery.fileupload.js" />
     <Content Include="js\jquery.iframe-transport.js" />
     <Content Include="js\main.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -151,6 +153,7 @@
     <Compile Include="Models\StoreEntities.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\Transaction.cs" />
+    <Compile Include="Models\VerifyCode.cs" />
     <Compile Include="Models\Voucher.cs" />
     <Compile Include="Utilities\PxPay.cs" />
     <Compile Include="Utilities\WechatHelper.cs" />
@@ -158,21 +161,22 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\ErrorViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
     <Content Include="packages.config" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\TopUp\Index.cshtml" />
+    <Content Include="Views\TopUp\Home.cshtml" />
     <Content Include="Views\TopUp\confirm.cshtml" />
     <Content Include="Views\TopUp\view.cshtml" />
     <Content Include="Views\Shared\message.cshtml" />
     <Content Include="Views\Voucher\scan.cshtml" />
     <Content Include="Views\Shared\error.cshtml" />
-    <Content Include="Views\ErrorPage\FileNotFound.cshtml" />
-    <Content Include="Views\ErrorPage\UnauthorizedAccess.cshtml" />
     <None Include="Properties\PublishProfiles\Production.pubxml" />
+    <Content Include="Views\TopUp\fakePay.cshtml" />
+    <Content Include="Views\ErrorPage\error.cshtml" />
     <None Include="Web.Pro.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

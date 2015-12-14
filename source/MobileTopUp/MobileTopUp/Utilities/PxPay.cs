@@ -476,6 +476,8 @@ namespace MobileTopUp.Utilities
             }
 
         }
+
+
     }
 
     /// <summary>
@@ -826,6 +828,11 @@ namespace MobileTopUp.Utilities
                     }
                 }
             }
+        }
+
+        public override string ToString()
+        {
+            return _Xml;
         }
     }
 }

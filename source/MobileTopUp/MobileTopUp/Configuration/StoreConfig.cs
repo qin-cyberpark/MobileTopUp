@@ -262,9 +262,16 @@ namespace MobileTopUp.Configuration
 
     public class AdministratorElementCollection : ConfigurationElementCollection
     {
+        public object[] GetAllKeys()
+        {
+            return BaseGetAllKeys();
+        }
         new public string this[string id]
         {
-            get { return ((AdministratorElement)BaseGet(id)).Name; }
+            get
+            {
+                return ((AdministratorElement)BaseGet(id)).Name;
+            }
         }
         public AdministratorElement this[int i]
         {

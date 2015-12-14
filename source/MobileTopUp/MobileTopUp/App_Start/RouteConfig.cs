@@ -23,39 +23,30 @@ namespace MobileTopUp
                 , new { quantiy = @"[1-5]?" }
             );
             routes.MapRoute(
-             "View",
-             "View/{transactionId}",
-            new
-            {
-                controller = "TopUp",
-                action = "View"
-            }
-          );
+                "TopUpProcess",
+                "{Action}/{transactionId}",
+                new
+                {
+                    controller = "TopUp"
+                },
+                new { transactionId = @"\d+" }
+                );
             routes.MapRoute(
-               "Paid",
-               "Paid/{transactionId}",
-              new
-              {
-                  controller = "TopUp",
-                  action = "Paid"
-              }
-            );
+                "ErrorPage",
+                "ErrorPage/{Action}",
+                new
+                {
+                    controller = "ErrorPage",
+                    action = "index"
+                }
+                );
             routes.MapRoute(
-               "Pay",
-               "pay",
-              new
-              {
-                  controller = "TopUp",
-                  action = "Pay"
-              }
-            );
-            routes.MapRoute(
-                 "TopUpHome",
-                 "{brand}/{quantiy}",
+                 "Default",
+                 "{Action}/{brand}/{quantiy}",
                  new
                  {
                      controller = "TopUp",
-                     action = "Index",
+                     action = "Home",
                      brand = UrlParameter.Optional,
                      quantiy = UrlParameter.Optional
                  },

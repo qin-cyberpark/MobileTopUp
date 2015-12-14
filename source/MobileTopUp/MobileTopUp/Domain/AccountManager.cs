@@ -8,6 +8,7 @@ namespace MobileTopUp
 {
     public class AccountManager
     {
+        private static Dictionary<string, string> _adminis = new Dictionary<string, string>();
         public static Account GetAccountById(AccountType accountType, string id)
         {
             Store.SysInfo("ACCOUNT",string.Format("start to get account info by id {0}@{1}", id, accountType));
@@ -15,7 +16,7 @@ namespace MobileTopUp
                 Account account;
                 using (StoreEntities db = new StoreEntities())
                 {
-                    account = db.Accounts.FirstOrDefault(x => x.Type.Value == accountType.Value && x.ReferenceID.Equals(id));
+                    account = db.Accounts.FirstOrDefault(x => x.Type.Value.Equals(accountType.Value) && x.ReferenceID.Equals(id));
                 }
 
                 Store.SysInfo("ACCOUNT",string.Format("succeed to got account info id {0}", account == null?"NULL":account.ID.ToString()));
@@ -54,7 +55,22 @@ namespace MobileTopUp
 
         public static bool IsAdministrator(Account account)
         {
-            return Store.Configuration.Administrators[account.ReferenceID] != null;
+            if(account == null)
+            {
+                return false;
+            }
+
+            if(_adminis.Count == 0)
+            {
+                object[] keys = Store.Configuration.Administrators.GetAllKeys();
+                foreach(object k in keys)
+                {
+                    string id = (string)k;
+                    _adminis.Add(id, Store.Configuration.Administrators[id]);
+                }
+            }
+
+            return _adminis.ContainsKey(account.ReferenceID);
         }
     }
 }

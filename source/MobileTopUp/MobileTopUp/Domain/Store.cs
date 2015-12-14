@@ -39,7 +39,7 @@ namespace MobileTopUp
             string openid = null;
             if (Store.Configuration.FakeLogin && Store.Configuration.Administrators.Count > 0) {
                 openid = Store.Configuration.Administrators[0].WechatId;
-                Store.BizInfo("AUTH", string.Format("fake login set open id {0}", openid));
+                Store.BizInfo("AUTH", null, string.Format("fake login set open id={0}", openid));
             }
             else
             {
@@ -49,12 +49,12 @@ namespace MobileTopUp
             if (string.IsNullOrEmpty(openid))
             {
                 //failed to get open id
-                Store.BizInfo("AUTH", string.Format("can not get open id by code {0}", code));
+                Store.BizInfo("AUTH", null, string.Format("can not get open id by code={0}", code));
                 return null;
             }
 
             //got open id
-            Store.BizInfo("AUTH", string.Format("got open id {0}", openid));
+            Store.BizInfo("AUTH", null, string.Format("got open id {0}", openid));
             //get customer
             Account account = AccountManager.GetAccountById(AccountType.Wechat, openid);
             if (account == null)
@@ -63,28 +63,28 @@ namespace MobileTopUp
                 OAuthUserInfo userInfo = WechatHelper.GetUserInfo(userInfoAccessToken, openid);
                 if(userInfo == null)
                 {
-                    Store.BizInfo("AUTH", string.Format("can not get user info by open id {0}", openid));
+                    Store.BizInfo("AUTH", null, string.Format("can not get user info by open id={0}", openid));
                     return null;
                 }
 
                 if (string.IsNullOrEmpty(userInfo.nickname))
                 {
-                    Store.BizInfo("AUTH", string.Format("can not get user name in userinfo open id {0}", openid));
+                    Store.BizInfo("AUTH", null, string.Format("can not get user name in userinfo open id={0}", openid));
                     return null;
                 }
 
                 string name = userInfo.nickname;
-                Store.BizInfo("AUTH", string.Format("got user name {0}", name));
+                Store.BizInfo("AUTH", null, string.Format("got user name={0}", name));
 
                 //create account
                 account = AccountManager.CreateAccount(AccountType.Wechat, openid, name);
                 if (account.ID == 0)
                 {
-                    Store.BizInfo("AUTH", string.Format("can not create account open {0}:{1}", openid, name));
+                    Store.BizInfo("AUTH",null, string.Format("can not create account open {0}:{1}", openid, name));
                     return null;
                 }
 
-                Store.BizInfo("AUTH", string.Format("new account created {0}:{1}", openid, name));
+                Store.BizInfo("AUTH", account.ID, string.Format("new account created {0}:{1}", openid, name));
             }
 
             return account;
