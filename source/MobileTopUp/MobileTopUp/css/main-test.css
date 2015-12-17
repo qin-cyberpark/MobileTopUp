@@ -80,7 +80,7 @@ body {
 .brand-brief {
     min-width: 80px;
     text-align: center;
-    margin-top:10px;
+    margin-top: 10px;
 }
 
     .brand-brief IMG {
@@ -101,22 +101,35 @@ body {
     border: solid 1px #777;
     padding: 0px;
 }
-.module-box.record{
-    height:200px
-}
-.module-box.stock{
-    height:200px
-}
-.module-box.add-voucher{
-    padding:10px;
-}
+
+    .module-box.record {
+        height: 200px;
+    }
+
+    .module-box.stock {
+        height: 200px;
+    }
+
+    .module-box.add-voucher {
+        border: none;
+        padding: 10px;
+    }
+
+        .module-box.add-voucher input {
+            margin-top: 5px;
+        }
+                .module-box.add-voucher button {
+            margin-top: 5px;
+        }
+
     .module-box .caption {
         text-align: center;
     }
-    .module-box .caption.dark {
-        background-color: #999;
-        color: #eee;
-    }
+
+        .module-box .caption.dark {
+            background-color: #999;
+            color: #eee;
+        }
 
     .module-box .list THEAD {
         background-color: #999;
@@ -148,6 +161,6 @@ TD.right {
     text-align: right;
 }
 
-.alert.add-voucher{
-    margin:0px 10px 0px 0px;
+.alert.add-voucher {
+    margin: 0px 10px 0px 0px;
 }

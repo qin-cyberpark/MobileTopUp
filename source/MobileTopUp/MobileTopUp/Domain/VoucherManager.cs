@@ -29,6 +29,9 @@ namespace MobileTopUp
                 using (StoreEntities db = new StoreEntities())
                 {
                     db.Accounts.Attach(_manager);
+                    Bitmap image = OcrHelper.CreateVoucherImage(voucher.Brand, voucher.Number, voucher.SerialNumber);
+                    ImageConverter converter = new ImageConverter();
+                    voucher.Image = (byte[])converter.ConvertTo(image, typeof(byte[]));
                     voucher.Creator = _manager;
                     voucher.CreatedDate = DateTime.Now;
                     db.Vouchers.Add(voucher);
@@ -217,15 +220,14 @@ namespace MobileTopUp
             {
                 //send voucher
                 Store.BizInfo("VOUCHER", trans.Consumer.ID, string.Format("start to send voucher transId={0}", trans.ID));
-                /*
                 byte[][] imageBytes = new byte[trans.Vouchers.Count][];
                 int idx = 0;
                 foreach (Voucher v in trans.Vouchers)
                 {
                     imageBytes[idx++] = v.Image;
                 }
-                WechatHelper.SendImagesAsync(trans.Consumer.ReferenceID, imageBytes);
-                */
+               WechatHelper.SendImagesAsync(trans.Consumer.ReferenceID, imageBytes);
+                
                 WechatHelper.SendMessageAsync(trans.Consumer.ReferenceID, string.Format("Your {0} voucher number:{1}", trans.Brand, trans.VoucherNumberString));
                 using (StoreEntities db = new StoreEntities())
                 {

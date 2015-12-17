@@ -19,11 +19,11 @@ namespace MobileTopUp.Controllers
 
         public ActionResult Index()
         {
-            //Account account = null;
-            //if (!VerifyInfo("ADMIN-IDX", out account))
-            //{
-            //    return Redirect("~/admin/login");
-            //}
+            Account account = null;
+            if (!VerifyInfo("ADMIN-IDX", out account))
+            {
+                return Redirect("~/admin/login");
+            }
 
             return View();
         }
