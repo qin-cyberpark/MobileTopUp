@@ -5,30 +5,32 @@
     string message = "Sorry! Something went wrong";
 
     ErrorViewModel m = (ErrorViewModel)Model;
-    switch (m.Type)
-    {
-        case ErrorViewModel.ErrorType.FileNotFound:
-            imgFile = "404.png";
-            message = "404 Page Not Found";
-            break;
-        case ErrorViewModel.ErrorType.UnauthorizedAccess:
-            message = "Sorry! Access denied :(";
-            break;
-        case ErrorViewModel.ErrorType.OutOfStock:
-            message = "Sorry! Temporarily Unavailable";
-            break;
-        case ErrorViewModel.ErrorType.Customer:
-            backUrl = string.IsNullOrEmpty(m.BackUrl) ? backUrl : m.BackUrl;
-            imgFile = string.IsNullOrEmpty(m.ImageFile) ? imgFile : m.ImageFile;
-            message = string.IsNullOrEmpty(m.Message) ? message : m.Message;
-            break;
+    if (m != null) {
+        switch (m.Type)
+        {
+            case ErrorViewModel.ErrorType.FileNotFound:
+                imgFile = "404.png";
+                message = "404 Page Not Found";
+                break;
+            case ErrorViewModel.ErrorType.UnauthorizedAccess:
+                message = "Sorry! Access denied :(";
+                break;
+            case ErrorViewModel.ErrorType.OutOfStock:
+                message = "Sorry! Temporarily Unavailable";
+                break;
+            case ErrorViewModel.ErrorType.Customer:
+                backUrl = string.IsNullOrEmpty(m.BackUrl) ? backUrl : m.BackUrl;
+                imgFile = string.IsNullOrEmpty(m.ImageFile) ? imgFile : m.ImageFile;
+                message = string.IsNullOrEmpty(m.Message) ? message : m.Message;
+                break;
+        }
     }
 
 
 }
 <div class="container">
     <div class="jumbotron" style="text-align:center">
-        <img src="../img/@imgFile" style="width:200px" />
+        <img src="~/img/@imgFile" style="width:200px" />
         <h4 style="margin-bottom:30px">@message</h4>
         <a href="@backUrl"><button type="button" class="btn">Back</button></a>
     </div>

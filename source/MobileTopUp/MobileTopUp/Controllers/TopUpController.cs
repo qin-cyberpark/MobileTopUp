@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using MobileTopUp.Models;
 using System.Threading;
 using System.Data.Entity;
+using MobileTopUp.ViewModels;
 
 namespace MobileTopUp.Controllers
 {
@@ -30,7 +31,9 @@ namespace MobileTopUp.Controllers
                 if (account == null)
                 {
                     Store.BizInfo("HOME", null, string.Format("can not get visitor info cdoe=", Request["code"]));
-                    return View("Error");
+                    ErrorViewModel errorModel = new ErrorViewModel {
+                    Message="Unauthorized"};
+                    return View("Error", errorModel);
                 }
                 Session["LoginAccount"] = account;
                 Store.BizInfo("HOME", account.ID, string.Format("login, name={0}", account.Name));

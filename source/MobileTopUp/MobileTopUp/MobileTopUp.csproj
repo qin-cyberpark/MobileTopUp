@@ -112,10 +112,12 @@
     <Content Include="css\bootstrap.min.css" />
     <Content Include="css\main-test.css" />
     <Content Include="css\main.css" />
+    <Content Include="css\addvoucher.css" />
     <Content Include="Global.asax" />
     <Content Include="img\2degree.png" />
     <Content Include="img\404.png" />
     <Content Include="img\error.png" />
+    <Content Include="img\loading.gif" />
     <Content Include="img\local.png" />
     <Content Include="img\pe-a2a.png" />
     <Content Include="img\pe-cc.png" />
@@ -130,11 +132,16 @@
     <Content Include="img\wip.png" />
     <Content Include="img\wx-pay.png" />
     <Content Include="js\bootstrap.min.js" />
-    <Content Include="js\jquery-1.11.3.min.js" />
+    <Content Include="css\cropper.min.css" />
+    <Content Include="js\cropper.min.js" />
+    <Content Include="js\jquery.min.js" />
     <Content Include="js\jquery-ui.min.js" />
     <Content Include="js\jquery.fileupload.js" />
     <Content Include="js\jquery.iframe-transport.js" />
+    <Content Include="js\jquery.ui.widget.js" />
     <Content Include="js\main.js" />
+    <Content Include="js\ocrad.js" />
+    <Content Include="img\picture.jpg" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -159,6 +166,7 @@
     <Compile Include="Models\Transaction.cs" />
     <Compile Include="Models\VerifyCode.cs" />
     <Compile Include="Models\Voucher.cs" />
+    <Compile Include="Utilities\OcrHelper.cs" />
     <Compile Include="Utilities\PxPay.cs" />
     <Compile Include="Utilities\WechatHelper.cs" />
     <Compile Include="Global.asax.cs">
@@ -181,6 +189,7 @@
     <Content Include="Views\Shared\error.cshtml" />
     <Content Include="Views\Admin\login.cshtml" />
     <Content Include="Views\Admin\index.cshtml" />
+    <Content Include="Views\Admin\addVoucher.cshtml" />
     <None Include="Web.Pro.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -190,7 +199,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="js\vendor\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

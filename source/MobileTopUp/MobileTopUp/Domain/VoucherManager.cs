@@ -6,6 +6,8 @@ using Tesseract;
 using System.Text.RegularExpressions;
 using MobileTopUp.Models;
 using MobileTopUp.Utilities;
+using System.IO;
+using System.Drawing;
 
 namespace MobileTopUp
 {
@@ -62,7 +64,7 @@ namespace MobileTopUp
             }
         }
 
-        public static Voucher FindById(int id)
+        public static Voucher Find(int id)
         {
             Voucher v = null;
             try
@@ -86,6 +88,50 @@ namespace MobileTopUp
                 Store.SysError("VOUCHER", string.Format("failed to find voucher id {0}", id), ex);
                 return null;
             }
+        }
+
+        public static Voucher Find(BrandType brand, string number)
+        {
+            Voucher voucher = null;
+            try
+            {
+                using (StoreEntities db = new StoreEntities())
+                {
+                    voucher = db.Vouchers.FirstOrDefault(v => v.Brand.Value.Equals(brand.Value) && v.Number.Equals(number));
+                }
+                if (voucher == null)
+                {
+                    Store.BizInfo("VOUCHER", null, string.Format("can not find voucher brand={0}, number={1}", brand, number));
+                }
+                else
+                {
+                    Store.BizInfo("VOUCHER", null, string.Format("found voucher brand={0}, number={1}", brand, number));
+                }
+                return voucher;
+            }
+            catch (Exception ex)
+            {
+                Store.SysError("VOUCHER", string.Format("failed to find voucher brand={0}, number={1}", brand, number), ex);
+                return null;
+            }
+
+        }
+
+        public static Voucher Find(Voucher v)
+        {
+            if (v.ID > 0)
+            {
+                return Find(v.ID);
+            }
+            else
+            {
+                return Find(v.Brand, v.Number);
+            }
+        }
+
+        public static bool IsExist(Voucher v)
+        {
+            return Find(v) != null;
         }
 
         public static int GetStock(string brand)
@@ -164,13 +210,14 @@ namespace MobileTopUp
                 }
             }
         }
-   
+
         public static bool SendVoucher(Transaction trans)
         {
             try
             {
                 //send voucher
                 Store.BizInfo("VOUCHER", trans.Consumer.ID, string.Format("start to send voucher transId={0}", trans.ID));
+                /*
                 byte[][] imageBytes = new byte[trans.Vouchers.Count][];
                 int idx = 0;
                 foreach (Voucher v in trans.Vouchers)
@@ -178,6 +225,7 @@ namespace MobileTopUp
                     imageBytes[idx++] = v.Image;
                 }
                 WechatHelper.SendImagesAsync(trans.Consumer.ReferenceID, imageBytes);
+                */
                 WechatHelper.SendMessageAsync(trans.Consumer.ReferenceID, string.Format("Your {0} voucher number:{1}", trans.Brand, trans.VoucherNumberString));
                 using (StoreEntities db = new StoreEntities())
                 {
@@ -195,34 +243,32 @@ namespace MobileTopUp
             }
         }
 
-        public static string ScanVoucherNumber(string file)
+        public static List<string> RecognizeVoucherNumber(string imgBase64)
         {
-            string text = null;
-            using (TesseractEngine engine = new TesseractEngine(Store.Configuration.TemporaryDirectory, "eng", EngineMode.Default))
+            List<string> result = new List<string>();
+            byte[] imageBytes = Convert.FromBase64String(imgBase64);
+
+            using (var ms = new MemoryStream(imageBytes, 0, imageBytes.Length))
             {
-                using (Pix img = Pix.LoadFromFile(file))
+                Image image = Image.FromStream(ms, true);
+                Bitmap bitmap = new Bitmap(image);
+                //bitmap = new Bitmap(@"C:\GreenSpot\voucher\image.jpg");
+                string text = OcrHelper.Recognize(bitmap);
+                if (!string.IsNullOrEmpty(text))
                 {
-                    using (Page page = engine.Process(img, Rect.FromCoords(0, 0, img.Width, img.Height)))
+                    Regex regx = new Regex(@"[\d- ]+");
+                    MatchCollection finds = regx.Matches(text);
+                    foreach (Match m in finds)
                     {
-                        text = page.GetText();
+                        if (m.Success && m.Value.Trim().Length > 0)
+                        {
+                            result.Add(m.Value);
+                        }
                     }
                 }
             }
-            string matchedStr = "";
-            if (!string.IsNullOrEmpty(text))
-            {
-                Regex regx = new Regex(@"[\d\s-]+");
-                MatchCollection finds = regx.Matches(text);
-                foreach (Match m in finds)
-                {
-                    if (m.Success && m.Value.Trim().Length > 5)
-                    {
-                        matchedStr += m.Value.Trim() + "\r\n";
-                    }
-                }
-            }
-            text = matchedStr + "==========================================\r\n" + text;
-            return text;
+
+            return result;
         }
     }
 }

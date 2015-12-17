@@ -19,6 +19,9 @@ namespace MobileTopUp.Models
         [StringLength(30)]
         public string Number { get; set; }
 
+        [StringLength(30)]
+        public string SerialNumber { get; set; }
+
         [Column(TypeName = "blob")]
         public byte[] Image { get; set; }
 

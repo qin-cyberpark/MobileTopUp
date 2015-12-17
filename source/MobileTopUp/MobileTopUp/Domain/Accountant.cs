@@ -72,7 +72,7 @@ namespace MobileTopUp
         {
             string payUrl = null;
             string refStr = string.Format("TOPUP {0} {1}",trans.Brand,trans.ID);
-            string tranIdStr = string.Format("{0}-{1}",trans.ID.ToString(), attemptTime);
+            string tranIdStr = string.Format("{0}-{1}-{2}",trans.ID.ToString(),attemptTime,DateTime.Now.ToString("HHmmss"));
             string remark1 = trans.VoucherNumberString;
             if (trans.PaymentType  == PaymentType.PxPay)
             {
@@ -118,13 +118,13 @@ namespace MobileTopUp
                     Store.SysError("ACCOUNT-PXPAY", "can not get pxpay payment result - resposne is null");
                 }
                 Store.SysInfo("ACCOUNT-PXPAY", output.ToString());
-                if (bool.Parse(output.Success) == isSuccess)
+                if (!(isSuccess?"1":"0").Equals(output.Success))
                 {
                     Store.SysError("ACCOUNT-PXPAY", string.Format("payment result not match except {0} - actual {1}", output.Success, isSuccess));
                 }
                 
                 //set transaction
-                int transactionId = int.Parse(output.TxnId);
+                int transactionId = int.Parse(output.TxnId.Split('-')[0]);
                 decimal amount = decimal.Parse(output.AmountSettlement);
                 using (StoreEntities db = new StoreEntities())
                 {
