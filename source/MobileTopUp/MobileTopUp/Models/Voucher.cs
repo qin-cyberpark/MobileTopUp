@@ -9,25 +9,38 @@ namespace MobileTopUp.Models
     [Table("t_voucher")]
     public partial class Voucher
     {
-        public int ID { get; set; }
+        [Key]
+        [Column(Order = 0)]
+        public string Brand { get; set; }
 
-        [Required]
-        public BrandType Brand { get; set; }
+        //public BrandType Brand
+        //{
+        //    get
+        //    {
+        //        return (BrandType)BrandName;
+        //    }
+        //    set
+        //    {
+        //        BrandName = value.Value;
+        //    }
+        //}
 
-        public decimal Denomination { get; set; }
-
-        [StringLength(30)]
-        public string Number { get; set; }
-
+        [Key]
+        [Column(Order = 1)]
         [StringLength(30)]
         public string SerialNumber { get; set; }
+
+        [Required]
+        [StringLength(30)]
+        public string TopUpNumber { get; set; }
+
+        public decimal Denomination { get; set; }
 
         [Column(TypeName = "blob")]
         public byte[] Image { get; set; }
 
         public int CreatedBy { get; set; }
         public virtual Account Creator { get; set; }
-
 
         public DateTime CreatedDate { get; set; }
 

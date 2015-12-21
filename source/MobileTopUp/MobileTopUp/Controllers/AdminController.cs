@@ -7,7 +7,6 @@ using MobileTopUp.Utilities;
 using MobileTopUp.Models;
 using MobileTopUp.ViewModels;
 using System.Diagnostics;
-using Tesseract;
 using System.Drawing;
 using System.IO;
 
@@ -25,7 +24,7 @@ namespace MobileTopUp.Controllers
                 return Redirect("~/admin/login");
             }
 
-            return View();
+            return Redirect("~/admin/voucher");
         }
 
         #region login
@@ -35,7 +34,7 @@ namespace MobileTopUp.Controllers
             if (VerifyInfo("ADMIN-IDX", out account))
             {
                 //has login
-                return Redirect("~/admin/index");
+                return Redirect("~/admin/voucher");
             }
 
             //login
@@ -70,7 +69,7 @@ namespace MobileTopUp.Controllers
             }
             //verify one code
             VerifyLoginCode(account);
-            return Content("OK");
+            return Content("<H1>OK</H1>");
         }
 
         public ActionResult CheckLoginCode()
@@ -188,7 +187,7 @@ namespace MobileTopUp.Controllers
         }
         #endregion
 
-        public ActionResult AddVoucher()
+        public ActionResult Voucher()
         {
             Account account = null;
             if (!VerifyInfo("ADMIN-IDX", out account))
@@ -199,112 +198,170 @@ namespace MobileTopUp.Controllers
             return View();
         }
 
-        [HttpPost]
-        public ActionResult RecognizeVoucherNumber()
-        {
-            try
-            {
-                string imgBase64 = Request.Form.Get("imgBase64");
-                imgBase64 = imgBase64.Substring(imgBase64.LastIndexOf(',') + 1);
-                List<string> candidates = VoucherManager.RecognizeVoucherNumber(imgBase64);
-                if (candidates == null || candidates.Count == 0)
-                {
-                    return Content("NG");
-                }
-
-                string jsonStr = "";
-                foreach (string c in candidates)
-                {
-                    if (!string.IsNullOrEmpty(jsonStr))
-                    {
-                        jsonStr += ",";
-                    }
-                    jsonStr += "\"" + c.Replace(" ", "").Replace("-", "") + "\"";
-                }
-
-                jsonStr = "{\"candidates\":[" + jsonStr + "]}";
-
-                return Content(jsonStr);
-            }
-            catch (Exception ex)
-            {
-                Store.SysError("RECOGNIZE", "Fail to recognize", ex);
-                throw ex;
-            }
-        }
 
         [HttpPost]
-        public ActionResult UploadVoucher()
+        public ActionResult AddVoucher()
         {
             Account account = null;
             if (!VerifyInfo("ADMIN-IDX", out account))
             {
                 return Content("{\"fail\":1,\"message:\":\"unauthorized operation\"}");
             }
-            /*
-            if (Request.Files.Count > 0)
-            {
-                var file = Request.Files[0];
-
-                if (file != null && file.ContentLength > 0)
-                {
-                    int fileSizeInBytes = file.ContentLength;
-                    MemoryStream target = new MemoryStream();
-                    file.InputStream.CopyTo(target);
-                    byte[] data = target.ToArray();
-
-
-                    Voucher v = new Voucher
-                    {
-                        Brand = (BrandType)Request["brand_code"],
-                        Denomination = VoucherType.Twenty,
-                        Number = Request["voucher_number"],
-                        Image = data
-                    };
-                    if (VoucherManager.IsExist(v))
-                    {
-                        string response = "{\"state\":200,\"message\":" + string.Format("\"{0} {1} is exist\"", v.Brand, v.Number) + "}";
-                        return Content(response);
-                    }
-
-                    VoucherManager mnger = new VoucherManager(account);
-                    mnger.Add(v);
-                    if (v.ID > 0)
-                    {
-                        string response = "{" + string.Format("\"state\":{0},\"result\":\"~/voucher/{0}\",\"message\":\"{1}\"", 200, v.ID, "OK");
-                        response += string.Format(",\"voucher_brand\":\"{0}\",\"voucher_id\":\"{1}\", \"voucher_no\":\"{2}\"", v.Brand, v.ID, v.Number) + "}";
-                        return Content(response);
-                    }
-                }
-            }
-
-            return Content("{\"state\":200,\"message:\":\"fail to add voucher\"}");
-            */
 
             Voucher v = new Voucher
             {
-                Brand = (BrandType)Request["brand_code"],
+                Brand = (BrandType)Request["brand"],
                 Denomination = VoucherType.Twenty,
-                Number = Request["voucher_number"],
-                SerialNumber = Request["voucher_serial_number"]
+                TopUpNumber = Request["topup_number"],
+                SerialNumber = Request["serial_number"]
             };
 
-            if (VoucherManager.IsExist(v))
+            Voucher existV = VoucherManager.FindBySerialOrTopupNumber(v);
+            if (existV != null)
             {
-                string response = "{\"fail\":1,\"message\":" + string.Format("\"{0} {1} is exist\"", v.Brand, v.SerialNumber) + "}";
+                string numberStr = null;
+                if (existV.SerialNumber.Equals(v.SerialNumber))
+                {
+                    numberStr = "SN-" + v.SerialNumber;
+                }
+                else if (existV.TopUpNumber.Equals(v.TopUpNumber))
+                {
+                    numberStr = v.TopUpNumber;
+                }
+                string response = "{\"fail\":1,\"message\":" + string.Format("\"{0} {1} is exist\"", v.Brand, numberStr) + "}";
                 return Content(response);
             }
 
             VoucherManager mnger = new VoucherManager(account);
-            mnger.Add(v);
-            if (v.ID > 0)
+            if (mnger.Add(v))
             {
-                string response = "{" + string.Format("\"success\":1,\"result\":\"~/voucher/{0}\",\"message\":\"{1}\"", v.ID, "OK");
-                response += string.Format(",\"voucher_brand\":\"{0}\",\"voucher_id\":\"{1}\", \"voucher_no\":\"{2}\"", v.Brand, v.ID, v.Number) + "}";
+                string response = string.Format("{{\"added\":1,\"voucher_brand\":\"{0}\",\"voucher_sn\":\"{1}\", \"voucher_no\":\"{2}\"}}"
+                    , v.Brand, v.SerialNumber, v.TopUpNumber);
                 return Content(response);
             }
 
             return Content("{\"fail\":1,\"message:\":\"fail to add voucher\"}");
+        }
+
+        [HttpPost]
+        public ActionResult UpdateVoucher()
+        {
+            Account account = null;
+            if (!VerifyInfo("ADMIN-IDX", out account))
+            {
+                return Content("{\"fail\":1,\"message:\":\"unauthorized operation\"}");
+            }
+
+            //ori
+            Voucher oriV = new Voucher
+            {
+                Brand = (BrandType)Request["ori_brand"],
+                TopUpNumber = Request["ori_topup_number"],
+                SerialNumber = Request["ori_serial_number"]
+            };
+
+            //new
+            Voucher newV = new Voucher
+            {
+                Brand = (BrandType)Request["brand"],
+                TopUpNumber = Request["topup_number"],
+                SerialNumber = Request["serial_number"]
+            };
+
+            Voucher existV = null;
+            if (oriV.Brand != newV.Brand)
+            {
+                //change brand
+                existV = VoucherManager.FindBySerialOrTopupNumber(newV);
+                if (existV != null)
+                {
+                    string numberStr = null;
+                    if (existV.SerialNumber.Equals(newV.SerialNumber))
+                    {
+                        numberStr = "SN-" + newV.SerialNumber;
+                    }
+                    else if (existV.TopUpNumber.Equals(newV.TopUpNumber))
+                    {
+                        numberStr = newV.TopUpNumber;
+                    }
+                    string response = "{\"fail\":1,\"message\":" + string.Format("\"{0} {1} is exist\"", newV.Brand, numberStr) + "}";
+                    return Content(response);
+                }
+            }
+            else if (oriV.SerialNumber.Equals(newV.SerialNumber) && !oriV.TopUpNumber.Equals(newV.TopUpNumber))
+            {
+                //change top up number
+                existV = VoucherManager.FindByTopUpNumber(newV);
+                if (existV != null)
+                {
+                    string response = "{\"fail\":1,\"message\":" + string.Format("\"{0} {1} is exist\"", newV.Brand, newV.TopUpNumber) + "}";
+                    return Content(response);
+                }
+            }
+            else if (!oriV.SerialNumber.Equals(newV.SerialNumber) && oriV.TopUpNumber.Equals(newV.TopUpNumber))
+            {
+                //change serial number
+                existV = VoucherManager.FindBySerialNumber(newV);
+                if (existV != null)
+                {
+                    string response = "{\"fail\":1,\"message\":" + string.Format("\"{0} SN-{1} is exist\"", newV.Brand, newV.SerialNumber) + "}";
+                    return Content(response);
+                }
+            }
+
+            VoucherManager mnger = new VoucherManager(account);
+            if (mnger.Update(oriV, newV))
+            {
+                string response = string.Format("{{\"updated\":1,\"ori_voucher_brand\":\"{0}\",\"ori_voucher_sn\":\"{1}\", \"ori_voucher_no\":\"{2}\""
+                                                    , oriV.Brand, oriV.SerialNumber, oriV.TopUpNumber);
+                response += string.Format(",\"voucher_brand\":\"{0}\",\"voucher_sn\":\"{1}\", \"voucher_no\":\"{2}\"}}"
+                                                    , newV.Brand, newV.SerialNumber, newV.TopUpNumber);
+                return Content(response);
+            }
+
+            return Content("{\"fail\":1,\"message:\":\"fail to update voucher\"}");
+        }
+
+        [HttpPost]
+        public ActionResult DeleteVoucher()
+        {
+            Account account = null;
+            if (!VerifyInfo("ADMIN-IDX", out account))
+            {
+                return Content("{\"fail\":1,\"message:\":\"unauthorized operation\"}");
+            }
+
+       
+            //new
+            Voucher delV = new Voucher
+            {
+                Brand = (BrandType)Request["brand"],
+                TopUpNumber = Request["topup_number"],
+                SerialNumber = Request["serial_number"]
+            };
+
+            VoucherManager mnger = new VoucherManager(account);
+            if (mnger.Delete(delV))
+            {
+                string response = string.Format("{{\"deleted\":1,\"voucher_brand\":\"{0}\",\"voucher_sn\":\"{1}\", \"voucher_no\":\"{2}\"}}"
+                                                    , delV.Brand, delV.SerialNumber, delV.TopUpNumber);
+
+                return Content(response);
+            }
+
+            return Content("{\"fail\":1,\"message:\":\"fail to delete voucher\"}");
+        }
+
+        public ActionResult GetStatistic()
+        {
+            Account account = null;
+            if (!VerifyInfo("ADMIN-IDX", out account))
+            {
+                return Content("{\"fail\":1,\"message:\":\"unauthorized operation\"}");
+            }
+
+            VoucherStatistic statistic = VoucherManager.GetStatistic();
+            return Content(statistic.ToJson());
         }
     }
 }

@@ -28,17 +28,24 @@ namespace MobileTopUp
             }
         }
 
-
         public static Account CreateAccount(AccountType accountType, string oriId, string name)
         {
             Store.SysInfo("[ACCOUNT]", string.Format("start to create account {0}:{1}@{2}", oriId, name, accountType));
             try {
-                Account account = new Account
+
+                Account account = GetAccountById(accountType, oriId);
+                if(account != null)
+                {
+                    return account;
+                }
+
+                account = new Account
                 {
                     Type = accountType,
                     ReferenceID = oriId,
                     Name = name
                 };
+
                 using (StoreEntities db = new StoreEntities())
                 {
                     account = db.Accounts.Add(account);

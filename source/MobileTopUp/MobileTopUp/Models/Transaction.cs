@@ -48,38 +48,36 @@ namespace MobileTopUp.Models
 
         public int PayFailedCount { get; set; }
 
+        public bool HasPaid { get; set; }
+        public bool HasCancelled { get; set; }
+
 
         public virtual ICollection<Voucher> Vouchers { get; set; }
 
-        public void Paid()
-        {
-            PaidDate = DateTime.Now;
-            foreach(Voucher v in Vouchers)
-            {
-                v.AccountID = this.AccountID;
-                v.IsSold = true;
-            }
+        public void PayFail(string refStr) {
+            PayFailedCount++;
+            PaymentRef = string.IsNullOrEmpty(PaymentRef)? "" : PaymentRef + refStr;
         }
 
-        public string VoucherNumberString
+        public void Paid(string refStr)
         {
-            get
+            PaidDate = DateTime.Now;
+            HasPaid = true;
+            foreach(Voucher v in Vouchers)
             {
-                string voucherStr = null;
-                foreach (Voucher v in Vouchers)
-                {
-                    if (!string.IsNullOrEmpty(voucherStr))
-                    {
-                        voucherStr += ",";
-                    }
-
-                    if (!string.IsNullOrEmpty(v.Number))
-                    {
-                        voucherStr += v.Number;
-                    }
-                }
-                return voucherStr;
+                v.IsSold = true;
             }
+            PaymentRef = string.IsNullOrEmpty(PaymentRef) ? "" : PaymentRef + refStr;
+        }
+
+        public void Cancel()
+        {
+            this.HasCancelled = true;
+            foreach(Voucher v in Vouchers)
+            {
+                v.AccountID = null;
+            }
+            Vouchers.Clear();
         }
     }
 }

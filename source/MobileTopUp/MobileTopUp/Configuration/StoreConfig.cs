@@ -105,13 +105,6 @@ namespace MobileTopUp.Configuration
                 return Directories["tesseractData"];
             }
         }
-        public string VoucherImageDirectory
-        {
-            get
-            {
-                return Directories["voucherImage"];
-            }
-        }
         public bool FakeLogin
         {
             get
@@ -123,7 +116,30 @@ namespace MobileTopUp.Configuration
         {
             get
             {
-                return StoreSettings["RootURL"];
+                return StoreSettings["rootURL"];
+            }
+        }
+        public int UnpaidVouchKeepMinutes
+        {
+            get
+            {
+                return int.Parse(StoreSettings["unpaidVouchKeepMinutes"]);
+            }
+        }
+
+        public int LowStockLevel
+        {
+            get
+            {
+                return int.Parse(StoreSettings["lowStockLevel"]);
+            }
+        }
+
+        public bool DoesNotifyLowStock
+        {
+            get
+            {
+                return bool.Parse(StoreSettings["notifyLowStock"]);
             }
         }
 
@@ -266,6 +282,18 @@ namespace MobileTopUp.Configuration
         {
             return BaseGetAllKeys();
         }
+
+        public string[] GetAllWechatIds()
+        {
+            object[] keys = BaseGetAllKeys();
+            int count = keys.Length;
+            string[] result = new string[count];
+            for(int i=0;i< count; i++)
+            {
+                result[i] = (string)keys[i];
+            }
+            return result;
+        }
         new public string this[string id]
         {
             get
@@ -277,6 +305,7 @@ namespace MobileTopUp.Configuration
         {
             get { return (AdministratorElement)BaseGet(i); }
         }
+
         protected override ConfigurationElement CreateNewElement()
         {
             return new AdministratorElement();
@@ -286,6 +315,7 @@ namespace MobileTopUp.Configuration
         {
             return ((AdministratorElement)element).WechatId;
         }
+
     }
 
     public class StoreSettingElement : ConfigurationElement

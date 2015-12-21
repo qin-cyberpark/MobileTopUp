@@ -12,6 +12,7 @@ using Senparc.Weixin.MP.AdvancedAPIs.Media;
 using Senparc.Weixin.Entities;
 using MobileTopUp.Configuration;
 using System.Threading;
+using System.Web.Hosting;
 
 namespace MobileTopUp.Utilities
 {
@@ -59,9 +60,11 @@ namespace MobileTopUp.Utilities
         public static string GetOpenID(string code, out string userInfoAccessToken)
         {
             _sysLogger.Info(string.Format("[WX]start to get open ID by code {0}", code));
-            try {
+            try
+            {
                 OAuthAccessTokenResult result = OAuthApi.GetAccessToken(_appId, _appSecret, code);
-                if (string.IsNullOrEmpty(result.access_token)) {
+                if (string.IsNullOrEmpty(result.access_token))
+                {
                     userInfoAccessToken = null;
                     return null;
                 }
@@ -87,10 +90,11 @@ namespace MobileTopUp.Utilities
         public static OAuthUserInfo GetUserInfo(string token, string openID)
         {
             _sysLogger.Info(string.Format("[WX]start to get user info by open id {0}", openID));
-            try {
+            try
+            {
                 return OAuthApi.GetUserInfo(token, openID, Senparc.Weixin.Language.en);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _sysLogger.Error(string.Format("[WX]failed to get user info by open id {0}", openID), ex);
                 return null;
@@ -114,7 +118,7 @@ namespace MobileTopUp.Utilities
             {
                 _sysLogger.Info(string.Format("[WX]start to upload temporary image try {0}", i));
                 updateRst = MediaApi.UploadTemporaryMedia(_appId, Senparc.Weixin.MP.UploadMediaFileType.image, tempFile);
-                if (updateRst!=null && updateRst.errcode == 0)
+                if (updateRst != null && updateRst.errcode == 0)
                 {
                     break;
                 }
@@ -189,25 +193,54 @@ namespace MobileTopUp.Utilities
         /// <returns></returns>
         public static bool SendMessage(string openid, string message, int maxAttamptTime = 3)
         {
-            _sysLogger.Info(string.Format("[WX]start to sent message to {0}", openid));
-            WxJsonResult sendRst = null;
-            for (int i = 0; i < maxAttamptTime; i++)
+            try
             {
-                _sysLogger.Info(string.Format("[WX]start to send image to {0} try {1}", openid, i));
-                sendRst = CustomApi.SendText(_appId, openid, message);
-                if (sendRst != null && sendRst.errcode == 0)
+                WxJsonResult sendRst = null;
+                for (int i = 0; i < maxAttamptTime; i++)
                 {
-                    break;
+                    _sysLogger.Info(string.Format("[WX]send message to {0} try {1}", openid, i));
+                    sendRst = CustomApi.SendText(_appId, openid, message);
+                    if (sendRst != null && sendRst.errcode == 0)
+                    {
+                        break;
+                    }
                 }
-            }
-            if (sendRst == null || sendRst.errcode != 0)
-            {
-                _sysLogger.Info("[WX]faild to send message");
+                if (sendRst == null || sendRst.errcode != 0)
+                {
+                    _sysLogger.Info("[WX]faild to send message");
+                    return false;
+                }
+                return true;
+            }catch{
                 return false;
             }
-
-            return true;
         }
+
+        public static void SendMessage(string[] openids, string message)
+        {
+            if (openids == null || openids.Length == 0 || string.IsNullOrEmpty(message))
+            {
+                return;
+            }
+
+            foreach (string openid in openids)
+            {
+                SendMessage(openid, message);
+            }
+        }
+        public static void SendMessage(string openid, string[] messages)
+        {
+            if (messages == null || messages.Length == 0)
+            {
+                return;
+            }
+
+            foreach(string msg in messages)
+            {
+                SendMessage(openid, msg);
+            } 
+        }
+
         public static void SendMessageAsync(string openid, string message)
         {
             if (string.IsNullOrEmpty(message))
@@ -215,9 +248,27 @@ namespace MobileTopUp.Utilities
                 return;
             }
             _sysLogger.Info(string.Format("[WX]start thread to sent message to {0}", openid));
-            ThreadStart starter = () => SendMessage(openid, message);
-            Thread thread = new Thread(starter);
-            thread.Start();
+            HostingEnvironment.QueueBackgroundWorkItem(ct => SendMessage(openid, message));
+        }
+
+        public static void SendMessageAsync(string openid, string[] messages)
+        {
+            if (messages == null || messages.Length == 0)
+            {
+                return;
+            }
+            _sysLogger.Info(string.Format("[WX]start thread to sent messages to {0}", openid));
+            HostingEnvironment.QueueBackgroundWorkItem(ct => SendMessage(openid, messages));
+        }
+
+        public static void SendMessageAsync(string[] openids, string message)
+        {
+            if (openids == null || openids.Length == 0 || string.IsNullOrEmpty(message))
+            {
+                return;
+            }
+            _sysLogger.Info(string.Format("[WX]start thread to sent message to openids"));
+            HostingEnvironment.QueueBackgroundWorkItem(ct => SendMessage(openids, message));
         }
     }
 }

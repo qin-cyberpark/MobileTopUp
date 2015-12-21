@@ -24,7 +24,7 @@ namespace MobileTopUp
         }
         public static void BizInfo(object moudule, object id, string message)
         {
-            _bizLogger.Info(string.Format("[{0}][id={1}]{2}", moudule, id, message));
+            _bizLogger.Info(string.Format("[{0}][user={1}]{2}", moudule, id, message));
         }
     }
 }

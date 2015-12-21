@@ -9,8 +9,10 @@ h4, h5 {
 }
 
 body {
-    color:#677077;
-    background-color:#70C1B3;
+    color: #333;
+    background-color: #70C1B3;
+    /*background-color: #FFFFFF;*/
+    /*background-color: #00dcbe;*/
 }
 
 .btn-brand {
@@ -38,8 +40,8 @@ body {
     background-image: url(../img/vodafone.png);
 }
 
-.btn-2degree {
-    background-image: url(../img/2degree.png);
+.btn-2degrees {
+    background-image: url(../img/2degrees.png);
 }
 
 .btn-skinny {
@@ -60,7 +62,7 @@ body {
 }
 
 .quanity-selected {
-    background-color: #247BA0;
+    background-color: #008cdc;
 }
 
 .btn-pay {
@@ -73,94 +75,190 @@ body {
 
 .btn-confirm {
     color: white;
-    background-color: #247BA0;
+    background-color: #008cdc;
 }
 
-/*admin index*/
-.brand-brief {
-    min-width: 80px;
-    text-align: center;
-    margin-top: 10px;
+/* voucher view page*/
+.voucher-info {
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 5px;
 }
 
-    .brand-brief IMG {
-        height: 40px;
+    .voucher-info .logo {
+        text-align: center;
+        margin-top: 20px;
+        margin-bottom: 10px;
     }
 
-    .brand-brief .remaining {
-        margin: 0px;
-        font-size: 50px;
-    }
-
-        .brand-brief .remaining .alert {
-            color: red;
+        .voucher-info .logo IMG {
+            height: 60px;
         }
 
-.module-box {
-    margin-top: 15px;
-    border: solid 1px #777;
-    padding: 0px;
-}
 
-    .module-box.record {
-        height: 200px;
+    .voucher-info .subtitile {
+        font-size: 16px;
     }
 
-    .module-box.stock {
-        height: 200px;
+    .voucher-info .language {
+        text-align: right;
     }
 
-    .module-box.add-voucher {
-        border: none;
-        padding: 10px;
+    .voucher-info .topup-number {
+        font-size: 40px;
+        color: #000;
+        padding: 0px;
+        margin-top: 10px;
+        line-height: 40px;
     }
 
-        .module-box.add-voucher input {
-            margin-top: 5px;
-        }
-                .module-box.add-voucher button {
-            margin-top: 5px;
-        }
+    .voucher-info .remark {
+        font-size: 14px;
+    }
 
-    .module-box .caption {
+    .voucher-info .how-to-use {
+        font-size: 14px;
+    }
+
+    .voucher-info .back {
+        margin-top: 20px;
         text-align: center;
     }
 
-        .module-box .caption.dark {
-            background-color: #999;
-            color: #eee;
-        }
-
-    .module-box .list THEAD {
-        background-color: #999;
-        color: #eee;
-    }
-
-    .module-box .list {
-        width: 100%;
-    }
-
-        .module-box .list TR {
-            width: 100%;
-        }
-
-        .module-box .list TD {
-            padding-left: 5px;
-            padding-right: 5px;
-        }
-
-.input-group-addon.noborder {
-    border: 0px;
+.voucher-history {
+    margin-bottom: 5px;
 }
 
-TD.center {
+    .voucher-history .purchaseInfo {
+        font-size: 14px;
+        background-color: black;
+        color: white;
+        margin-top: 10px;
+        padding: 0px 5px 0px 5px;
+    }
+
+        .voucher-history .purchaseInfo .brand {
+            float: left;
+        }
+
+        .voucher-history .purchaseInfo .date {
+            float: right;
+        }
+
+    .voucher-history .serial-number {
+        font-size: 12px;
+        color: #666;
+    }
+
+    .voucher-history .topup-number-sm {
+        font-size: 32px;
+        color: #000;
+        margin-top: 5px;
+        margin-bottom: 2px;
+        padding: 0px;
+        line-height: 20px;
+    }
+
+    .voucher-history .pay-now {
+        color: red;
+    }
+
+/*voucher admin*/
+.brand-brief {
+    background-color: white;
+    padding: 0px;
+    border: 1px solid #babcbe;
     text-align: center;
+    opacity: 0.3;
+    filter: alpha(opacity=30); /* For IE8 and earlier */
+    cursor: pointer;
+    color: black;
 }
 
-TD.right {
-    text-align: right;
+    .brand-brief .logo {
+        border-radius: 0;
+        height: 60px;
+        background-size: auto 80%;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+.brief-selected {
+    opacity: 1;
+    filter: alpha(opacity=100); /* For IE8 and earlier */
+}
+
+.brand-brief .remaining {
+    font-size: 20px;
+    margin-right: 5px;
+}
+
+    .brand-brief .remaining.low-stock {
+        color: red;
+    }
+
+.input-topup-number {
+    margin-top: 8px;
+    font-size: 36px;
+    height: 48px;
+    line-height: 48px;
+    -moz-appearance: textfield;
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.input-serial-number {
+    margin-top: 8px;
+    font-size: 30px;
+    height: 40px;
+    line-height: 40px;
+    -moz-appearance: textfield;
 }
 
 .alert.add-voucher {
-    margin: 0px 10px 0px 0px;
+    margin: 0px 0px 0px 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 12px;
+}
+
+.row-voucher {
+    margin-top: 5px;
+}
+
+    .row-voucher .number {
+        float: left;
+    }
+
+    .row-voucher .serial-number {
+        font-size: 14px;
+        color: #666;
+    }
+
+    .row-voucher .topup-number-sm {
+        font-size: 28px;
+        color: #000;
+        margin-top: 5px;
+        margin-bottom: 2px;
+        padding: 0px;
+        line-height: 20px;
+    }
+
+    .row-voucher .opt {
+        font-size: 32px;
+        float: right;
+    }
+
+        .row-voucher .opt SPAN {
+            cursor: pointer;
+        }
+
+.brand-selector {
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.delete-prompt {
+    font-size: 20px;
 }

@@ -21,26 +21,38 @@ namespace MobileTopUp.Controllers
         /// <param name="brand"></param>
         /// <param name="quantiy"></param>
         /// <returns></returns>
-        public ActionResult Home(string brand, int? quantiy)
+        public ActionResult Index()
         {
-            Store.BizInfo("HOME", null, string.Format("visited, cdoe={0}, brand={1}, quantiy={2}", Request["code"], brand, quantiy));
-            Account account = null;
-            if (!VerifyInfo("HOME",out account))
+            Store.BizInfo("INDEX", null, string.Format("visited, cdoe={0}, brand={1}, quantiy={2}", Request["code"], Request["brand"], Request["quantiy"]));
+            string brand = Request["brand"];
+            int quantiy = 1;
+            if (Request["qty"] != null)
             {
-                //authorize is needed
-                account = Store.GetAccountByWechatCode(Request["code"]);
-                if (account == null)
+                try
                 {
-                    Store.BizInfo("HOME", null, string.Format("can not get visitor info cdoe=", Request["code"]));
-                    ErrorViewModel errorModel = new ErrorViewModel {
-                    Message="Unauthorized"};
-                    return View("Error", errorModel);
+                    quantiy = int.Parse(Request["qty"]);
+                    if (quantiy < 1 || quantiy > 5)
+                    {
+                        quantiy = 1;
+                    }
                 }
-                Session["LoginAccount"] = account;
-                Store.BizInfo("HOME", account.ID, string.Format("login, name={0}", account.Name));
+                catch
+                {
+                    quantiy = 1;
+                }
+            }
+
+            Account account = null;
+            if (!VerifyInfoOrLogin("INDEX", Request["code"], out account))
+            {
+                ErrorViewModel errorModel = new ErrorViewModel
+                {
+                    Message = "Unauthorized"
+                };
+                return View("Error", errorModel);
             }
             ViewBag.Brand = BrandType.VerifiedOrDefault(brand);
-            ViewBag.Qty = quantiy == null ? 1 : quantiy;
+            ViewBag.Qty = quantiy;
             return View();
         }
 
@@ -51,34 +63,62 @@ namespace MobileTopUp.Controllers
         /// <param name="quantiy"></param>
         /// <param name="payType"></param>
         /// <returns></returns>
-        public ActionResult Confirm(string brand, int quantiy, string payType)
+        public ActionResult Confirm()
         {
             //get account
             Account account = null;
             if (!VerifyInfo("CONFIM", out account))
             {
-                return Redirect("/errorpage");
+                return Redirect("~");
             }
 
-            //verify brand, amount, pay type
+
             Transaction trans = new Transaction();
+
+            //verify brand
+            string brand = Request.Form["brand"];
+            if (brand == null)
+            {
+                brand = "";
+            }
             if (!BrandType.Contains(brand.ToUpper()))
             {
                 //unvalid brand
-                Store.BizInfo("CONFIM", account.ID, string.Format("brand not valid, code={0}", brand.ToUpper()));
-                return Redirect("/errorpage");
+                Store.BizInfo("CONFIM", account.ID, string.Format("brand not valid, brand={0}", brand));
+                return Redirect("~");
+            }
+
+            //verify quanlity
+            string qtyStr = Request.Form["qty"];
+            int quantiy = 0;
+            if (Request["qty"] != null)
+            {
+                try
+                {
+                    quantiy = int.Parse(Request.Form["qty"]);
+                }
+                catch
+                {
+                    quantiy = 0;
+                }
+            }
+            if (quantiy < 1 || quantiy > 5)
+            {
+                //unvalid brand
+                Store.BizInfo("CONFIM", account.ID, string.Format("quantity not valid, qty={0}", qtyStr));
+                return Redirect("~");
             }
 
             //verify pay type
-            payType = payType.ToUpper();
+            string payType = Request.Form["paytype"];
             if (!payType.Contains(payType.ToUpper()))
             {
                 //unvalid pay type
-                Store.BizInfo("CONFIM", account.ID, string.Format("payment type not valid, code={0}", payType.ToUpper()));
+                Store.BizInfo("CONFIM", account.ID, string.Format("payment type not valid, paytype={0}", payType));
                 return Redirect("/errorpage");
             }
 
-            Store.BizInfo("CONFIM", account.ID, string.Format("visited, brand={0}, quantiy={1}", brand, quantiy));
+            Store.BizInfo("CONFIM", account.ID, string.Format("visited, brand={0}, quantiy={1}, paytype={2}", brand, quantiy, payType));
 
             //transaction info
             trans.Consumer = account;
@@ -118,7 +158,7 @@ namespace MobileTopUp.Controllers
         /// PAY
         /// </summary>
         /// <returns></returns>
-        public ActionResult Pay(int transactionId)
+        public ActionResult Pay()
         {
             bool isSkip = string.IsNullOrEmpty(Request["skip"]) ? false : bool.Parse(Request["skip"]);
 
@@ -127,6 +167,13 @@ namespace MobileTopUp.Controllers
             Transaction trans = null;
             if (!VerifyInfo("PAY", out account, out trans))
             {
+                return Redirect("~");
+            }
+
+            if (trans.PaidDate != null)
+            {
+                //paid
+                Store.BizInfo("PAY", account.ID, string.Format("transaction has paid, trans id={0}", trans.ID));
                 return Redirect("~/errorpage");
             }
 
@@ -144,41 +191,81 @@ namespace MobileTopUp.Controllers
 
             if (trans.ID == 0)
             {
-                //new transaction
-                //verify voucher stock
-                if (!VoucherManager.CheckStock(trans.Brand, trans.Quantity))
-                {
-                    Store.BizInfo("PAY", account.ID, string.Format("not enough {0} voucher, qty={1}", trans.Brand, trans.Quantity));
-                    return Redirect("~/errorpage/unavailable");
-                }
-
                 //hold voucher
                 if (!VoucherManager.Hold(trans))
                 {
                     Store.BizInfo("PAY", account.ID, string.Format("can not create transcation and hold voucher"));
-                    return Redirect("~/errorpage");
+                    return Redirect("~/errorpage/unavailable");
                 }
-
-                //remove transaction for session
-                Session.Remove("CurrentTransaction");
             }
+            //remove transaction for session
+            Session.Remove("CurrentTransaction");
 
             //redirect to pay
             string payUrl = null;
-            string urlSuccess = string.Format("{0}/Message/PxPayCallBack/SUCCESS", Store.Configuration.RootUrl);
-            string urlFail = string.Format("{0}/Message/PxPayCallBack/FAIL", Store.Configuration.RootUrl);
+            string urlSuccess = string.Format("{0}/TopUp/PxPayCallBack/{1}?paid=SUCCESS", Store.Configuration.RootUrl, trans.ID);
+            string urlFail = string.Format("{0}/TopUp/PxPayCallBack/{1}?paid=FAIL", Store.Configuration.RootUrl, trans.ID);
 
             if (isSkip)
             {
                 //test
                 Store.BizInfo("PAY", trans.ID, "skip to test pay payment");
-                return Redirect(string.Format("~/fakePay/{0}", trans.ID));
+                return Redirect(string.Format("~/TopUp/fakePay/{0}", trans.ID));
             }
             else
             {
-                payUrl = Accountant.GeneratePayURL(trans, urlFail, urlSuccess, trans.PayFailedCount);
-                Store.BizInfo("PAY", account.ID, string.Format("go to payment url generated:{0}", payUrl));
-                return Redirect(payUrl);
+                try
+                {
+                    payUrl = Accountant.GeneratePayURL(trans, urlFail, urlSuccess, trans.PayFailedCount);
+                    Store.BizInfo("PAY", account.ID, string.Format("go to payment url generated:{0}", payUrl));
+                    return Redirect(payUrl);
+                }
+                catch
+                {
+                    Store.BizInfo("PAY", account.ID, string.Format("fail to generate payment url:{0}", payUrl));
+                    return Redirect("~/errorpage");
+                }
+            }
+        }
+
+        public ActionResult PxPayCallBack(int transactionId)
+        {
+            string paidFlag = Request["paid"];
+            if (paidFlag == null)
+            {
+                Store.SysError("MSG", "without paid result parameter");
+                return Redirect("~/ErrorPage");
+            }
+            Store.SysInfo("MSG", string.Format("PxPay call back [{0}]:{1}", paidFlag, Request.Url.ToString()));
+            bool isSuccess = "SUCCESS".Equals(paidFlag.ToUpper());
+
+            string payResultId = Request["result"];
+            if (string.IsNullOrEmpty(payResultId))
+            {
+                Store.SysError("MSG", "without result id");
+                return Redirect("~/ErrorPage");
+            }
+
+            int paidTransId = 0;
+            if (!Accountant.VerifyPxPayPayment(payResultId, isSuccess, out paidTransId))
+            {
+                Store.BizInfo("MSG", null, "px payment not verified, result id=" + payResultId);
+                return Redirect("~/ErrorPage");
+            }
+
+            if (paidTransId != transactionId)
+            {
+                Store.BizInfo("MSG", null, string.Format("transaction not matched, px {0} <> url {1}", paidTransId, transactionId));
+                return Redirect("~/ErrorPage");
+            }
+
+            if (isSuccess)
+            {
+                return Redirect("~/topup/paid/" + transactionId);
+            }
+            else
+            {
+                return Redirect("~/topup/repay/" + transactionId);
             }
         }
 
@@ -188,7 +275,7 @@ namespace MobileTopUp.Controllers
             Account account = null;
             if (!VerifyInfo("FAKEPAY", out account))
             {
-                return Redirect("~/errorpage");
+                return Redirect("~");
             }
 
             //get account
@@ -224,17 +311,16 @@ namespace MobileTopUp.Controllers
             }
             else if (isSuccess == true)
             {
-
                 //paid
                 using (var db = new StoreEntities())
                 {
                     db.Transactions.Attach(trans);
-                    trans.Paid();
+                    trans.Paid("FAKE");
                     db.SaveChanges();
                     Store.BizInfo("FAKEPAY", account.ID, string.Format("transaction set to paid, id={0}", trans.ID));
                 }
                 Session.Remove("CurrentTransaction");
-                return Redirect("~/paid/" + transactionId);
+                return Redirect("~/topup/paid/" + transactionId);
             }
             else
             {
@@ -247,7 +333,7 @@ namespace MobileTopUp.Controllers
                     Store.BizInfo("FAKEPAY", account.ID, string.Format("pay fail count increased , id={0}", trans.ID));
                 }
                 Session.Remove("CurrentTransaction");
-                return Redirect("~/repay/" + transactionId);
+                return Redirect("~/topup/repay/" + transactionId);
             }
         }
 
@@ -262,7 +348,7 @@ namespace MobileTopUp.Controllers
             Account account = null;
             if (!VerifyInfo("PAID", out account))
             {
-                return Redirect("~/errorpage");
+                return Redirect("~");
             }
 
             Transaction trans = null;
@@ -278,7 +364,7 @@ namespace MobileTopUp.Controllers
                 return Redirect("~/errorpage");
             }
 
-            return Redirect(string.Format("~/View/{0}", trans.ID));
+            return Redirect(string.Format("~/topup/View/{0}", trans.ID));
         }
 
         public ActionResult Repay(int transactionId)
@@ -287,7 +373,7 @@ namespace MobileTopUp.Controllers
             Account account = null;
             if (!VerifyInfo("REPAY", out account))
             {
-                return Redirect("~/errorpage");
+                return Redirect("~");
             }
 
             Transaction trans = null;
@@ -300,7 +386,7 @@ namespace MobileTopUp.Controllers
             Session["CurrentTransaction"] = trans;
             ViewBag.Transaction = trans;
             ViewBag.IsAdministrator = AccountManager.IsAdministrator(account);
-            ViewBag.IsPayFail = true;
+            ViewBag.IsContiuous = Request["contiuous"]==null? true :bool.Parse(Request["contiuous"]);
             return View("Confirm");
         }
 
@@ -310,7 +396,7 @@ namespace MobileTopUp.Controllers
             Account account = null;
             if (!VerifyInfo("VIEW", out account))
             {
-                return Redirect("~/errorpage");
+                return Redirect("~");
             }
 
             Transaction trans = null;
@@ -333,7 +419,32 @@ namespace MobileTopUp.Controllers
                 Store.BizInfo("VIEW", account.ID, string.Format("fail to send voucher to transId={0}", trans.ID));
             }
 
-            ViewBag.Vouchers = trans.Vouchers;
+            ViewBag.Transaction = trans;
+            return View();
+        }
+
+        public ActionResult MyVoucher()
+        {
+            //verify customer
+            Account account = null;
+            if (!VerifyInfoOrLogin("MY_VOUCHER", Request["code"], out account))
+            {
+                ErrorViewModel errorModel = new ErrorViewModel
+                {
+                    Message = "Unauthorized"
+                };
+                return View("Error", errorModel);
+            }
+
+            //get voucher
+            ViewBag.Transactions = Store.GetTransactionByConsumer(account);
+
+            return View();
+
+        }
+
+        public ActionResult HowToUse()
+        {
             return View();
         }
 
@@ -345,6 +456,29 @@ namespace MobileTopUp.Controllers
             {
                 Store.BizInfo(module, null, string.Format("no account info"));
                 return false;
+            }
+
+            return true;
+        }
+
+        private bool VerifyInfoOrLogin(string module, string code,  out Account account)
+        {
+            account = null;
+            if (!VerifyInfo(module, out account))
+            {
+                //authorize is needed
+                account = Store.GetAccountByWechatCode(code);
+                if (account == null)
+                {
+                    Store.BizInfo(module, null, string.Format("can not get visitor info cdoe=", Request["code"]));
+                    ErrorViewModel errorModel = new ErrorViewModel
+                    {
+                        Message = "Unauthorized"
+                    };
+                    return false;
+                }
+                Session["LoginAccount"] = account;
+                Store.BizInfo(module, account.ID, string.Format("login, name={0}", account.Name));
             }
 
             return true;
@@ -374,18 +508,12 @@ namespace MobileTopUp.Controllers
         private bool LoadTransaction(Account account, int transactionId, out Transaction trans)
         {
             trans = null;
-            if (account == null || account.ID == 0)
+            if (account != null && account.ID > 0)
             {
-                return false;
+                trans = Store.GetTransactionByConsumer(account, transactionId);
             }
 
-            using (StoreEntities db = new StoreEntities())
-            {
-                trans = db.Transactions.Include(t => t.Consumer).Include(t => t.Vouchers)
-                            .FirstOrDefault(t => t.ID == transactionId && t.AccountID == account.ID);
-
-                return trans != null;
-            }
+            return trans != null;
         }
     }
 }

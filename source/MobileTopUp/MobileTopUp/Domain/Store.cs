@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Data.Entity;
 using MobileTopUp.Models;
 using MobileTopUp.Configuration;
 using MobileTopUp.Utilities;
 using Senparc.Weixin.MP.AdvancedAPIs.OAuth;
+using System.Text;
 
 namespace MobileTopUp
 {
@@ -37,11 +38,12 @@ namespace MobileTopUp
             string userInfoAccessToken = null;
 
             string openid = null;
-            if (Store.Configuration.FakeLogin && Store.Configuration.Administrators.Count > 0) {
+            if (Store.Configuration.FakeLogin && Store.Configuration.Administrators.Count > 0)
+            {
                 openid = Store.Configuration.Administrators[0].WechatId;
                 Store.BizInfo("AUTH", null, string.Format("fake login set open id={0}", openid));
             }
-            else
+            else if (!string.IsNullOrEmpty(code))
             {
                 openid = WechatHelper.GetOpenID(code, out userInfoAccessToken);
             }
@@ -61,7 +63,7 @@ namespace MobileTopUp
             {
                 //get name
                 OAuthUserInfo userInfo = WechatHelper.GetUserInfo(userInfoAccessToken, openid);
-                if(userInfo == null)
+                if (userInfo == null)
                 {
                     Store.BizInfo("AUTH", null, string.Format("can not get user info by open id={0}", openid));
                     return null;
@@ -80,7 +82,7 @@ namespace MobileTopUp
                 account = AccountManager.CreateAccount(AccountType.Wechat, openid, name);
                 if (account.ID == 0)
                 {
-                    Store.BizInfo("AUTH",null, string.Format("can not create account open {0}:{1}", openid, name));
+                    Store.BizInfo("AUTH", null, string.Format("can not create account open {0}:{1}", openid, name));
                     return null;
                 }
 
@@ -88,6 +90,123 @@ namespace MobileTopUp
             }
 
             return account;
+        }
+
+        public static Transaction GetTransactionByConsumer(Account consumer, int transactionId)
+        {
+            Store.BizInfo("TRANS", null, string.Format("start to get transaction {0} of id={1}", transactionId, consumer.ID));
+            Transaction trans = null;
+            using (StoreEntities db = new StoreEntities())
+            {
+                try
+                {
+                    trans = db.Transactions.Include(t => t.Consumer).Include(t => t.Vouchers)
+                                .FirstOrDefault(t => t.ID == transactionId && t.AccountID == consumer.ID);
+
+                    Store.BizInfo("TRANS", null, string.Format("success to get transaction {0} of id={1}", transactionId, consumer.ID));
+                }
+                catch (Exception ex)
+                {
+                    Store.SysError("TRANS", string.Format("fail to get transaction {0} of id={1}", transactionId, consumer.ID), ex);
+                }
+            }
+
+            return trans;
+        }
+
+        public static IList<Transaction> GetTransactionByConsumer(Account consumer)
+        {
+            Store.BizInfo("TRANS", null, string.Format("start to get transactions of id={0}", consumer.ID));
+            List<Transaction> transList = new List<Transaction>();
+            using (StoreEntities db = new StoreEntities())
+            {
+                try
+                {
+                    var transactions = db.Transactions.Include(t => t.Vouchers).Where(t => t.AccountID == consumer.ID).OrderByDescending(t => t.OrderDate);
+                    foreach (Transaction t in transactions)
+                    {
+                        transList.Add(t);
+                    }
+                    Store.BizInfo("TRANS", null, string.Format("success to get transactions of id={0}", consumer.ID));
+                }
+                catch (Exception ex)
+                {
+                    Store.SysError("TRANS", string.Format("fail to get transactions of id={0}", consumer.ID), ex);
+                }
+            }
+
+            return transList;
+        }
+
+        public static void NotifyAdministrators(string message)
+        {
+
+            string[] adminWechatIds = Store.Configuration.Administrators.GetAllWechatIds();
+            Store.BizInfo("NOTIFY", null, string.Format("start to notify admin:{0}",message));
+            WechatHelper.SendMessageAsync(adminWechatIds, message);
+        }
+
+        struct LowLevelNotification
+        {
+            public string Brand;
+            public int Stock;
+            public bool DoesNotify;
+            public bool IsOptional;
+        }
+        public static void NotifyVoucherChanges(VoucherStatistic previous, VoucherStatistic current)
+        {
+            //low stock
+            if (!Store.Configuration.DoesNotifyLowStock)
+            {
+                return;
+            }
+            Store.BizInfo("NOTIFY", null, "start to create notification");
+            LowLevelNotification[] notifications = new LowLevelNotification[4];
+            notifications[0] = GenerateNotificationByBrand(BrandType.Spark, previous?.SparkStatistic, current?.SparkStatistic);
+            notifications[1] = GenerateNotificationByBrand(BrandType.Vodafone, previous?.VodafoneStatistic, current?.VodafoneStatistic);
+            notifications[2] = GenerateNotificationByBrand(BrandType.TwoDegrees, previous?.TwoDegreesStatistic, current?.TwoDegreesStatistic);
+            notifications[3] = GenerateNotificationByBrand(BrandType.Skinny, previous?.SkinnyStatistic, current?.SkinnyStatistic);
+            bool hasMadantory = false;
+            foreach(LowLevelNotification n in notifications)
+            {
+                hasMadantory = n.DoesNotify && !n.IsOptional;
+                if (hasMadantory)
+                {
+                    break;
+                }
+            }
+
+            if (!hasMadantory)
+            {
+                Store.BizInfo("NOTIFY", null, "no madantory notification");
+                return;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("[LOW STOCK LEVEL]");
+            foreach (LowLevelNotification n in notifications)
+            {
+                if (n.DoesNotify)
+                {
+                    sb.Append("\n").Append(n.Brand).Append(":").Append(n.Stock);
+                }
+            }
+
+            NotifyAdministrators(sb.ToString());
+        }
+
+        private static LowLevelNotification GenerateNotificationByBrand(BrandType brand, BrandStatistic previous, BrandStatistic current)
+        {
+            LowLevelNotification n = new LowLevelNotification()
+            {
+                Brand = brand.Value,
+                Stock = current.AvailableCount,
+                DoesNotify = current == null ? false : current.AvailableCount <= Store.Configuration.LowStockLevel,
+                IsOptional = previous == null ? false : current.AvailableCount >= previous.AvailableCount
+  
+            };
+
+            return n;
         }
     }
 }

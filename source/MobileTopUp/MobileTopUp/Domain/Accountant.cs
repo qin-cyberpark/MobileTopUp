@@ -16,7 +16,7 @@ namespace MobileTopUp
         {
             RequestInput reqInput = new RequestInput();
 
-            reqInput.AmountInput = amount.ToString("#.##");
+            reqInput.AmountInput = amount.ToString("F2");
             reqInput.CurrencyInput = CurrencyType.NZD.Value;
             reqInput.MerchantReference = reference;
             reqInput.TxnId = transactionID;
@@ -40,40 +40,14 @@ namespace MobileTopUp
         {
             return GeneratePxPayRequestURL(amount, reference, transactionID, null, urlFail, urlSuccess);
         }
-        /*
-        private static decimal GetPxPaymentAmount(string resultId, out ResponseOutput output)
-        {
-            output = _pxPay.ProcessResponse(resultId);
-            if (output == null)
-            {
-                return 0.0M;
-            }
-
-            if (!output.Success.Equals("1"))
-            {
-                return 0.0M;
-            }
-
-            if (string.IsNullOrEmpty(output.AmountSettlement))
-            {
-                return 0.0M;
-            }
-
-            try
-            {
-                decimal amount = decimal.Parse(output.AmountSettlement);
-                return amount;
-            }catch{
-                return 0.0M;
-            }
-        }*/
+      
         #endregion
         public static string GeneratePayURL(Transaction trans, string urlFail, string urlSuccess, int attemptTime = 0)
         {
             string payUrl = null;
             string refStr = string.Format("TOPUP {0} {1}",trans.Brand,trans.ID);
             string tranIdStr = string.Format("{0}-{1}-{2}",trans.ID.ToString(),attemptTime,DateTime.Now.ToString("HHmmss"));
-            string remark1 = trans.VoucherNumberString;
+            string remark1 = FormatTopUpNumbers(trans);
             if (trans.PaymentType  == PaymentType.PxPay)
             {
                 payUrl = GeneratePxPayRequestURL(trans.ChargeAmount, refStr, tranIdStr, remark1, urlFail, urlSuccess);
@@ -81,24 +55,7 @@ namespace MobileTopUp
             return payUrl;
         }
 
-        /*
-        public static bool VerifyPayment(decimal amount, PaymentType type, string refId, out string authCode, out string response)
-        {
-            decimal chargedAmount = 0.0M;
-            authCode = null;
-            response = null;
-
-            if (type == PaymentType.PxPay)
-            {
-                ResponseOutput output = null;
-                chargedAmount = GetPxPaymentAmount(refId, out output);
-                authCode = output.AuthCode;
-                response = output.ToString();
-            }
-
-            return chargedAmount == amount;
-        }
-        */
+       
         /// <summary>
         /// verify px payment match transaction
         /// if pay success set transaction as paid
@@ -136,13 +93,11 @@ namespace MobileTopUp
                         return false;
                     }
 
-                    
-                    trans.PaymentRef = (string.IsNullOrEmpty(trans.PaymentRef)? "" : trans.PaymentRef) + output.ToString();
                     if (!isSuccess)
                     {
                         //pay fail
                         outTransactionId = transactionId;
-                        trans.PayFailedCount++;
+                        trans.PayFail(output.ToString());
                         Store.BizInfo("ACCOUNT-PAPAY", trans.AccountID, "pay failed count = " + trans.PayFailedCount);
                         db.SaveChanges();
                         return true;
@@ -158,8 +113,9 @@ namespace MobileTopUp
                         }
 
                         outTransactionId = transactionId;
-                        trans.Paid();
+                        trans.Paid(output.ToString());
                         db.SaveChanges();
+                        VoucherManager.UpdateStatistic();
                         Store.BizInfo("ACCOUNT-PAPAY", trans.AccountID, string.Format("transaction set to paid, id={0}", trans.ID));
                         return true;
                     }
@@ -172,5 +128,25 @@ namespace MobileTopUp
                 return false;
             }
         }
+
+        private static string FormatTopUpNumbers(Transaction trans)
+        {
+            string voucherStr = null;
+            foreach (Voucher v in trans.Vouchers)
+            {
+                if (!string.IsNullOrEmpty(voucherStr))
+                {
+                    voucherStr += ",";
+                }
+
+                if (!string.IsNullOrEmpty(v.TopUpNumber))
+                {
+                    voucherStr += v.TopUpNumber;
+                }
+            }
+
+            return voucherStr;
+        }
+
     }
 }
