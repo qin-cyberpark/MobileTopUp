@@ -1,0 +1,123 @@
+﻿<style>
+    body {
+        background-color: white;
+    }
+</style>
+<script>
+    function changeLang() {
+        if ($("#lnkChgLang").attr("lang") === "en") {
+            $(".how-to-use[lang=en]").hide();
+            $(".how-to-use[lang=cn]").show();
+            $("#lnkChgLang").attr("lang", "cn");
+            $("#lnkChgLang").html("English");
+
+        } else {
+            $(".how-to-use[lang=cn]").hide();
+            $(".how-to-use[lang=en]").show();
+            $("#lnkChgLang").attr("lang", "en");
+            $("#lnkChgLang").html("中文");
+        }
+    }
+    $(function () {
+        $(".how-to-use[lang=cn]").hide();
+    });
+</script>
+<div class="container">
+    <div class="row voucher-info" style="margin-top:5px">
+        <div class="col-xs-12 language"><a id="lnkChgLang" lang="en" href="javascript:changeLang()">中文</a></div>
+        <div class="col-xs-12 logo">
+            <img src="~/img/spark.png" height="60px" />
+        </div>
+        <div class="col-xs-12 how-to-use" lang="en">
+            To top up or to check your balance, call *333 from Your mobile.<br />
+            Download our Smartphone APP to check Your balance spark.co.nz/smartphoneapp
+            Top up at least once a Year to keep your credit.<br />
+            Need help? Call 0800 323232<br />
+            Voucher subject to Spark Prepaid T&C See <a href="http://spark.co.nz/terms" target="_blank">spark.co.nz/terms</a><br />
+            Voucher not refundable. includes GST.<br />
+        </div>
+        <div class="col-xs-12 how-to-use" lang="cn">
+            用欲充值手机拨打*333, 进行充值或余额查询<br />
+            下载手机应用查询余额 <a href="http://spark.co.nz/smartphoneapp">spark.co.nz/smartphoneapp</a><br />
+            每年至少充值一次以使余额有效<br />
+            如需帮助，请拨 0800 323232<br />
+            充值码不可退，价格已含GST<br />
+            详细条款请见：<a href="http://spark.co.nz/terms" target="_blank">spark.co.nz/terms</a><br />
+        </div>
+        <div class="col-xs-12 logo">
+            <img src="~/img/vodafone.png" height="60px" />
+        </div>
+        <div class="col-xs-12 how-to-use" lang="en">
+            FREE TXT the Top Up number above to 887. Load this voucher within 6 months of Purchase date.<br />
+            Voucher is non-refundable & inc GST.<br /><br />
+            For terms see: <a href="http://vodafone.co.nz/term" target="_blank">vodafone.co.nz/terms</a><br />
+        </div>
+        <div class="col-xs-12 how-to-use" lang="cn">
+            用欲充值手机发送充值码至887,进行充值<br />
+            充值码6个月内有效<br />
+            充值码不可退，价格已含GST<br />
+            详细条款请见：<a href="http://vodafone.co.nz/term" target="_blank">vodafone.co.nz/terms</a><br />
+        </div>
+        <div class="col-xs-12 how-to-use">
+        </div>
+        <div class="col-xs-12 logo">
+            <img src="~/img/2degrees.png" height="60px" />
+        </div>
+        <div class="col-xs-12 how-to-use" lang="en">
+            1. Dial *100# from Your mobile and follow the on screen prompts<br />
+            OR<br />
+            2. Text the Top Up number above to 201 from Your mobile<br />
+            OR<br />
+            3. Dial 201 from Your mobile and follow the prompts<br />
+            <br />
+            To check Your balance:<br />
+            1. Dial #100*1# to see your balances<br />
+            OR<br />
+            2. Login to Your 2degrees at <a href="http://2dm.co.nz/Y2d" target="_blank">2dm.co.nz/Y2d</a><br />
+            <br />
+
+            For help call 200 from Your mobile or 0800 022 022 from any NZ Phone<br />
+            Please load this voucher within 6 months of the Purchase date. Standard credit is valid for 365 Days. Voucher is non-refundable. For full terms and conditions, visit <a href="http://2dm.co.nz">2dm.co.nz</a><br />
+        </div>
+        <div class="col-xs-12 how-to-use" lang="cn">
+            充值：<br />
+            1. 用欲充值手机拨打*100#，根据屏幕提示操作<br />
+            2. 用欲充值手机发送充值码至887,进行充值<br />
+            3. 用欲充值手机拨打201, 进行充值<br />
+            <br />
+            余额查询：<br />
+            1. 用欲查询手机拨打*100#<br />
+            2. 登录Your 2degrees,网址<a href="http://2dm.co.nz/Y2d" target="_blank">2dm.co.nz/Y2d</a><br /><br />
+            如需帮助，用该手机拨打200，或其他新西兰电话拨打0800 022 022<br />
+            充值码6个月内有效, 余额365天内有效<br />
+            充值码不可退，价格已含GST<br />
+            详细条款请见：<a href="http://2dm.co.nz">2dm.co.nz</a><br />
+        </div>
+        <div class="col-xs-12 logo">
+            <img src="~/img/skinny.png" height="60px" />
+        </div>
+        <div class="col-xs-12 how-to-use" lang="en">
+            There are lots of ways to top up.it.s easy!<br />
+
+            A.Free .text TOPUP <12-digit-topupcode>
+                . to 2424<br />
+                B.Call 204 on Your mobile and follow the voice prompts.<br />
+                C.Visit <a href="skinny.co.nz/topup" target="_blank">skinny.co.nz/topup</a><br />
+                D.On the Skinny Mobile APP, just select the top up tab, then enter your voucher number. To get the APP txt APP to 2424<br />
+
+                For help visit <a href="http://skinny.co.nz/help" target="_blank">skinny.co.nz/help</a><br />
+
+                Voucher must be used within 6 months from Purchase date. Voucher non-refundable and inc GST.<br />
+                For full terms and conditions go to <a href="http://skinny.co.nz/terms" target="_blank">skinny.co.nz/terms</a><br />
+        </div>
+        <div class="col-xs-12 how-to-use" lang="cn">
+            A. 用欲充值手机发送短信 TOPUP+空格+充值码 至2424,进行充值<br />
+            B. 用欲充值手机拨打204, 进行充值<br />
+            C. 访问 <a href="skinny.co.nz/topup" target="_blank">skinny.co.nz/topup</a><br />
+            D. 在Skinny手机应用中，选择Top Up，然后输入充值码. 发送短信APP至2424获取手机应用<br />
+            充值码6个月内有效<br />
+            充值码不可退，价格已含GST<br />
+            详细条款请见：<a href="http://skinny.co.nz/terms" target="_blank">skinny.co.nz/terms</a><br />
+        </div>
+    </div>
+</div>

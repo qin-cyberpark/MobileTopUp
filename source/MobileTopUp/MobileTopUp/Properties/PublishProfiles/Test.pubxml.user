@@ -1,0 +1,383 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit http://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_PublishTargetUrl>ftp://101.98.78.36/greenspot/voucher/test</_PublishTargetUrl>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAABFkcAtBrHU+aUmHLETfS4wAAAAACAAAAAAAQZgAAAAEAACAAAAAUJ3k9IbDt7OK7eXWmG+wjR3qsM2IZ247jvNm1XYHTIAAAAAAOgAAAAAIAACAAAABXIffMIxSbEzKXfdupnjhvpj2za6rKSab0yKqacrQO+SAAAAC/g6tE665sDB9N4yL7NwQGGLBxhIvyLHkB0TEzT/gr30AAAAAhCXU6/lbeGuAr0o0kLJOY97CTWdHoYvW2/gr8AJ+iE/0WsKeZ49bpt+hJi1itJr0fpdhrcCOKEZwN8hJqfjFc</EncryptedPassword>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="bin/Common.Logging.Core.dll">
+      <publishTime>12/20/2015 13:45:38</publishTime>
+    </File>
+    <File Include="bin/Common.Logging.Core.pdb">
+      <publishTime>12/20/2015 13:45:38</publishTime>
+    </File>
+    <File Include="bin/Common.Logging.dll">
+      <publishTime>12/20/2015 13:45:42</publishTime>
+    </File>
+    <File Include="bin/Common.Logging.Log4Net1213.dll">
+      <publishTime>12/20/2015 13:45:45</publishTime>
+    </File>
+    <File Include="bin/Common.Logging.Log4Net1213.pdb">
+      <publishTime>12/20/2015 13:45:45</publishTime>
+    </File>
+    <File Include="bin/Common.Logging.pdb">
+      <publishTime>12/20/2015 13:45:42</publishTime>
+    </File>
+    <File Include="bin/EntityFramework.dll">
+      <publishTime>12/05/2015 00:07:44</publishTime>
+    </File>
+    <File Include="bin/log4net.dll">
+      <publishTime>12/10/2015 18:18:07</publishTime>
+    </File>
+    <File Include="bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Web.Infrastructure.dll">
+      <publishTime>12/05/2015 00:06:45</publishTime>
+    </File>
+    <File Include="bin/MobileTopUp.dll">
+      <publishTime>12/23/2015 11:17:00</publishTime>
+    </File>
+    <File Include="bin/MobileTopUp.pdb">
+      <publishTime>12/23/2015 11:17:00</publishTime>
+    </File>
+    <File Include="bin/MySql.Data.dll">
+      <publishTime>10/02/2015 17:05:26</publishTime>
+    </File>
+    <File Include="bin/MySql.Data.Entity.EF6.dll">
+      <publishTime>10/02/2015 17:05:30</publishTime>
+    </File>
+    <File Include="bin/Newtonsoft.Json.dll">
+      <publishTime>12/05/2015 00:06:46</publishTime>
+    </File>
+    <File Include="bin/quartz.config">
+      <publishTime>12/20/2015 14:46:03</publishTime>
+    </File>
+    <File Include="bin/Quartz.dll">
+      <publishTime>12/20/2015 13:06:39</publishTime>
+    </File>
+    <File Include="bin/Quartz.pdb">
+      <publishTime>12/20/2015 13:06:39</publishTime>
+    </File>
+    <File Include="bin/quartz_bak.config">
+      <publishTime>12/20/2015 14:46:03</publishTime>
+    </File>
+    <File Include="bin/quartz_jobs.xml">
+      <publishTime>12/20/2015 19:23:35</publishTime>
+    </File>
+    <File Include="bin/quartz_jobs_bak.xml">
+      <publishTime>12/20/2015 19:23:35</publishTime>
+    </File>
+    <File Include="bin/roslyn/csc.exe">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.Build.Tasks.CodeAnalysis.dll">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.CSharp.dll">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.dll">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CodeAnalysis.VisualBasic.dll">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.CSharp.Core.targets">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/Microsoft.VisualBasic.Core.targets">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Collections.Immutable.dll">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/System.Reflection.Metadata.dll">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/vbc.exe">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/VBCSCompiler.exe">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/roslyn/VBCSCompiler.exe.config">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/Senparc.Weixin.dll">
+      <publishTime>12/06/2015 22:22:04</publishTime>
+    </File>
+    <File Include="bin/Senparc.Weixin.MP.dll">
+      <publishTime>12/06/2015 22:22:07</publishTime>
+    </File>
+    <File Include="bin/System.Net.Http.Formatting.dll">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/System.Web.Helpers.dll">
+      <publishTime>12/05/2015 00:06:45</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.dll">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.WebHost.dll">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="bin/System.Web.Mvc.dll">
+      <publishTime>12/05/2015 00:06:45</publishTime>
+    </File>
+    <File Include="bin/System.Web.Razor.dll">
+      <publishTime>12/05/2015 00:06:45</publishTime>
+    </File>
+    <File Include="bin/System.Web.Webpages.Deployment.dll">
+      <publishTime>12/05/2015 00:06:45</publishTime>
+    </File>
+    <File Include="bin/System.Web.Webpages.dll">
+      <publishTime>12/05/2015 00:06:45</publishTime>
+    </File>
+    <File Include="bin/System.Web.Webpages.Razor.dll">
+      <publishTime>12/05/2015 00:06:45</publishTime>
+    </File>
+    <File Include="bin/Tesseract.dll">
+      <publishTime>12/09/2015 11:50:47</publishTime>
+    </File>
+    <File Include="css/addvoucher.css">
+      <publishTime>12/16/2015 10:14:55</publishTime>
+    </File>
+    <File Include="css/bootstrap.min.css">
+      <publishTime>12/06/2015 18:36:13</publishTime>
+    </File>
+    <File Include="css/cropper.min.css">
+      <publishTime>12/15/2015 11:15:36</publishTime>
+    </File>
+    <File Include="css/main-test.css">
+      <publishTime>12/19/2015 17:54:04</publishTime>
+    </File>
+    <File Include="css/main.css">
+      <publishTime>12/22/2015 15:14:47</publishTime>
+    </File>
+    <File Include="css/main.min.css">
+      <publishTime>12/22/2015 17:49:10</publishTime>
+    </File>
+    <File Include="css/test.css">
+      <publishTime>12/16/2015 10:14:55</publishTime>
+    </File>
+    <File Include="fonts/glyphicons-halflings-regular.eot">
+      <publishTime>11/24/2015 18:59:06</publishTime>
+    </File>
+    <File Include="fonts/glyphicons-halflings-regular.svg">
+      <publishTime>11/24/2015 18:59:06</publishTime>
+    </File>
+    <File Include="fonts/glyphicons-halflings-regular.ttf">
+      <publishTime>11/24/2015 18:59:06</publishTime>
+    </File>
+    <File Include="fonts/glyphicons-halflings-regular.woff">
+      <publishTime>11/24/2015 18:59:06</publishTime>
+    </File>
+    <File Include="fonts/glyphicons-halflings-regular.woff2">
+      <publishTime>11/24/2015 18:59:06</publishTime>
+    </File>
+    <File Include="Global.asax">
+      <publishTime>12/05/2015 00:06:48</publishTime>
+    </File>
+    <File Include="img/2degree.png">
+      <publishTime>12/06/2015 03:16:19</publishTime>
+    </File>
+    <File Include="img/2degrees.png">
+      <publishTime>12/06/2015 03:16:19</publishTime>
+    </File>
+    <File Include="img/404.png">
+      <publishTime>12/14/2015 17:31:29</publishTime>
+    </File>
+    <File Include="img/error.png">
+      <publishTime>12/14/2015 17:26:14</publishTime>
+    </File>
+    <File Include="img/loading.gif">
+      <publishTime>12/15/2015 11:48:42</publishTime>
+    </File>
+    <File Include="img/local.png">
+      <publishTime>12/15/2015 02:07:22</publishTime>
+    </File>
+    <File Include="img/pe-a2a.png">
+      <publishTime>12/06/2015 03:16:19</publishTime>
+    </File>
+    <File Include="img/pe-cc.png">
+      <publishTime>12/06/2015 03:16:19</publishTime>
+    </File>
+    <File Include="img/pe-wide-red.PNG">
+      <publishTime>12/11/2015 21:30:31</publishTime>
+    </File>
+    <File Include="img/pe-wide.png">
+      <publishTime>12/11/2015 21:23:01</publishTime>
+    </File>
+    <File Include="img/pe.png">
+      <publishTime>12/08/2015 14:38:10</publishTime>
+    </File>
+    <File Include="img/picture.jpg">
+      <publishTime>12/15/2015 11:54:27</publishTime>
+    </File>
+    <File Include="img/skinny.png">
+      <publishTime>12/06/2015 03:16:19</publishTime>
+    </File>
+    <File Include="img/soldout.png">
+      <publishTime>12/14/2015 17:42:51</publishTime>
+    </File>
+    <File Include="img/spark.png">
+      <publishTime>12/20/2015 19:40:08</publishTime>
+    </File>
+    <File Include="img/vodafone.png">
+      <publishTime>12/06/2015 03:16:19</publishTime>
+    </File>
+    <File Include="img/wechat.png">
+      <publishTime>12/08/2015 14:38:10</publishTime>
+    </File>
+    <File Include="img/wip.png">
+      <publishTime>12/08/2015 17:13:06</publishTime>
+    </File>
+    <File Include="img/wx-pay.png">
+      <publishTime>12/06/2015 18:11:46</publishTime>
+    </File>
+    <File Include="js/admin.js">
+      <publishTime>12/21/2015 23:50:45</publishTime>
+    </File>
+    <File Include="js/admin.min.js">
+      <publishTime>12/22/2015 17:49:12</publishTime>
+    </File>
+    <File Include="js/bootstrap.min.js">
+      <publishTime>12/06/2015 18:36:17</publishTime>
+    </File>
+    <File Include="js/cropper.min.js">
+      <publishTime>12/15/2015 11:15:36</publishTime>
+    </File>
+    <File Include="js/jquery-1.11.3.min.js">
+      <publishTime>12/06/2015 18:35:55</publishTime>
+    </File>
+    <File Include="js/jquery-ui.min.js">
+      <publishTime>12/09/2015 14:04:23</publishTime>
+    </File>
+    <File Include="js/jquery.fileupload.js">
+      <publishTime>12/09/2015 14:11:32</publishTime>
+    </File>
+    <File Include="js/jquery.iframe-transport.js">
+      <publishTime>12/09/2015 14:11:32</publishTime>
+    </File>
+    <File Include="js/jquery.min.js">
+      <publishTime>12/06/2015 18:35:55</publishTime>
+    </File>
+    <File Include="js/jquery.mobile.min.js">
+      <publishTime>12/21/2015 10:07:34</publishTime>
+    </File>
+    <File Include="js/jquery.ui.widget.js">
+      <publishTime>12/09/2015 14:11:05</publishTime>
+    </File>
+    <File Include="js/main.js">
+      <publishTime>12/16/2015 14:28:17</publishTime>
+    </File>
+    <File Include="js/ocrad.js">
+      <publishTime>12/15/2015 10:46:20</publishTime>
+    </File>
+    <File Include="Models/StoreModel.edmx.diagram">
+      <publishTime>12/11/2015 00:56:50</publishTime>
+    </File>
+    <File Include="Models/TopUpEntities.edmx.diagram">
+      <publishTime>12/07/2015 16:54:42</publishTime>
+    </File>
+    <File Include="packages.config">
+      <publishTime>12/22/2015 17:43:14</publishTime>
+    </File>
+    <File Include="Views/Admin/addVoucher.cshtml">
+      <publishTime>12/17/2015 10:23:09</publishTime>
+    </File>
+    <File Include="Views/Admin/index.cshtml">
+      <publishTime>12/22/2015 17:41:54</publishTime>
+    </File>
+    <File Include="Views/Admin/login.cshtml">
+      <publishTime>12/22/2015 02:01:43</publishTime>
+    </File>
+    <File Include="Views/Admin/voucher.cshtml">
+      <publishTime>12/22/2015 17:49:04</publishTime>
+    </File>
+    <File Include="Views/ErrorPage/error.cshtml">
+      <publishTime>12/14/2015 17:44:27</publishTime>
+    </File>
+    <File Include="Views/ErrorPage/FileNotFound.cshtml">
+      <publishTime>12/11/2015 11:37:16</publishTime>
+    </File>
+    <File Include="Views/ErrorPage/UnauthorizedAccess.cshtml">
+      <publishTime>12/11/2015 11:37:30</publishTime>
+    </File>
+    <File Include="Views/Home/confirm.cshtml">
+      <publishTime>12/11/2015 13:56:14</publishTime>
+    </File>
+    <File Include="Views/Home/Index.cshtml">
+      <publishTime>12/11/2015 13:58:02</publishTime>
+    </File>
+    <File Include="Views/JsTest/index.cshtml">
+      <publishTime>12/22/2015 13:59:55</publishTime>
+    </File>
+    <File Include="Views/Shared/error.cshtml">
+      <publishTime>12/22/2015 16:42:30</publishTime>
+    </File>
+    <File Include="Views/Shared/message.cshtml">
+      <publishTime>12/11/2015 11:37:10</publishTime>
+    </File>
+    <File Include="Views/Shared/_Layout.cshtml">
+      <publishTime>12/22/2015 17:53:00</publishTime>
+    </File>
+    <File Include="Views/TopUp/confirm.cshtml">
+      <publishTime>12/22/2015 15:11:07</publishTime>
+    </File>
+    <File Include="Views/TopUp/fakePay.cshtml">
+      <publishTime>12/19/2015 14:17:59</publishTime>
+    </File>
+    <File Include="Views/TopUp/Home.cshtml">
+      <publishTime>12/14/2015 20:40:08</publishTime>
+    </File>
+    <File Include="Views/TopUp/howToUse.cshtml">
+      <publishTime>12/22/2015 17:16:47</publishTime>
+    </File>
+    <File Include="Views/TopUp/Index.cshtml">
+      <publishTime>12/22/2015 15:07:14</publishTime>
+    </File>
+    <File Include="Views/TopUp/myVoucher.cshtml">
+      <publishTime>12/22/2015 13:59:49</publishTime>
+    </File>
+    <File Include="Views/TopUp/view.cshtml">
+      <publishTime>12/20/2015 11:04:00</publishTime>
+    </File>
+    <File Include="Views/Voucher/scan.cshtml">
+      <publishTime>12/10/2015 20:31:58</publishTime>
+    </File>
+    <File Include="Views/web.config">
+      <publishTime>12/10/2015 20:31:58</publishTime>
+    </File>
+    <File Include="Views/Wx/topup-confirm.cshtml">
+      <publishTime>12/08/2015 14:24:55</publishTime>
+    </File>
+    <File Include="Views/Wx/topup-home.cshtml">
+      <publishTime>12/08/2015 14:58:25</publishTime>
+    </File>
+    <File Include="Views/Wx/topup-msg.cshtml">
+      <publishTime>12/08/2015 11:30:07</publishTime>
+    </File>
+    <File Include="Views/Wx/topup-voucher.cshtml">
+      <publishTime>12/10/2015 20:31:58</publishTime>
+    </File>
+    <File Include="Views/_ViewStart.cshtml">
+      <publishTime>12/05/2015 00:24:23</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>12/23/2015 11:17:02</publishTime>
+    </File>
+    <File Include="Web.Dev.config">
+      <publishTime>12/10/2015 20:22:51</publishTime>
+    </File>
+    <File Include="Web.Test.config">
+      <publishTime>12/11/2015 16:29:24</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

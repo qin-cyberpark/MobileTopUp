@@ -1,0 +1,47 @@
+﻿@using MobileTopUp.Utilities
+@{
+    ViewBag.Title = "Confirm";
+    string logoFile = (string)ViewBag.Transaction.Brand + ".png";
+    string paymentName = "Payment Express";
+    if (ViewBag.Transaction.PaymentType != PaymentType.PxPay)
+    {
+        paymentName = ViewBag.Transaction.PaymentType.Value;
+    }
+
+    bool isContiuous = ViewBag.IsContiuous ?? true;
+    bool isRepay = ViewBag.Transaction.PayFailedCount > 0;
+
+}
+<div class="container">
+    <div class="jumbotron" style="text-align:center;margin-top:30px;">
+        <img src="~/img/@logoFile" style="height:80px" />
+        <h4>$20 Voucher x @ViewBag.Transaction.Quantity</h4>
+        <h4>total <span class="lbl-amount">@ViewBag.Transaction.ChargeAmount @ViewBag.Transaction.Currency</span></h4>
+        <h4>pay by <span class="lbl-amount">@paymentName</span></h4>
+        <h5>*accpet Credit Card and Bank Account</h5>
+        <p style="margin-top:30px">
+            @if (isContiuous && isRepay)
+            {
+                <h4 style="background-color:orange;color:white;margin-top:5px;margin-bottom:5px;">Sorry, Your payment failed</h4>
+            }
+            <a href="@Url.Content("~")topup/pay/@ViewBag.Transaction.ID">
+
+                @if (isContiuous && isRepay)
+                {
+                    <button type="submit" class="btn btn-confirm">Pay Again</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-confirm">Confirm and Pay</button>
+                }
+
+            </a>
+            <a href="@Url.Content("~")topup/index?brand=@ViewBag.Transaction.Brand&qty=@ViewBag.Transaction.Quantity">
+            <button type="button" class="btn">Back</button></a>
+        </p>
+        @if ((bool)ViewBag.IsAdministrator)
+        {
+            <a href="@Url.Content("~")topup/pay/@ViewBag.Transaction.ID?skip=true">test payment</a>
+        }
+    </div>
+</div>

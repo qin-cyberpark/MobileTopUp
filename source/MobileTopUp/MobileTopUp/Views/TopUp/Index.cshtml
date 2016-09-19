@@ -1,0 +1,111 @@
+﻿@using MobileTopUp;
+@{
+    ViewBag.Title = "Top Up";
+}
+<div class="container">
+    <!-- brand -->
+    <div class="btn-group btn-group-justified" role="group" aria-label="...">
+        <div class="btn-group" role="group">
+            
+            <button type="button" class="btn btn-brand btn-lg brand-selected btn-spark" brand-type="@BrandType.Spark"><div class="amount-float">$20</div></button>
+        </div>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-brand btn-lg btn-vodafone" brand-type="@BrandType.Vodafone"><div class="amount-float">$20</div></button>
+        </div>
+    </div>
+    <div class="btn-group btn-group-justified" role="group" aria-label="...">
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-brand btn-lg btn-2degrees" brand-type="@BrandType.TwoDegrees"><div class="amount-float">$20</div></button>
+        </div>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-brand btn-lg btn-skinny" brand-type="@BrandType.Skinny"><div class="amount-float">$20</div></button>
+        </div>
+    </div>
+    <!-- amount -->
+    <div style="margin-top:20px"><h4>Quantity of $20 Voucher</h4></div>
+    <div class="btn-group btn-group-justified" role="group" aria-label="...">
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-quanity btn-lg" quanity="1">1</button>
+        </div>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-quanity btn-lg no-left-border" quanity="2">2</button>
+        </div>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-quanity btn-lg no-left-border" quanity="3">3</button>
+        </div>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-quanity btn-lg no-left-border" quanity="4">4</button>
+        </div>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-quanity btn-lg no-left-border" quanity="5">5</button>
+        </div>
+    </div>
+    <p style="height:15px"></p>
+    <div class="btn-group btn-group-justified" role="group" aria-label="..." style="text-align:center">
+        @if (false)
+            {
+            <div class="btn-group" role="group">
+                <span id="payAmountCNY" class="lbl-amount">
+                    0 CNY
+                </span>
+                <button type="button" class="btn btn-pay" pay-type="@PaymentType.WechatPay"><img src="~/img/wechat.png" /></button>
+            </div>
+        }
+    </div>
+    <div style="text-align:center">
+        <h4 id="payAmountNZD" class="lbl-amount-big">0 NZD</h4>
+        <h5>*accpet Credit Card and Bank Account</h5>
+        <form id="formVoucher" action="@Url.Content("~/topup/")confirm" method="post">
+            <input type="hidden" id="formBrand" name="brand" value=""/>
+            <input type="hidden" id="formQty" name="qty" value=""/>
+            <input type="hidden" id="formPayType" name="paytype" value="" />
+            <div>
+                <img src="~/img/pe-wide-red.png" class="btn-pay" pay-type="@PaymentType.PxPay" style="width:95%;max-width:280px" />
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    var _form = $("#formVoucher");
+    var _form_brand=$("#formBrand");
+    var _form_qty=$("#formQty");
+    var _form_payType=$("#formPayType");
+
+    var _denomination = @VoucherType.Twenty;
+    var _exRateCNY = @Store.Configuration.Payment.ExchangeRateCNY;
+    var _discount = @Store.Configuration.Payment.Discount;
+
+    $(document).ready(function () {
+        // Handler for .ready() called.
+        //brand select
+        $(".btn-brand").click(function () {
+            $(".btn-brand").removeClass("brand-selected");
+            $(this).addClass("brand-selected");
+            _form_brand.val($(this).attr("brand-type"));
+        });
+        $(".btn-brand[brand-type='@ViewBag.Brand']").click();
+
+        //amount select
+        $(".btn-quanity").click(function () {
+            $(".btn-quanity").removeClass("quanity-selected");
+            $(this).addClass("quanity-selected");
+            _form_qty.val($(this).attr("quanity"));
+            showPayAmount($(this).attr("quanity"));
+        })
+        $(".btn-quanity[quanity='@ViewBag.Qty']").click();
+
+        //pay button
+        $(".btn-pay").click(function () {
+            _form_payType.val($(this).attr("pay-type"));
+            _form.submit();
+        })
+    });
+
+    function showPayAmount(quanity) {
+        var idx = 0;
+        amount = _denomination * quanity;
+        var nzd = amount * _discount;
+        var cny = nzd * _exRateCNY;
+        $("#payAmountNZD").text(['now',nzd.toFixed(2),"NZD"].join(' '));
+    }
+</script>

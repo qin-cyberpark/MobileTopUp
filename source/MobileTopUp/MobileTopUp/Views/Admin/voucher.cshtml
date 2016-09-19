@@ -1,0 +1,101 @@
+﻿<script language="javascript">
+    $(document).on("mobileinit", function () {
+        $.mobile.autoInitializePage = false;
+    });
+</script>
+<script src="~/js/jquery.mobile.min.js"></script>
+<script src="~/js/admin.js"></script>
+<div class="modal" id="editModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="formVoucher" action="#" add-url="~/admin/AddVoucher" update-url="~/admin/UpdateVoucher" enctype="multipart/form-data" method="post">
+                <input type="hidden" id="oriBrand" name="ori_brand" value="" />
+                <input type="hidden" id="oriSerialNumber" name="ori_serial_number" value="" />
+                <input type="hidden" id="oriTopupNumber" name="ori_topup_number" value="" />
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <select id="brandSelector" class="brand-selector" name="brand">
+                        <option value="@BrandType.Spark" selected="selected">@BrandType.Spark</option>
+                        <option value="@BrandType.Vodafone">@BrandType.Vodafone</option>
+                        <option value="@BrandType.TwoDegrees">@BrandType.TwoDegrees</option>
+                        <option value="@BrandType.Skinny">@BrandType.Skinny</option>
+                    </select>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <input id="topupNumber" name="topup_number" type="text" class="form-control input-topup-number" placeholder="topup number" maxlength="12">
+                    </div>
+                    <div>
+                        <input id="topupNumberConfirm" name="topup_number_confirm" type="text" class="form-control input-topup-number" placeholder="confirm number" maxlength="12">
+                    </div>
+                    <div>
+                        <input id="serialNumber" name="serial_number" type="text" class="form-control input-serial-number" placeholder="serial number" maxlength="15">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button id="btnAdd" type="button" class="btn btn-primary">Add</button>
+                    <button id="btnSave" type="button" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="modal" id="delModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form id="formDelVoucher" action="~/admin/DeleteVoucher" enctype="multipart/form-data" method="post">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4>Delete Voucher</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="confirmMsg">
+                        You have selected to delete<br/>
+                        <div class="delete-prompt"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="delBrand" name="brand" value="" />
+                    <input type="hidden" id="delSerialNumber" name="serial_number" value="" />
+                    <input type="hidden" id="delTopupNumber" name="topup_number" value="" />
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button id="btnDelete" type="button" class="btn btn-primary">Delete</button>
+                </div>
+            </form>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<div class="container">
+    <div class="row" style="text-align:center;">
+        <h3>VOUCHER.GREENSPOT</h3>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="row">
+                <div id="updatedTime" class="col-md-12 col-xs-12" style="text-align:center">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 col-xs-3 brand-brief brief-selected" brand-type="@BrandType.Spark">
+                    <div class="btn-spark logo"></div>
+                    <div><span class="remaining">-</span>(<span class="hold">-</span>)&nbsp;<span class="sold">-</span></div>
+                </div>
+                <div class="col-md-3 col-xs-3 brand-brief" brand-type="@BrandType.Vodafone">
+                    <div class="btn-vodafone logo"></div>
+                    <div><span class="remaining">-</span>(<span class="hold">-</span>)&nbsp;<span class="sold">-</span></div>
+                </div>
+                <div class="col-md-3 col-xs-3 brand-brief" brand-type="@BrandType.TwoDegrees">
+                    <div class="btn-2degrees logo"></div>
+                    <div><span class="remaining">-</span>(<span class="hold">-</span>)&nbsp;<span class="sold">-</span></div>
+                </div>
+                <div class="col-md-3 col-xs-3 brand-brief" brand-type="@BrandType.Skinny">
+                    <div class="btn-skinny logo"></div>
+                    <div><span class="remaining">-</span>(<span class="hold">-</span>)&nbsp;<span class="sold">-</span></div>
+                </div>
+            </div>
+            <div id="panelAvailable" class="row">
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,16 @@
+﻿<div class="container">
+    <div class="jumbotron" style="text-align:center;margin-top:30px;">
+        <div>
+            @if ((bool)ViewBag.IsAdministrator)
+            {
+                <h4>test payment</h4>
+                <h3><a href="@Url.Content("~")topup/fakePay/@ViewBag.TransactionID?result=success">SUCCESS</a>
+                    <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+                    <a href="@Url.Content("~")topup/fakePay/@ViewBag.TransactionID?result=fail">FAIL</a></h3>
+            }
+        </div>
+        <div style="margin-top:30px">
+            <a href="@Url.Content("~")"><button type="button" class="btn">Back</button></a>
+        </div>
+    </div>
+</div>

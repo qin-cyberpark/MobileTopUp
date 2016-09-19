@@ -1,0 +1,26 @@
+﻿<script language="javascript">
+    $(document).ready(function () {
+        checkLogin();
+    })
+    function checkLogin() {
+        console.debug("start listenning");
+        $.ajax({
+            url: "@Url.Content("~")admin/CheckLoginCode?code=@ViewBag.LoginCode"
+        }).done(function(msg) {
+            if (msg == "SUCCESS") {
+                console.log("login success");
+                location.href = "@Url.Content("~")admin/";
+            } else {
+                console.log("checking...");
+                checkLogin();
+            }
+        });
+    }
+</script>
+<div class="container">
+    <div class="jumbotron" style="text-align:center;margin-top:30px">
+        <h3>LOGIN</h3>
+        <img src="~/img/login-qr.JPG" style="max-width:350px" />
+        <h4>@ViewBag.LoginCode</h4>
+    </div>
+</div>

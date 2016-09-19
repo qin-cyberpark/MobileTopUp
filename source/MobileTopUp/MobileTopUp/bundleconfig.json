@@ -1,0 +1,14 @@
+[
+  {
+    "outputFileName": "css/main.css",
+    "inputFiles": [
+      "css/main.css"
+    ]
+  },
+  {
+    "outputFileName": "js/admin.js",
+    "inputFiles": [
+      "js/admin.js"
+    ]
+  }
+]

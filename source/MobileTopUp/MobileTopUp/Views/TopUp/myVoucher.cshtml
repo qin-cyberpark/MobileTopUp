@@ -1,0 +1,59 @@
+﻿@using MobileTopUp.Models;
+@{
+    ViewBag.Title = "MY VOUCHER";
+    IList<Transaction> _transList = ViewBag.Transactions;
+}
+<style>
+  body{
+      background-color:white;
+  }
+</style>
+<div class="container">
+    @if (_transList.Count > 0)
+    {
+        foreach (Transaction t in _transList)
+        {
+            <div class="row voucher-history">
+                <div class="col-xs-12 purchaseInfo">
+                    <div class="brand">@t.Brand</div>
+                    <div class="date"> @string.Format("{0:dd-MM-yyyy HH:mm}", t.HasPaid ? t.PaidDate : t.OrderDate)</div>
+                </div>
+                @if (t.HasPaid)
+                {
+                    foreach (Voucher v in t.Vouchers)
+                    {
+                        <div class="col-xs-12">
+                            <div class="topup-number-sm">@v.TopUpNumber</div>
+                            <div class="serial-number">
+                                $20 SN-@v.SerialNumber <!--<a href="#">download</a>-->
+                            </div>
+                        </div>
+                    }
+                }
+                else if (t.HasCancelled)
+                {
+                    <div class="col-xs-12">
+                        has been cancelled due to non-payment
+                    </div>
+                }
+                else
+                {
+                    <div class="col-xs-12">
+                        awaiting payment. transaction will be held till @t.OrderDate.AddMinutes(Store.Configuration.UnpaidVouchKeepMinutes).ToString("HH:mm dd-MM-yyyy").
+                        <a class="pay-now" href="@Url.Content("~")topup/repay/@t.ID?contiuous=false">PAY NOW</a>
+                    </div>
+                }
+
+            </div>
+        }
+    }
+    else
+    {
+        <div class="row voucher-history">
+            <div class="col-xs-12">
+                You have not purchased any voucher.
+            </div>
+        </div>
+
+    }
+</div>

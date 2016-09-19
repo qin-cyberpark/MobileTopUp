@@ -1,19 +1,21 @@
 ###############
 #    ignore   #
 ###############
+
 ###############
 #    global   #
 ###############
+
 /publish/
+
 ###############
 #    project  #
 ###############
-/source/MobileTopUp/packages/
 /source/MobileTopUp/*/bin/
+
 /source/MobileTopUp/*/obj/
+/source/MobileTopUp/packages/
+
+/source/MobileTopUp/TestResults
 /design/voucher_sample
-/source/MobileTopUp
-/test/log
-/test/temp
-/test/tessdata/Configs
-/test/tessdata
+/test/*
