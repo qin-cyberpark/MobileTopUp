@@ -1,0 +1,41 @@
+<Response valid="1">
+	<AmountSettlement>0.01</AmountSettlement>
+	<AuthCode>037055</AuthCode>
+	<CardName>Visa</CardName>
+	<CardNumber>428418........54</CardNumber>
+	<DateExpiry>0816</DateExpiry>
+	<DpsTxnRef>0000000315b813ed</DpsTxnRef>
+	<Success>1</Success>
+	<ResponseText>APPROVED</ResponseText>
+	<DpsBillingId/>
+	<CardHolderName>QIN SHEN</CardHolderName>
+	<CurrencySettlement>NZD</CurrencySettlement>
+	<TxnData1/>
+	<TxnData2/>
+	<TxnData3/>
+	<TxnType>Purchase</TxnType>
+	<CurrencyInput>NZD</CurrencyInput>
+	<MerchantReference>TOPUP SPARK</MerchantReference>
+	<ClientInfo>115.188.148.48</ClientInfo>
+	<TxnId>58</TxnId>
+	<EmailAddress/>
+	<BillingId/>
+	<TxnMac>ECD3D4A6</TxnMac>
+	<CardNumber2/>
+	<DateSettlement>20151214</DateSettlement>
+	<IssuerCountryId>0</IssuerCountryId>
+	<Cvc2ResultCode>M</Cvc2ResultCode>
+	<ReCo>00</ReCo>
+	<ProductSku/>
+	<ShippingName/>
+	<ShippingAddress/>
+	<ShippingPostalCode/>
+	<ShippingPhoneNumber/>
+	<ShippingMethod/>
+	<BillingName/>
+	<BillingPostalCode/>
+	<BillingAddress/>
+	<BillingPhoneNumber/>
+	<PhoneNumber/>
+	<AccountInfo/>
+</Response>

@@ -16,7 +16,8 @@
                 message = "Sorry! Access denied :(";
                 break;
             case ErrorViewModel.ErrorType.OutOfStock:
-                message = "Sorry! Temporarily Unavailable";
+                imgFile = "soldout.png";
+                message = "Sorry! Temporarily out of stock.";
                 break;
             case ErrorViewModel.ErrorType.Customer:
                 backUrl = string.IsNullOrEmpty(m.BackUrl) ? backUrl : m.BackUrl;

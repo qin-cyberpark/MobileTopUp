@@ -23,15 +23,23 @@ body {
     background-size: auto 60%;
     background-position: center;
     background-repeat: no-repeat;
+    color:#aaa;
     opacity: 0.15;
     filter: alpha(opacity=15); /* For IE8 and earlier */
 }
 
 .brand-selected {
+    color:#333;
     opacity: 1;
     filter: alpha(opacity=100); /* For IE8 and earlier */
 }
-
+.amount-float{
+    font-size:20px;
+    position:absolute;
+    left:10px;
+    top:10px;
+    z-index:100;
+}
 .btn-spark {
     background-image: url(../img/spark.png);
 }
@@ -70,6 +78,11 @@ body {
 }
 
 .lbl-amount {
+    color: #FF1654;
+}
+
+.lbl-amount-big {
+    font-size:30px;
     color: #FF1654;
 }
 
@@ -123,6 +136,7 @@ body {
     .voucher-info .back {
         margin-top: 20px;
         text-align: center;
+        margin-top: 20px;
     }
 
 .voucher-history {

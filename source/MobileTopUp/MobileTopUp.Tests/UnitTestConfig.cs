@@ -28,7 +28,6 @@ namespace MobileTopUp.Tests
             //directories
             Assert.AreEqual(@"E:\Temp\voucher\tmp\", cfg.TemporaryDirectory);
             Assert.AreEqual(@"E:\Temp\voucher\tessdata\", cfg.TesseractDataDirectory);
-            Assert.AreEqual(@"E:\Temp\voucher\voucerImage\", cfg.VoucherImageDirectory);
 
             //administrator
             Assert.AreEqual(1, cfg.Administrators.Count);

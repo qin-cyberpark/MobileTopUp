@@ -1,48 +1,78 @@
 {
   "button": [
    {
-	{
-	 "name": "test",
-      "sub_button": [
-	  	{
-          "type": "view",
-          "name": "local",
-          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8f0f03f3f09da028&redirect_uri=http://http://192.168.2.146&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
-        },
-        {
-          "type": "view",
-          "name": "test",
-          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8f0f03f3f09da028&redirect_uri=http://voucher.greenspot.net.nz/test&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
-        },
-        {
-          "type": "view",
-          "name": "pub",
-          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8f0f03f3f09da028&redirect_uri=http://voucher.greenspot.net.nz/pub&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
-        }
-      ]
-    },
-    {
-      "name": "Top Up",
+      "name": "Local",
       "sub_button": [
         {
           "type": "view",
           "name": "Spark",
-          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8f0f03f3f09da028&redirect_uri=http://voucher.greenspot.net.nz/pub/spark&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8f0f03f3f09da028&redirect_uri=http://192.168.2.146/?brand=SPARK&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect"
         },
         {
           "type": "view",
           "name": "Vodafone",
-          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8f0f03f3f09da028&redirect_uri=http://voucher.greenspot.net.nz/pub/vodafone&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8f0f03f3f09da028&redirect_uri=http://192.168.2.146/?brand=VODAFONE&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect"
         },
         {
           "type": "view",
-          "name": "2 Degree",
-          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8f0f03f3f09da028&redirect_uri=http://voucher.greenspot.net.nz/pub/2degree&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
+          "name": "2 Degrees",
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8f0f03f3f09da028&redirect_uri=http://192.168.2.146/?brand=2DEGREES&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect"
         },
         {
           "type": "view",
           "name": "Skinny",
-          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8f0f03f3f09da028&redirect_uri=http://voucher.greenspot.net.nz/pub/skinny&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8f0f03f3f09da028&redirect_uri=http://192.168.2.146/?brand=SKINNY&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect"
+        },
+		{
+          "type": "view",
+          "name": "My Voucher",
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8f0f03f3f09da028&redirect_uri=http://192.168.2.146/topup/myvoucher&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect"
+		          
+        }
+      ]
+    },
+    {
+      "name": "Test",
+      "sub_button": [
+        {
+          "type": "view",
+          "name": "Spark",
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx4965c136969ac3bd&redirect_uri=http://voucher.greenspot.net.nz/test?brand=SPARK&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect"
+        },
+        {
+          "type": "view",
+          "name": "Vodafone",
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx4965c136969ac3bd&redirect_uri=http://voucher.greenspot.net.nz/test?brand=VODAFONE&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect"
+        },
+        {
+          "type": "view",
+          "name": "2 Degree",
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx4965c136969ac3bd&redirect_uri=http://voucher.greenspot.net.nz/test?brand=2DEGREES&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect"
+		 },
+        {
+          "type": "view",
+          "name": "Skinny",
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx4965c136969ac3bd&redirect_uri=http://voucher.greenspot.net.nz/test?brand=SKINNY&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect"
+		},
+		{
+          "type": "view",
+          "name": "My Voucher",
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx4965c136969ac3bd&redirect_uri=http://voucher.greenspot.net.nz/test/topup/myvoucher&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect"
+        }
+      ]
+    },
+	   {
+      "name": "Admin",
+      "sub_button": [
+        {
+          "type": "view",
+          "name": "Local",
+          "url":  "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8f0f03f3f09da028&redirect_uri=http://192.168.2.146/admin&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect"
+        },
+        {
+          "type": "view",
+          "name": "Test",
+          "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx4965c136969ac3bd&redirect_uri=http://voucher.greenspot.net.nz/test/admin&response_type=code&scope=snsapi_userinfo&state=STATE&connect_redirect=1#wechat_redirect"
         }
       ]
     }

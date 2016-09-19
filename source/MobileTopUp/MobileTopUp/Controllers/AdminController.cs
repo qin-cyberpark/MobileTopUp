@@ -149,36 +149,41 @@ namespace MobileTopUp.Controllers
             Dictionary<int, Account> verifyWaitList = (Dictionary<int, Account>)HttpContext.Application["VERIFIED_ADMIN"];
             if (verifyWaitList == null || verifyWaitList.Count == 0)
             {
+                Store.BizInfo("ADMIN - VERIFY", null, "nothing to verify");
                 return false;
             }
-
-            int key = verifyWaitList.First(x => x.Value == null).Key;
-            verifyWaitList[key] = account;
+            int[] keys = verifyWaitList.Keys.ToArray();
+            foreach (int key in keys)
+            {
+                verifyWaitList[key] = account;
+                Store.BizInfo("ADMIN - VERIFY", null, string.Format("code {0} verified", key));
+            }
+            
             HttpContext.Application["VERIFIED_ADMIN"] = verifyWaitList;
             return true;
         }
 
         private bool CheckLoginCode(int code, out Account account)
         {
-            Store.BizInfo("ADMIN - VERIFY", null, string.Format("check code {0} verified or not", code));
+            Store.SysInfo("ADMIN - VERIFY", string.Format("check code {0} verified or not", code));
             account = null;
             Dictionary<int, Account> verifyWaitList = (Dictionary<int, Account>)HttpContext.Application["VERIFIED_ADMIN"];
             if (verifyWaitList == null)
             {
-                Store.BizInfo("ADMIN - VERIFY", null, string.Format("verify Wait List is empty"));
+                Store.SysInfo("ADMIN - VERIFY", string.Format("verify Wait List is empty"));
                 return false;
             }
 
             if (!verifyWaitList.ContainsKey(code))
             {
-                Store.BizInfo("ADMIN - VERIFY", null, string.Format("code {0} not exist", code));
+                Store.SysInfo("ADMIN - VERIFY", string.Format("code {0} not exist", code));
                 return false;
             }
 
             account = verifyWaitList[code];
             if (account == null)
             {
-                Store.BizInfo("ADMIN - VERIFY", null, string.Format("account for code {0} not set", code));
+                Store.SysInfo("ADMIN - VERIFY", string.Format("account for code {0} not set", code));
                 return false;
             }
             verifyWaitList.Remove(code);

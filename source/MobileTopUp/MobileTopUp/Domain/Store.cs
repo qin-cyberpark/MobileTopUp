@@ -142,7 +142,7 @@ namespace MobileTopUp
         {
 
             string[] adminWechatIds = Store.Configuration.Administrators.GetAllWechatIds();
-            Store.BizInfo("NOTIFY", null, string.Format("start to notify admin:{0}",message));
+            Store.BizInfo("NOTIFY", null, string.Format("start to notify admin:{0}", message));
             WechatHelper.SendMessageAsync(adminWechatIds, message);
         }
 
@@ -160,14 +160,14 @@ namespace MobileTopUp
             {
                 return;
             }
-            Store.BizInfo("NOTIFY", null, "start to create notification");
+            Store.SysInfo("NOTIFY", "start to create notification");
             LowLevelNotification[] notifications = new LowLevelNotification[4];
             notifications[0] = GenerateNotificationByBrand(BrandType.Spark, previous?.SparkStatistic, current?.SparkStatistic);
             notifications[1] = GenerateNotificationByBrand(BrandType.Vodafone, previous?.VodafoneStatistic, current?.VodafoneStatistic);
             notifications[2] = GenerateNotificationByBrand(BrandType.TwoDegrees, previous?.TwoDegreesStatistic, current?.TwoDegreesStatistic);
             notifications[3] = GenerateNotificationByBrand(BrandType.Skinny, previous?.SkinnyStatistic, current?.SkinnyStatistic);
             bool hasMadantory = false;
-            foreach(LowLevelNotification n in notifications)
+            foreach (LowLevelNotification n in notifications)
             {
                 hasMadantory = n.DoesNotify && !n.IsOptional;
                 if (hasMadantory)
@@ -178,7 +178,7 @@ namespace MobileTopUp
 
             if (!hasMadantory)
             {
-                Store.BizInfo("NOTIFY", null, "no madantory notification");
+                Store.SysInfo("NOTIFY", "no madantory notification");
                 return;
             }
 
@@ -200,10 +200,9 @@ namespace MobileTopUp
             LowLevelNotification n = new LowLevelNotification()
             {
                 Brand = brand.Value,
-                Stock = current.AvailableCount,
-                DoesNotify = current == null ? false : current.AvailableCount <= Store.Configuration.LowStockLevel,
-                IsOptional = previous == null ? false : current.AvailableCount >= previous.AvailableCount
-  
+                Stock = current.AvailableCount + current.UnpaidCount,
+                DoesNotify = current == null ? false : current.AvailableCount + current.UnpaidCount <= Store.Configuration.LowStockLevel,
+                IsOptional = previous == null ? false : current.AvailableCount + current.UnpaidCount >= previous.AvailableCount + previous.UnpaidCount
             };
 
             return n;
